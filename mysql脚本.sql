@@ -1,13 +1,13 @@
 -- 创建数据库
-CREATE DATABASE knowledgeInMotion_education_mamge;
+CREATE DATABASE knowledgeInMotion_education_mange;
 -- 选择数据库
-USE knowledgeInMotion_education_mamge;
+USE knowledgeInMotion_education_mange;
 -- 创建学生表
 CREATE TABLE t_student(
 	-- 学号，主键
 	student_id VARCHAR(50) PRIMARY KEY,
 	-- 所属学院代码
-	student_colllege_id TINYINT,
+	student_college_id TINYINT,
 	-- 所属班级代码
 	student_class_id INT NOT NULL,
 	-- 姓名
