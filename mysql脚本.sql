@@ -115,3 +115,16 @@ INSERT INTO t_score VALUES(3, '2331020130229', '小学语文', 99);
 SELECT * FROM t_score;
 
 
+
+-- 创建管理员用户表
+CREATE TABLE t_administrator(
+-- 用户名
+	user_name VARCHAR(16) PRIMARY KEY,
+-- 密码
+	password varchar(32)
+);
+-- 往管理员表添加数据
+INSERT INTO t_administrator VALUES('gxnzd', '123456');
+-- 查询管理员表
+SELECT * FROM t_administrator;
+
