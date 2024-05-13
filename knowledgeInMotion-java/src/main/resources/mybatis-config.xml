@@ -22,6 +22,6 @@
     <mappers>
         <mapper resource="com/gxnzd/qht/dao/studentMapper.xml"/>
         <mapper resource="com/gxnzd/qht/dao/teacherMapper.xml"/>
-        <mapper resource="com/gxnzd/qht/dao/administrator.xml"/>
+        <mapper resource="com/gxnzd/qht/dao/administratorMapper.xml"/>
     </mappers>
 </configuration>

@@ -7,7 +7,8 @@ new FormModel {
 			"autoSize": false
 		} ) {
 			name: "this"
-			"title": "行知教务管理系统 -登录 by覃惠通"
+			"title": "行知教务管理系统 -登录    by覃惠通"
+			"defaultCloseOperation": 3
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "用 户名"
@@ -32,22 +33,14 @@ new FormModel {
 				"width": 40
 				"height": 15
 				"x": 30
-				"y": 130
-			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "inputPassWord"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 130
-				"height": 30
-				"x": 100
-				"y": 115
+				"y": 135
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "buttonLogin"
 				"text": "登录"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "login", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loginButtonOnClick", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 225
+				"x": 235
 				"y": 190
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -63,16 +56,17 @@ new FormModel {
 				"text": "忘记密码？"
 				"foreground": sfield java.awt.Color blue
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 250
-				"y": 125
+				"x": 230
+				"y": 135
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
 				"text": "用户名:教师为工号，学生为学号。"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 235
+				"x": 230
 				"y": 70
 				"width": 195
+				"height": 20
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "checkBoxLoginType"
@@ -94,9 +88,17 @@ new FormModel {
 				"x": 30
 				"y": 195
 			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "inputPassWord"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 100
+				"y": 130
+				"width": 130
+				"height": 30
+			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 55, 50 )
-			"size": new java.awt.Dimension( 420, 285 )
+			"location": new java.awt.Point( 60, 40 )
+			"size": new java.awt.Dimension( 420, 265 )
 		} )
 	}
 }

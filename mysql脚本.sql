@@ -124,7 +124,7 @@ CREATE TABLE t_administrator(
 	password varchar(32)
 );
 -- 往管理员表添加数据
-INSERT INTO t_administrator VALUES('gxnzd', '123456');
+INSERT INTO t_administrator VALUES('root', '123456');
 -- 查询管理员表
 SELECT * FROM t_administrator;
 
