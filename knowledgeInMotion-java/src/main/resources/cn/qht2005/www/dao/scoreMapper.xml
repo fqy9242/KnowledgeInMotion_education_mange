@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qht2005.www.dao.ScoreMapper">
+    <!--成绩表数据库结果映射-->
+    <resultMap id="scoreResultMap" type="cn.qht2005.www.pojo.Score">
+        <result column="course_id" property="courseId"/>
+        <result column="student_id" property="studentId"/>
+        <result column="course_name" property="courseName"/>
+        <result column="course_score" property="score"/>
+    </resultMap>
+
+</mapper>

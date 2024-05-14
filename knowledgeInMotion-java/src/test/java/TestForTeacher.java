@@ -1,5 +1,4 @@
-import com.gxnzd.qht.service.impl.StudentServiceImpl;
-import com.gxnzd.qht.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

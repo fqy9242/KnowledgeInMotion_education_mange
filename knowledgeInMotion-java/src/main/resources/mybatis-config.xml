@@ -20,8 +20,9 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="com/gxnzd/qht/dao/studentMapper.xml"/>
-        <mapper resource="com/gxnzd/qht/dao/teacherMapper.xml"/>
-        <mapper resource="com/gxnzd/qht/dao/administratorMapper.xml"/>
+        <mapper resource="cn/qht2005/www/dao/studentMapper.xml"/>
+        <mapper resource="cn/qht2005/www/dao/teacherMapper.xml"/>
+        <mapper resource="cn/qht2005/www/dao/administratorMapper.xml"/>
+        <mapper resource="cn/qht2005/www/dao/scoreMapper.xml"/>
     </mappers>
 </configuration>
