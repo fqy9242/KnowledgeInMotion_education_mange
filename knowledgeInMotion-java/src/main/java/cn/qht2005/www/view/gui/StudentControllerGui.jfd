@@ -16,6 +16,126 @@ new FormModel {
 					"autoSize": false
 				} ) {
 					name: "panelInfo"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+						"text": "学号"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 5
+						"y": 55
+						"width": 30
+						"height": 15
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputStudentId"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 35
+						"y": 45
+						"width": 110
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "姓名"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 30
+						"height": 15
+						"x": 165
+						"y": 55
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputStudentName"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 110
+						"height": 34
+						"x": 195
+						"y": 45
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label3"
+						"text": "性别"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 30
+						"height": 15
+						"x": 5
+						"y": 105
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label4"
+						"text": "年龄"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 30
+						"height": 15
+						"x": 155
+						"y": 110
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputAge"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 55
+						"height": 34
+						"x": 200
+						"y": 100
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label5"
+						"text": "手机号"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 70
+						"height": 15
+						"x": 0
+						"y": 155
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputPhoneNumber"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 110
+						"x": 50
+						"y": 145
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label6"
+						"text": "地址"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 30
+						"height": 15
+						"x": 165
+						"y": 155
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputAdrress"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 145
+						"height": 34
+						"x": 200
+						"y": 150
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "checkboxSex"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "男"
+							addElement( "男" )
+							addElement( "女" )
+						}
+						"selectedIndex": -1
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 40
+						"y": 95
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonModify"
+						"text": "修改"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 10
+						"y": 5
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonPrint"
+						"text": "导出"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 78
+						"height": 34
+						"x": 135
+						"y": 5
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "个人信息"
 				} )
@@ -69,4 +189,3 @@ new FormModel {
 		} )
 	}
 }
-

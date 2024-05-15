@@ -23,18 +23,21 @@ public class StudentControllerGui extends JFrame {
     private static final StudentServiceImpl studentService;     // 学生服务对象
     private static final TeacherServiceImpl teacherServiceImpl;     // 教师服务对象
     private String studentId;                                   // 学生id
-    private final Student student = teacherServiceImpl.getStudentById(studentId);   // 当前登录的学生对象
+    private final Student student;   // 当前登录的学生对象
     static {
         try {
             studentService = new StudentServiceImpl();
             teacherServiceImpl = new TeacherServiceImpl();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
     public StudentControllerGui(String studentId) {
         this.studentId = studentId;
+        student = teacherServiceImpl.getStudentById(studentId);
         initComponents();
+
     }
 
     private void createUIComponents() {
@@ -45,6 +48,20 @@ public class StudentControllerGui extends JFrame {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPane1 = new JTabbedPane();
         panelInfo = new JPanel();
+        label1 = new JLabel();
+        inputStudentId = new JTextField();
+        label2 = new JLabel();
+        inputStudentName = new JTextField();
+        label3 = new JLabel();
+        label4 = new JLabel();
+        inputAge = new JTextField();
+        label5 = new JLabel();
+        inputPhoneNumber = new JTextField();
+        label6 = new JLabel();
+        inputAdrress = new JTextField();
+        checkboxSex = new JComboBox<>();
+        buttonModify = new JButton();
+        buttonPrint = new JButton();
         panelScore = new JPanel();
         scrollPane1 = new JScrollPane();
         tableScore = new JTable();
@@ -62,8 +79,68 @@ public class StudentControllerGui extends JFrame {
             //======== panelInfo ========
             {
                 panelInfo.setLayout(null);
+
+                //---- label1 ----
+                label1.setText("\u5b66\u53f7");
+                panelInfo.add(label1);
+                label1.setBounds(5, 55, 30, 15);
+                panelInfo.add(inputStudentId);
+                inputStudentId.setBounds(35, 45, 110, inputStudentId.getPreferredSize().height);
+
+                //---- label2 ----
+                label2.setText("\u59d3\u540d");
+                panelInfo.add(label2);
+                label2.setBounds(165, 55, 30, 15);
+                panelInfo.add(inputStudentName);
+                inputStudentName.setBounds(195, 45, 110, 34);
+
+                //---- label3 ----
+                label3.setText("\u6027\u522b");
+                panelInfo.add(label3);
+                label3.setBounds(5, 105, 30, 15);
+
+                //---- label4 ----
+                label4.setText("\u5e74\u9f84");
+                panelInfo.add(label4);
+                label4.setBounds(155, 110, 30, 15);
+                panelInfo.add(inputAge);
+                inputAge.setBounds(200, 100, 55, 34);
+
+                //---- label5 ----
+                label5.setText("\u624b\u673a\u53f7");
+                panelInfo.add(label5);
+                label5.setBounds(0, 155, 70, 15);
+                panelInfo.add(inputPhoneNumber);
+                inputPhoneNumber.setBounds(50, 145, 110, inputPhoneNumber.getPreferredSize().height);
+
+                //---- label6 ----
+                label6.setText("\u5730\u5740");
+                panelInfo.add(label6);
+                label6.setBounds(165, 155, 30, 15);
+                panelInfo.add(inputAdrress);
+                inputAdrress.setBounds(200, 150, 145, 34);
+
+                //---- checkboxSex ----
+                checkboxSex.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u7537",
+                    "\u5973"
+                }));
+                checkboxSex.setSelectedIndex(-1);
+                panelInfo.add(checkboxSex);
+                checkboxSex.setBounds(new Rectangle(new Point(40, 95), checkboxSex.getPreferredSize()));
+
+                //---- buttonModify ----
+                buttonModify.setText("\u4fee\u6539");
+                panelInfo.add(buttonModify);
+                buttonModify.setBounds(new Rectangle(new Point(10, 5), buttonModify.getPreferredSize()));
+
+                //---- buttonPrint ----
+                buttonPrint.setText("\u5bfc\u51fa");
+                panelInfo.add(buttonPrint);
+                buttonPrint.setBounds(135, 5, 78, 34);
             }
             tabbedPane1.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
+            showInfo();
 
             //======== panelScore ========
             {
@@ -118,6 +195,20 @@ public class StudentControllerGui extends JFrame {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     private JTabbedPane tabbedPane1;
     private JPanel panelInfo;
+    private JLabel label1;
+    private JTextField inputStudentId;
+    private JLabel label2;
+    private JTextField inputStudentName;
+    private JLabel label3;
+    private JLabel label4;
+    private JTextField inputAge;
+    private JLabel label5;
+    private JTextField inputPhoneNumber;
+    private JLabel label6;
+    private JTextField inputAdrress;
+    private JComboBox<String> checkboxSex;
+    private JButton buttonModify;
+    private JButton buttonPrint;
     private JPanel panelScore;
     private JScrollPane scrollPane1;
     private JTable tableScore;
@@ -137,6 +228,29 @@ public class StudentControllerGui extends JFrame {
         for (Score score : scores) {
             model.addRow(new Object[]{score.getCourseId(), score.getCourseName(), score.getScore()});
         }
+    }
+    // 将学生的个人信息展示到文本框
+    private void showInfo(){
+        // 获取个人信息
+        String studentId = this.studentId;
+        String name = student.getName();
+        Integer age = student.getAge();
+//        String sex = student.getSex() == 0 ? "男" : "女";
+        Short sex = student.getSex();
+        String phoneNumber = student.getPhoneNumber();
+        String address = student.getAddress();
+        // 展示到文本框
+        inputStudentId.setText(studentId);
+        inputStudentName.setText(name);
+        inputAge.setText(age.toString());
+        inputPhoneNumber.setText(phoneNumber);
+        inputAdrress.setText(address);
+        if (sex == 0){
+            checkboxSex.setSelectedIndex(0);
+        }else{
+            checkboxSex.setSelectedIndex(1);
+        }
+
     }
     public static void main(String[] args) {
         // 使用FlatLaf皮肤包
