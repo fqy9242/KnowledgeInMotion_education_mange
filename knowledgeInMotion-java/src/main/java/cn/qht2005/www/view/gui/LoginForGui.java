@@ -196,5 +196,6 @@ public class LoginForGui extends JFrame {
         }
         new LoginForGui().setVisible(true);
     }
+
 }
 

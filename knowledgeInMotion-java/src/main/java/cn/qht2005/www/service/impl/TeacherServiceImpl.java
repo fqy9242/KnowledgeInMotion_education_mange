@@ -4,7 +4,6 @@ import cn.qht2005.www.dao.StudentMapper;
 import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.pojo.Teacher;
 import cn.qht2005.www.dao.TeacherMapper;
-import cn.qht2005.www.service.StudentService;
 import cn.qht2005.www.service.TeacherService;
 import cn.qht2005.www.util.SqlSessionFactoryUtil;
 import org.apache.ibatis.session.SqlSession;
