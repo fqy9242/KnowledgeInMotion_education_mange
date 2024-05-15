@@ -1,5 +1,7 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Student;
+
 public interface TeacherService {
 	/**
 	 *
@@ -8,5 +10,6 @@ public interface TeacherService {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean login(String teacherId, String passWord) throws Exception;
+    boolean login(String teacherId, String passWord) throws Exception;
+	Student getStudentById(String studentId);
 }

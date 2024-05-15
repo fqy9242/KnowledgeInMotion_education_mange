@@ -1,6 +1,8 @@
+import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestForTeacher {
@@ -12,5 +14,11 @@ public class TestForTeacher {
 	public void testForTeacherLogin() throws Exception {
 		boolean res = new TeacherServiceImpl().login("2001333", "iloveChina");
 		assertTrue(res);
+	}
+	@Test
+	public void testgetStudentById() throws Exception {
+		Student s = new TeacherServiceImpl().getStudentById("2331020130229");
+		assertNotNull(s);
+
 	}
 }

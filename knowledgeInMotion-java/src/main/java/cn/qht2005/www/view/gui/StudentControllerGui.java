@@ -5,7 +5,9 @@
 package cn.qht2005.www.view.gui;
 
 import cn.qht2005.www.pojo.Score;
+import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
+import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import java.awt.*;
@@ -19,11 +21,13 @@ import javax.swing.table.*;
  */
 public class StudentControllerGui extends JFrame {
     private static final StudentServiceImpl studentService;     // 学生服务对象
+    private static final TeacherServiceImpl teacherServiceImpl;     // 教师服务对象
     private String studentId;                                   // 学生id
-
+    private final Student student = teacherServiceImpl.getStudentById(studentId);   // 当前登录的学生对象
     static {
         try {
             studentService = new StudentServiceImpl();
+            teacherServiceImpl = new TeacherServiceImpl();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -71,7 +75,6 @@ public class StudentControllerGui extends JFrame {
                     //---- tableScore ----
                     tableScore.setModel(new DefaultTableModel(
                         new Object[][] {
-
                         },
                         new String[] {
                             "\u8bfe\u7a0b\u7f16\u53f7", "\u8bfe\u7a0b\u540d\u79f0", "\u6210\u7ee9"
@@ -98,12 +101,12 @@ public class StudentControllerGui extends JFrame {
                     scrollPane1.setViewportView(tableScore);
                 }
                 panelScore.add(scrollPane1);
-                scrollPane1.setBounds(0, 5, 545, 375);
+                scrollPane1.setBounds(0, 0, 555, 475);
             }
             tabbedPane1.addTab("\u4e2a\u4eba\u6210\u7ee9", panelScore);
         }
         contentPane.add(tabbedPane1);
-        tabbedPane1.setBounds(0, 0, 615, 380);
+        tabbedPane1.setBounds(0, 0, 770, 475);
 
         contentPane.setPreferredSize(new Dimension(615, 410));
         pack();
