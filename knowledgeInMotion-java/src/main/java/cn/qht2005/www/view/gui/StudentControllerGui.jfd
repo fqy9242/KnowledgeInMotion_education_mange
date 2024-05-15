@@ -136,6 +136,15 @@ new FormModel {
 						"x": 135
 						"y": 5
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label7"
+						"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "text" ), new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 355
+						"y": 10
+						"height": 170
+						"width": 195
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "个人信息"
 				} )

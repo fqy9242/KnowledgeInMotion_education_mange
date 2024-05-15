@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+
 /**
  * @author 覃
  */
@@ -62,6 +63,7 @@ public class StudentControllerGui extends JFrame {
         checkboxSex = new JComboBox<>();
         buttonModify = new JButton();
         buttonPrint = new JButton();
+        label7 = new JLabel();
         panelScore = new JPanel();
         scrollPane1 = new JScrollPane();
         tableScore = new JTable();
@@ -138,9 +140,15 @@ public class StudentControllerGui extends JFrame {
                 buttonPrint.setText("\u5bfc\u51fa");
                 panelInfo.add(buttonPrint);
                 buttonPrint.setBounds(135, 5, 78, 34);
+
+                //---- label7 ----
+                label7.setBorder(new CompoundBorder(
+                    new TitledBorder("text"),
+                    new EmptyBorder(5, 5, 5, 5)));
+                panelInfo.add(label7);
+                label7.setBounds(355, 10, 195, 170);
             }
             tabbedPane1.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
-            showInfo();
 
             //======== panelScore ========
             {
@@ -209,6 +217,7 @@ public class StudentControllerGui extends JFrame {
     private JComboBox<String> checkboxSex;
     private JButton buttonModify;
     private JButton buttonPrint;
+    private JLabel label7;
     private JPanel panelScore;
     private JScrollPane scrollPane1;
     private JTable tableScore;
