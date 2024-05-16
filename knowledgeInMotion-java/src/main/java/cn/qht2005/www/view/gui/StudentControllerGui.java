@@ -126,6 +126,10 @@ public class StudentControllerGui extends JFrame {
         student = teacherServiceImpl.getStudentById(studentId);
         letInfoEditable(false);
     }
+    // 修改密码按钮被点击
+    private void buttonModifyPasswordMouseClicked(MouseEvent e) {
+        new ModifyPassword(studentId).setVisible(true);
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMain = new JTabbedPane();
@@ -156,6 +160,7 @@ public class StudentControllerGui extends JFrame {
         labelPhotoTip = new JLabel();
         label12 = new JLabel();
         labelTime = new JLabel();
+        buttonModifyPassword = new JButton();
         panelScore = new JPanel();
         scrollPane1 = new JScrollPane();
         tableScore = new JTable();
@@ -333,6 +338,17 @@ public class StudentControllerGui extends JFrame {
                 labelTime.setText("date");
                 panelInfo.add(labelTime);
                 labelTime.setBounds(75, 365, 365, 15);
+
+                //---- buttonModifyPassword ----
+                buttonModifyPassword.setText("\u4fee\u6539\u5bc6\u7801");
+                buttonModifyPassword.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonModifyPasswordMouseClicked(e);
+                    }
+                });
+                panelInfo.add(buttonModifyPassword);
+                buttonModifyPassword.setBounds(new Rectangle(new Point(165, 265), buttonModifyPassword.getPreferredSize()));
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
 
@@ -420,6 +436,7 @@ public class StudentControllerGui extends JFrame {
     private JLabel labelPhotoTip;
     private JLabel label12;
     private JLabel labelTime;
+    private JButton buttonModifyPassword;
     private JPanel panelScore;
     private JScrollPane scrollPane1;
     private JTable tableScore;

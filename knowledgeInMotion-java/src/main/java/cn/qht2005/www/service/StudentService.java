@@ -28,4 +28,12 @@ public interface StudentService {
 	 * @return
 	 */
 	Student modifyStudentByDynamic(String studentId, Student student);
+	/**
+	 * 修改学生密码
+	 * @param studentId 学号
+	 * @param passWord	原密码
+	 * @param passWordNew	新密码
+	 * @return 影响行数
+	 */
+	Integer modifyPassWord(String studentId, String passWord, String passWordNew);
 }

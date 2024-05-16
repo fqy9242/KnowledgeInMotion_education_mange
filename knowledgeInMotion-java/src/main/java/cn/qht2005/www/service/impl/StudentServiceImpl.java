@@ -16,7 +16,6 @@ public class StudentServiceImpl implements StudentService {
 	SqlSession sqlSession = sqlSessionFactory.openSession(true);
 	StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 	ScoreMapper scoreMapper = sqlSession.getMapper(ScoreMapper.class);
-
 	public StudentServiceImpl() throws Exception {
 	}
 
@@ -30,13 +29,12 @@ public class StudentServiceImpl implements StudentService {
 	}
 	/**
 	 * 根据学生id查询所有科目成绩
-	 * @param studentId
-	 * @return
+	 * @param studentId 学号
+	 * @return 成绩列表
 	 */
 	@Override
 	public List<Score> getScoreById(String studentId) {
-		List<Score> scores = scoreMapper.selectAllScoreByStudentId(studentId);
-		return scores;
+		return scoreMapper.selectAllScoreByStudentId(studentId);
 	}
 
 	@Override
@@ -48,5 +46,10 @@ public class StudentServiceImpl implements StudentService {
 
 		}
 		return null;
+	}
+
+	@Override
+	public Integer modifyPassWord(String studentId, String passWord, String passWordNew) {
+		return studentMapper.modifyPassWord(studentId, passWord, passWordNew);
 	}
 }

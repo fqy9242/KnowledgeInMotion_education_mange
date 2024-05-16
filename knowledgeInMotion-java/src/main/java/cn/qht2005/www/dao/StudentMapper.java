@@ -27,6 +27,16 @@ public interface StudentMapper {
 	 * 动态修改学生信息
 	 */
 	Integer modifyByDynamic(@Param("studentId") String studentId, @Param("student") Student student);
+	/**
+	 * 修改学生密码
+	 * @param studentId 学号
+	 * @param passWord 原密码
+	 * @param passWordNew 新密码
+	 * @return
+	 */
+	@Select("update t_student set student_login_password = #{passWordNew} where student_id = #{studentId} and student_login_password = #{passWord}")
+	@ResultMap("studentResultMap")
+	Integer modifyPassWord(@Param("studentId") String studentId, @Param("passWord") String passWord, @Param("passWordNew") String passWordNew);
 
 
 }
