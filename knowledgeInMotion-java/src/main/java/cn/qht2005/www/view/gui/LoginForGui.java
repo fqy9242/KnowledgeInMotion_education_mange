@@ -17,8 +17,6 @@ import javax.swing.*;
  * @author 覃
  */
 public class LoginForGui extends JFrame {
-
-
     public LoginForGui() {
         initComponents();
     }

@@ -23,7 +23,7 @@ CREATE TABLE t_student(
 	-- 学生户籍地
 	student_address VARCHAR(30),
 	-- 学生照片 存储数据为url地址
-	student_photograph VARCHAR(100)
+	student_photograph VARCHAR(500)
 );
 -- 学生表添加初始数据
 INSERT INTO t_student VALUES("2331020130229",3,39,'覃惠通',19,1,'17777402163','qht123','广西梧州',
@@ -56,7 +56,7 @@ CREATE TABLE t_teacher(
 	-- 登录密码 默认123456
 	teacher_login_password VARCHAR(20) DEFAULT '123456',
 	-- 教师照片 存储数据为url地址
-	teacher_photograph VARCHAR(100)
+	teacher_photograph VARCHAR(500)
 );
 -- 往学生表添加初始数据
 INSERT INTO t_teacher VALUES(2005333,3, 39, '李白','班主任', 35, 1, '18888888888','gxnzd123','http://pic.wankacn.com/2017-05-19_591f05253b542.jpeg');

@@ -19,11 +19,11 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 
 
@@ -33,8 +33,9 @@ import javax.swing.table.*;
 public class StudentControllerGui extends JFrame {
     private static final StudentServiceImpl studentService;     // 学生服务对象
     private static final TeacherServiceImpl teacherServiceImpl;     // 教师服务对象
+    private File uploadPhoto;                                         // 上传的图片
     private String studentId;                                   // 学生id
-    private final Student student;   // 当前登录的学生对象
+    private Student student;   // 当前登录的学生对象
     static {
         try {
             studentService = new StudentServiceImpl();
@@ -67,17 +68,64 @@ public class StudentControllerGui extends JFrame {
     }
 
     private void labelPhotoMouseClicked(MouseEvent e) {
-        try {
+        if ("完成".equals(buttonModify.getText())){
             uploadImage();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        }
+
+    }
+    // 修改按钮点击事件
+    private void buttonModifyMouseClicked(MouseEvent e) {
+        if ("修改".equals(buttonModify.getText())){
+            buttonModify.setText("完成");
+            buttonPrint.setText("取消");
+            letInfoEditable(true);
+        }else{
+            try {
+                upDateInfo();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            buttonModify.setText("修改");
+            buttonPrint.setText("导出");
+            letInfoEditable(false);
         }
     }
+    // 完成按钮点击事件 也就是提交修改信息
+    private void upDateInfo() throws Exception{
+        student.setStudentId(inputStudentId.getText());
+        student.setAge(Integer.parseInt(inputAge.getText()));
+        student.setPhoneNumber(inputPhoneNumber.getText());
+        student.setAddress(inputAdrress.getText());
+        if (uploadPhoto != null){
+            // 把图片上传到阿里云OSS并获取url
+            String photoUrl = AliOSSUtil.uploadFile(uploadPhoto);
+            // 设置图片url
+            student.setPhotograph(photoUrl);
+        }
+        // 提交修改
+        studentService.modifyStudentByDynamic(studentId, student);
+    }
 
+    // 导出/取消按钮点击事件
+    private void buttonPrintMouseClicked(MouseEvent e) {
+        if (buttonPrint.getText().equals(("取消"))){
+            // 那啥按钮是完成 也就是用户点击了修改
+            // 取消事件逻辑
+            cancelModify();
 
+        }// 用户没点击过修改 那就是导出
 
-
-
+    }
+    private void cancelModify(){
+        // 取消修改
+        student = teacherServiceImpl.getStudentById(studentId);
+        showInfo();
+        uploadPhoto = null;
+        buttonModify.setText("修改");
+        buttonPrint.setText("导出");
+        student = teacherServiceImpl.getStudentById(studentId);
+        letInfoEditable(false);
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMain = new JTabbedPane();
@@ -105,12 +153,13 @@ public class StudentControllerGui extends JFrame {
         InputClassTeacherPhoneNumber = new JTextField();
         label10 = new JLabel();
         inputClassId = new JTextField();
-        label11 = new JLabel();
+        labelPhotoTip = new JLabel();
         label12 = new JLabel();
         labelTime = new JLabel();
         panelScore = new JPanel();
         scrollPane1 = new JScrollPane();
         tableScore = new JTable();
+        button1 = new JButton();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u5b66\u751f\u7528\u6237      by\u8983\u60e0\u901a");
@@ -136,7 +185,7 @@ public class StudentControllerGui extends JFrame {
                 //---- inputStudentId ----
                 inputStudentId.setEditable(false);
                 panelInfo.add(inputStudentId);
-                inputStudentId.setBounds(43, 40, 110, inputStudentId.getPreferredSize().height);
+                inputStudentId.setBounds(40, 40, 110, inputStudentId.getPreferredSize().height);
 
                 //---- label2 ----
                 label2.setText("\u59d3\u540d");
@@ -195,11 +244,23 @@ public class StudentControllerGui extends JFrame {
 
                 //---- buttonModify ----
                 buttonModify.setText("\u4fee\u6539");
+                buttonModify.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonModifyMouseClicked(e);
+                    }
+                });
                 panelInfo.add(buttonModify);
                 buttonModify.setBounds(40, 5, 78, 29);
 
                 //---- buttonPrint ----
                 buttonPrint.setText("\u5bfc\u51fa");
+                buttonPrint.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonPrintMouseClicked(e);
+                    }
+                });
                 panelInfo.add(buttonPrint);
                 buttonPrint.setBounds(215, 5, 78, 29);
 
@@ -210,7 +271,6 @@ public class StudentControllerGui extends JFrame {
                 labelPhoto.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        labelPhotoMouseClicked(e);
                         labelPhotoMouseClicked(e);
                     }
                 });
@@ -257,11 +317,12 @@ public class StudentControllerGui extends JFrame {
                 panelInfo.add(inputClassId);
                 inputClassId.setBounds(40, 120, 110, 30);
 
-                //---- label11 ----
-                label11.setText("\u70b9\u51fb\u7167\u7247\u5373\u53ef\u4e0a\u4f20\u7167\u7247\u66f4\u6362");
-                label11.setForeground(Color.red);
-                panelInfo.add(label11);
-                label11.setBounds(350, 185, 190, 20);
+                //---- labelPhotoTip ----
+                labelPhotoTip.setText("\u70b9\u51fb\u7167\u7247\u5373\u53ef\u4e0a\u4f20\u7167\u7247\u66f4\u6362");
+                labelPhotoTip.setForeground(Color.red);
+                labelPhotoTip.setVisible(false);
+                panelInfo.add(labelPhotoTip);
+                labelPhotoTip.setBounds(350, 185, 190, 20);
 
                 //---- label12 ----
                 label12.setText("\u767b\u5f55\u65f6\u95f4");
@@ -311,7 +372,12 @@ public class StudentControllerGui extends JFrame {
                     scrollPane1.setViewportView(tableScore);
                 }
                 panelScore.add(scrollPane1);
-                scrollPane1.setBounds(0, 0, 555, 475);
+                scrollPane1.setBounds(0, 35, 555, 440);
+
+                //---- button1 ----
+                button1.setText("\u5bfc\u51fa");
+                panelScore.add(button1);
+                button1.setBounds(5, 0, button1.getPreferredSize().width, 35);
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u6210\u7ee9", panelScore);
         }
@@ -351,21 +417,35 @@ public class StudentControllerGui extends JFrame {
     private JTextField InputClassTeacherPhoneNumber;
     private JLabel label10;
     private JTextField inputClassId;
-    private JLabel label11;
+    private JLabel labelPhotoTip;
     private JLabel label12;
     private JLabel labelTime;
     private JPanel panelScore;
     private JScrollPane scrollPane1;
     private JTable tableScore;
+    private JButton button1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 上传图片
-    public void uploadImage() throws Exception {
+    public void uploadImage() {
         JFileChooser fileChooser = new JFileChooser();
+        // 限制选择的文件类型
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png");
+        fileChooser.setFileFilter(filter);
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            String url = AliOSSUtil.uploadFile(selectedFile);
-            System.out.println(url);
+            uploadPhoto = fileChooser.getSelectedFile();
+            try {
+                // 将上传的文件展示到标签
+                BufferedImage image = ImageIO.read(uploadPhoto);
+                ImageIcon imageIcon = new ImageIcon(image);
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(labelPhoto.getWidth(), labelPhoto.getHeight(), Image.SCALE_DEFAULT)); // 设置图片大小
+                labelPhoto.setIcon(imageIcon);
+/*                // 上传图片
+                String photoUrl = AliOSSUtil.uploadFile(photo);
+                student.setPhotograph(photoUrl);*/
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -424,15 +504,11 @@ public class StudentControllerGui extends JFrame {
     }
     // 让个人信息那一页的文本框可/不可编辑
     private void letInfoEditable(boolean flag){
-        inputStudentName.setEditable(flag);
         inputAge.setEditable(flag);
         inputPhoneNumber.setEditable(flag);
         inputAdrress.setEditable(flag);
         checkboxSex.setEnabled(flag);
-        inputCollegeId.setEditable(flag);
-        inputClassTeacher.setEditable(flag);
-        InputClassTeacherPhoneNumber.setEditable(flag);
-        inputClassId.setEditable(flag);
+        labelPhotoTip.setVisible(flag);
     }
     private void upDateTimeNow(){
         // 获取当前时间

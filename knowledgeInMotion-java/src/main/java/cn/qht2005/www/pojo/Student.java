@@ -10,7 +10,7 @@ public class Student {
 	// 密码 初始为123456
 	private String passWord;
 	// 姓名
-	private String Name;
+	private String name;
 	// 学院id
 	private Integer collegeId;
 	// 班级id
@@ -22,7 +22,7 @@ public class Student {
 	// 性别 0-男 1-女
 	private Short sex;
 	// 学生户籍地
-	private String Address;
+	private String address;
 	// 学生照片 存储数据为照片url
 	private String photograph;
 
@@ -34,13 +34,13 @@ public class Student {
 				   String phoneNumber, Short sex, String address, String photograph) {
 		this.studentId = studentId;
 		this.passWord = passWord;
-		Name = name;
+		this.name = name;
 		this.collegeId = collegeId;
 		this.classId = classId;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.sex = sex;
-		Address = address;
+		this.address = address;
 		this.photograph = photograph;
 	}
 
@@ -61,11 +61,11 @@ public class Student {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public Integer getCollegeId() {
@@ -109,11 +109,11 @@ public class Student {
 	}
 
 	public String getAddress() {
-		return Address;
+		return address;
 	}
 
 	public void setAddress(String address) {
-		Address = address;
+		this.address = address;
 	}
 
 	public String getPhotograph() {
@@ -129,13 +129,13 @@ public class Student {
 		return "Student{" +
 				"studentId='" + studentId + '\'' +
 				", passWord='" + passWord + '\'' +
-				", Name='" + Name + '\'' +
+				", Name='" + name + '\'' +
 				", collegeId=" + collegeId +
 				", classId='" + classId + '\'' +
 				", age=" + age +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", sex=" + sex +
-				", Address='" + Address + '\'' +
+				", Address='" + address + '\'' +
 				", photograph='" + photograph + '\'' +
 				'}';
 	}

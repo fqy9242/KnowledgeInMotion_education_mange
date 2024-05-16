@@ -49,9 +49,8 @@ public class AliOSSUtil{
 	public static String uploadFile(File file) throws Exception{
 		// 配置密钥
 		DefaultCredentialProvider credentialsProvider  = new DefaultCredentialProvider(ACCESS_KEY_ID, ACCESS_KEY_SECRET);
-		String endpoint = "https://oss-cn-hangzhou.aliyuncs.com";
 		// 填写Bucket名称，例如examplebucket。
-		String bucketName = "qht-file";
+		String bucketName = "knowledge-in-motion";
 		// 新的文件名
 		String newFileName = UUID.randomUUID() + file.getName().substring(file.getName().lastIndexOf("."));
 		// 创建OSSClient实例。

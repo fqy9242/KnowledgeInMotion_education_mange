@@ -12,8 +12,8 @@ import java.util.List;
 public interface ScoreMapper {
 	/**
 	 * 根据学生id查询所有科目成绩
-	 * @param studentId
-	 * @return
+	 * @param studentId 学生id
+	 * @return 返回所有科目成绩
 	 */
 	@Select("select * from t_score where student_id = #{studentId}")
 	@ResultMap("scoreResultMap")
