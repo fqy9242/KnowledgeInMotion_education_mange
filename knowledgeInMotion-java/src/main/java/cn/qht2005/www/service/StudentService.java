@@ -1,6 +1,7 @@
 package cn.qht2005.www.service;
 
 import cn.qht2005.www.pojo.Score;
+import cn.qht2005.www.pojo.Student;
 
 import java.util.List;
 
@@ -19,4 +20,12 @@ public interface StudentService {
 	 * @return
 	 */
 	List<Score> getScoreById(String studentId);
+
+	/**
+	 *  动态修改学生信息
+	 * @param studentId
+	 * @param student
+	 * @return
+	 */
+	Student modifyStudentByDynamic(String studentId, Student student);
 }

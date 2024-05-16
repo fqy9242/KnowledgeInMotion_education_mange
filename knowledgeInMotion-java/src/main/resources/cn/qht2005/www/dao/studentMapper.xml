@@ -15,7 +15,18 @@
         <result column="student_login_password" property="passWord"/>
         <result column="student_address" property="address"/>
         <result column="student_photograph" property="photograph"/>
-
     </resultMap>
+    <!--动态修改数据-->
+    <update id="modifyByDynamic" flushCache="true">
+        update t_student
+        <set>
+            <if test="student.sex != null">student_sex=#{student.sex},</if>
+            <if test="student.age != null">student_age=#{student.age},</if>
+            <if test="student.address != null">student_address=#{student.address},</if>
+            <if test="student.phoneNumber != null">student_phone_number=#{student.phoneNumber},</if>
+        </set>
+        where student_id = #{studentId};
+    </update>
+
 
 </mapper>

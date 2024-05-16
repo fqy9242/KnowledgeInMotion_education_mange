@@ -12,6 +12,7 @@ import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -66,7 +67,11 @@ public class StudentControllerGui extends JFrame {
     }
 
     private void labelPhotoMouseClicked(MouseEvent e) {
-        uploadImage();
+        try {
+            uploadImage();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 
@@ -191,12 +196,12 @@ public class StudentControllerGui extends JFrame {
                 //---- buttonModify ----
                 buttonModify.setText("\u4fee\u6539");
                 panelInfo.add(buttonModify);
-                buttonModify.setBounds(10, 5, 78, 29);
+                buttonModify.setBounds(40, 5, 78, 29);
 
                 //---- buttonPrint ----
                 buttonPrint.setText("\u5bfc\u51fa");
                 panelInfo.add(buttonPrint);
-                buttonPrint.setBounds(245, 5, 78, 29);
+                buttonPrint.setBounds(215, 5, 78, 29);
 
                 //---- labelPhoto ----
                 labelPhoto.setBorder(new CompoundBorder(
@@ -205,6 +210,7 @@ public class StudentControllerGui extends JFrame {
                 labelPhoto.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
+                        labelPhotoMouseClicked(e);
                         labelPhotoMouseClicked(e);
                     }
                 });
@@ -353,19 +359,13 @@ public class StudentControllerGui extends JFrame {
     private JTable tableScore;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 上传图片
-    public void uploadImage() {
+    public void uploadImage() throws Exception {
         JFileChooser fileChooser = new JFileChooser();
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            try {
-                BufferedImage image = ImageIO.read(selectedFile);
-                // 这里可以处理图片，例如显示在界面上，或者保存到其他地方
-                // 例如，将图片保存到项目的根目录下
-                ImageIO.write(image, "jpg", new File("uploaded_image.jpg"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String url = AliOSSUtil.uploadFile(selectedFile);
+            System.out.println(url);
         }
     }
 

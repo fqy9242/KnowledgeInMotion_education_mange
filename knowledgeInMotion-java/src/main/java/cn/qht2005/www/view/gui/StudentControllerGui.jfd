@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.10" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -133,7 +133,7 @@ new FormModel {
 						name: "buttonModify"
 						"text": "修改"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 10
+						"x": 40
 						"y": 5
 						"width": 78
 						"height": 29
@@ -144,12 +144,13 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 78
 						"height": 29
-						"x": 245
+						"x": 215
 						"y": 5
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "labelPhoto"
 						"border": new javax.swing.border.CompoundBorder( new javax.swing.border.TitledBorder( "text" ), new javax.swing.border.EmptyBorder( 5, 5, 5, 5 ) )
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "labelPhotoMouseClicked", true ) )
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "labelPhotoMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 345

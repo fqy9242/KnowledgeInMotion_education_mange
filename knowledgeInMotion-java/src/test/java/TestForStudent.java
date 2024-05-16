@@ -1,4 +1,5 @@
 import cn.qht2005.www.pojo.Score;
+import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,12 @@ public class TestForStudent {
 	public void testForgetScore() throws Exception {
 		List<Score> scores = new StudentServiceImpl().getScoreById("2331020130229");
 		System.out.println(scores);
-
+	}
+	@Test
+	public void testForDynamicUpdate() throws Exception{
+		Student s = new Student();
+		s.setSex((short) 2);
+		Student student = new StudentServiceImpl().modifyStudentByDynamic("2331020133133", s);
+		System.out.println(student);
 	}
 }

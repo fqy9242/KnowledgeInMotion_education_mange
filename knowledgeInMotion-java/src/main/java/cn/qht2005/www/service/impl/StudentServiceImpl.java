@@ -13,8 +13,8 @@ import java.util.List;
 
 public class StudentServiceImpl implements StudentService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
-	SqlSession sqlSession = sqlSessionFactory.openSession();
-	StudentMapper StudentMapper = sqlSession.getMapper(StudentMapper.class);
+	SqlSession sqlSession = sqlSessionFactory.openSession(true);
+	StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 	ScoreMapper scoreMapper = sqlSession.getMapper(ScoreMapper.class);
 
 	public StudentServiceImpl() throws Exception {
@@ -22,7 +22,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public boolean login(String studentId, String passWord) throws Exception {
-		Student res = StudentMapper.getStudentByIdAndPassword(studentId, passWord);
+		Student res = studentMapper.getStudentByIdAndPassword(studentId, passWord);
 		if (res == null) {
 			return false;
 		}
@@ -37,5 +37,16 @@ public class StudentServiceImpl implements StudentService {
 	public List<Score> getScoreById(String studentId) {
 		List<Score> scores = scoreMapper.selectAllScoreByStudentId(studentId);
 		return scores;
+	}
+
+	@Override
+	public Student modifyStudentByDynamic(String studentId, Student student) {
+		Integer upDateRow = studentMapper.modifyByDynamic(studentId, student);
+		if (upDateRow == 1){
+			// 更新成功
+			return studentMapper.getStudentById(studentId);
+
+		}
+		return null;
 	}
 }

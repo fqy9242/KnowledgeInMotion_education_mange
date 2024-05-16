@@ -23,5 +23,10 @@ public interface StudentMapper {
 	@ResultMap("studentResultMap")
 	Student getStudentByIdAndPassword(@Param("studentId") String studentId, @Param("passWord") String passWord);
 
+	/**
+	 * 动态修改学生信息
+	 */
+	Integer modifyByDynamic(@Param("studentId") String studentId, @Param("student") Student student);
+
 
 }

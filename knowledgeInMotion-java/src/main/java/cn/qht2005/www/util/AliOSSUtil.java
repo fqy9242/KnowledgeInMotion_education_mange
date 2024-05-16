@@ -1,5 +1,6 @@
 package cn.qht2005.www.util;
 
+import cn.qht2005.www.pojo.AliOssConfig;
 import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
@@ -26,22 +27,19 @@ import java.util.UUID;
  * @author 覃
  */
 public class AliOSSUtil{
-	private static Map<String, Object> pro;
+	private Map<String, Object> pro;
 	public static String ENDPOINT;
-	public static final String ACCESS_KEY_ID;
-	public static final String ACCESS_KEY_SECRET;
+	public static String ACCESS_KEY_ID;
+	public static String ACCESS_KEY_SECRET;
+
 
 	static {
-		ENDPOINT = pro.get("endpoint").toString();
 		Yaml yaml = new Yaml();
-		// 读入文件
-		InputStream resourceAsStream = AliOSSUtil.class.getClassLoader().getResourceAsStream("aliyunOss.yml");
-		pro = yaml.loadAs(resourceAsStream, AliOSSUtil.class);
-		ENDPOINT = pro.get("endpoint").toString();
-		ACCESS_KEY_ID = pro.get("accessKeyId").toString();
-		ACCESS_KEY_SECRET = pro.get("accessKeySecret").toString();
+		AliOssConfig aliOssConfig = yaml.loadAs(AliOSSUtil.class.getClassLoader().getResourceAsStream("aliyunOss.yml"), AliOssConfig.class);
+		ENDPOINT = aliOssConfig.getEndpoint();
+		ACCESS_KEY_ID = aliOssConfig.getAccessKeyId();
+		ACCESS_KEY_SECRET = aliOssConfig.getAccessKeySecret();
 	}
-
 
 	/**
 	 * 上传文件
@@ -57,7 +55,7 @@ public class AliOSSUtil{
 		// 新的文件名
 		String newFileName = UUID.randomUUID() + file.getName().substring(file.getName().lastIndexOf("."));
 		// 创建OSSClient实例。
-		OSS ossClient = new OSSClientBuilder().build(endpoint, credentialsProvider);
+		OSS ossClient = new OSSClientBuilder().build(ENDPOINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
 		InputStream inputStream = new FileInputStream(file);
 		// 创建PutObjectRequest对象。
 		PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, newFileName, inputStream);
