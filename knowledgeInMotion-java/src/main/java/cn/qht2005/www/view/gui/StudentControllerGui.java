@@ -8,8 +8,11 @@ import java.awt.event.*;
 import java.beans.*;
 import javax.imageio.ImageIO;
 import javax.swing.event.*;
+
+import cn.qht2005.www.dao.CollegeMapper;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
@@ -495,6 +498,8 @@ public class StudentControllerGui extends JFrame {
         String address = student.getAddress();
         String classId = student.getClassId();
         Integer collegeId = student.getCollegeId();
+        // 获取学院名称
+        String collegeName = getCollegeName(collegeId);
         BufferedImage photograph; // 证件照url
         try {
             photograph = ImgUtil.getImgByUrl(student.getPhotograph());
@@ -510,7 +515,7 @@ public class StudentControllerGui extends JFrame {
         inputAge.setText(age.toString());
         inputPhoneNumber.setText(phoneNumber);
         inputAdrress.setText(address);
-        inputCollegeId.setText(collegeId.toString());
+        inputCollegeId.setText(collegeName);
         inputClassId.setText(classId);
         if (sex == 1){
             checkboxSex.setSelectedIndex(0);
@@ -526,6 +531,14 @@ public class StudentControllerGui extends JFrame {
         inputAdrress.setEditable(flag);
         checkboxSex.setEnabled(flag);
         labelPhotoTip.setVisible(flag);
+    }
+    // 根据学院id获取学院名称
+    private String getCollegeName(Integer collegeId){
+        try {
+            return new CollegeServiceImpl().getCollegeNameById(collegeId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     private void upDateTimeNow(){
         // 获取当前时间

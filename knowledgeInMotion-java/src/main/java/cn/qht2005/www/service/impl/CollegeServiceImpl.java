@@ -1,5 +1,6 @@
 package cn.qht2005.www.service.impl;
 
+import cn.qht2005.www.dao.CollegeMapper;
 import cn.qht2005.www.pojo.College;
 import cn.qht2005.www.service.CollegeService;
 import cn.qht2005.www.util.SqlSessionFactoryUtil;
@@ -9,6 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.List;
 /**
  * 学院服务实现类
+ * @author 覃
  */
 public class CollegeServiceImpl implements CollegeService {
 	/**
@@ -16,7 +18,7 @@ public class CollegeServiceImpl implements CollegeService {
 	 */
 	private final SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	private final SqlSession session = sqlSessionFactory.openSession();
-	private CollegeService mapper = session.getMapper(CollegeService.class);
+	private CollegeMapper mapper = session.getMapper(CollegeMapper.class);
 
 	public CollegeServiceImpl() throws Exception {
 	}
@@ -26,7 +28,7 @@ public class CollegeServiceImpl implements CollegeService {
 	 */
 	@Override
 	public List<College> getAllCollege() {
-		return mapper.getAllCollege();
+		return mapper.selectAll();
 	}
 
 	/**
@@ -36,6 +38,6 @@ public class CollegeServiceImpl implements CollegeService {
 	 */
 	@Override
 	public String getCollegeNameById(int college) {
-		return mapper.getCollegeNameById(college);
+		return mapper.selectCollegeNameById(college);
 	}
 }

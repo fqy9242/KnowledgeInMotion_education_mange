@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 学院服务接口
+ * @author 覃
  */
 public interface CollegeService {
 	/**
@@ -14,8 +15,8 @@ public interface CollegeService {
 	List<College> getAllCollege();
 	/**
 	 * 根据学院id查询学院名称
-	 * @param college
-	 * @return
+	 * @param collegeId 学院id
+	 * @return 学院名称
 	 */
-	String getCollegeNameById(int college);
+	String getCollegeNameById(int collegeId);
 }

@@ -24,5 +24,6 @@
         <mapper resource="cn/qht2005/www/dao/teacherMapper.xml"/>
         <mapper resource="cn/qht2005/www/dao/administratorMapper.xml"/>
         <mapper resource="cn/qht2005/www/dao/scoreMapper.xml"/>
+        <mapper resource="cn/qht2005/www/dao/collegeMapper.xml"/>
     </mappers>
 </configuration>

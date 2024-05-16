@@ -32,13 +32,14 @@ public class ModifyPassword extends JFrame {
             JOptionPane.showMessageDialog(this, "请再次输入新密码！");
         }else if (!new String(inputNewPassWord.getPassword()).equals(new String(inputNewPassWordRe.getPassword()))){
             JOptionPane.showMessageDialog(this, "两次输入的新密码不一致！");}
-
         Integer impactRow = new StudentServiceImpl().modifyPassWord(studentId, new String(inputNowPassWord.getPassword()), new String(inputNewPassWord.getPassword()));
         if (impactRow == 1){
             JOptionPane.showMessageDialog(this, "修改成功！");
             JOptionPane.showMessageDialog(this, "登录已失效，请重新登录！");
             new LoginForGui().setVisible(true);
             this.dispose();
+        }else {
+            JOptionPane.showMessageDialog(this, "修改失败！");
         }
     }
     // 确认修改按钮被点击
@@ -52,6 +53,7 @@ public class ModifyPassword extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+
         panel1 = new JPanel();
         label1 = new JLabel();
         label2 = new JLabel();
@@ -62,6 +64,8 @@ public class ModifyPassword extends JFrame {
         inputNewPassWordRe = new JPasswordField();
 
         //======== this ========
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("\u4fee\u6539\u5bc6\u7801");
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -96,7 +100,7 @@ public class ModifyPassword extends JFrame {
             }
         });
         contentPane.add(button1);
-        button1.setBounds(40, 130, 95, 30);
+        button1.setBounds(45, 125, 95, 30);
         contentPane.add(inputNowPassWord);
         inputNowPassWord.setBounds(75, 10, 95, 30);
         contentPane.add(inputNewPassWord);
