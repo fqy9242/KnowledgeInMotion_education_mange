@@ -36,4 +36,5 @@ public interface StudentService {
 	 * @return 影响行数
 	 */
 	Integer modifyPassWord(String studentId, String passWord, String passWordNew);
+
 }

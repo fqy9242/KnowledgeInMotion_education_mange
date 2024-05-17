@@ -28,6 +28,16 @@
             </set>
         where student_id = #{studentId}
     </update>
+    <!--根据学生对象来动态查询学生信息-->
+    <select id="selectDynamic" resultMap="studentResultMap">
+        select * from t_student
+            <where>
+                <if test="name != null and name != ''">student_name = #{name}</if>
+                <if test="sex != null">student_sex = #{sex}</if>
+                <if test="collegeId != null and collegeId != ''">student_college_id = #{collegeId}</if>
+                <if test="classId != null and classId != ''">student_class_id = #{classId}</if>
+            </where>
+    </select>
 
 
 </mapper>

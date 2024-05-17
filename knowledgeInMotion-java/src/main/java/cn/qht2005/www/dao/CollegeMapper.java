@@ -25,4 +25,12 @@ public interface CollegeMapper {
 	@Select("select * from t_college where college_id = #{college}")
 	@ResultMap("collegeResultMapper")
 	College selectCollegeNameById(int college);
+	/**
+	 * 根据学院名称查询学院id
+	 * @param collegeName
+	 * @return
+	 */
+	@Select("select * from t_college where college_name = #{collegeName}")
+	@ResultMap("collegeResultMapper")
+	College selectCollegeIdByName(String collegeName);
 }

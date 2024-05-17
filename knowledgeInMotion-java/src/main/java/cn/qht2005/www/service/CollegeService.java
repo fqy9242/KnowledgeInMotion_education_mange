@@ -19,4 +19,10 @@ public interface CollegeService {
 	 * @return 学院名称
 	 */
 	String getCollegeNameById(int collegeId);
+	/**
+	 * 根据学院名称查询学院id
+	 * @param collegeName 学院名称
+	 * @return 学院id
+	 */
+	int getCollegeIdByName(String collegeName);
 }

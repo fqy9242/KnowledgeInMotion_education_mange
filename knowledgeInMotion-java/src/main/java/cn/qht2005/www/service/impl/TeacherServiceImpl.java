@@ -14,6 +14,7 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	SqlSession sqlSession = sqlSessionFactory.openSession();
+	StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 
     public TeacherServiceImpl() throws Exception {
 
@@ -45,7 +46,11 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public List<Student> getAllStudent() {
-		StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 		return studentMapper.selectAll();
+	}
+
+	@Override
+	public List<Student> getStudentByDynamic(Student student) {
+		return studentMapper.selectDynamic(student);
 	}
 }

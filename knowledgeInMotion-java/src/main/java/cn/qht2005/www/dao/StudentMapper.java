@@ -47,5 +47,11 @@ public interface StudentMapper {
 	@Select("select * from t_student")
 	@ResultMap("studentResultMap")
 	List<Student> selectAll();
+	/**
+	 * 动态查询学生
+	 * @param student 学生对象
+	 * @return 学生
+	 */
+	List<Student>selectDynamic(Student student);
 
 }

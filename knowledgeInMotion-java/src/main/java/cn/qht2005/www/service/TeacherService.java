@@ -16,4 +16,6 @@ public interface TeacherService {
 	Student getStudentById(String studentId);
 	// 获取所有的学生信息
 	List<Student> getAllStudent();
+	// 动态查询学生
+	List<Student> getStudentByDynamic(Student student);
 }

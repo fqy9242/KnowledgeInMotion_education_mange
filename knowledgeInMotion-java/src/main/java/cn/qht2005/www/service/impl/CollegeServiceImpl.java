@@ -40,4 +40,9 @@ public class CollegeServiceImpl implements CollegeService {
 	public String getCollegeNameById(int college) {
 		return mapper.selectCollegeNameById(college).getCollegeName();
 	}
+
+	@Override
+	public int getCollegeIdByName(String collegeName) {
+		return mapper.selectCollegeIdByName(collegeName).getCollegeId();
+	}
 }

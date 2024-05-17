@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -38,7 +39,11 @@ public class TeacherControllerGui extends JFrame {
         }else if (tabbedPaneMain.getSelectedIndex() == 1){
 
         } else if (tabbedPaneMain.getSelectedIndex() == 2){
-            showAllStudent();
+            try {
+                showAllStudent(new TeacherServiceImpl().getAllStudent());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -56,6 +61,31 @@ public class TeacherControllerGui extends JFrame {
 
     private void buttonModifyPasswordMouseClicked(MouseEvent e) {
         // TODO add your code here
+    }
+    // 查询按钮被点击
+
+    private void buttonQueryMouseClicked(MouseEvent e) {
+        try {
+            showQueryResult();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    // 根据条件动态查询学生信息
+    private void showQueryResult() throws Exception{
+        String studentName = inputStudentName.getText();
+        String classId = inputClass.getText();
+        short sex = checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0;
+        String collegeName = Objects.requireNonNull(checkboxCollege.getSelectedItem()).toString();
+        Student s = new Student();
+        s.setName(studentName);
+        s.setClassId(classId);
+        s.setSex(checkboxSex.getSelectedIndex() == -1 ? null :
+                checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0);
+        s.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+        s.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+        List<Student> students = new TeacherServiceImpl().getStudentByDynamic(s);
+        showAllStudent(students);
     }
 
     private void initComponents() {
@@ -92,9 +122,9 @@ public class TeacherControllerGui extends JFrame {
         tableStudentInfo = new JTable();
         buttonQuery = new JButton();
         label6 = new JLabel();
-        textField1 = new JTextField();
+        inputStudentName = new JTextField();
         label9 = new JLabel();
-        textField2 = new JTextField();
+        inputClass = new JTextField();
         label11 = new JLabel();
         checkboxSexForStudent = new JComboBox<>();
         label13 = new JLabel();
@@ -279,7 +309,7 @@ public class TeacherControllerGui extends JFrame {
                 //---- buttonExport ----
                 buttonExport.setText("\u5bfc\u51fa");
                 panel2.add(buttonExport);
-                buttonExport.setBounds(new Rectangle(new Point(450, 345), buttonExport.getPreferredSize()));
+                buttonExport.setBounds(new Rectangle(new Point(575, 435), buttonExport.getPreferredSize()));
 
                 //======== scrollPane1 ========
                 {
@@ -289,14 +319,14 @@ public class TeacherControllerGui extends JFrame {
                         new Object[][] {
                         },
                         new String[] {
-                            "\u5b66\u53f7", "\u59d3\u540d", "\u6027\u522b", "\u5b66\u9662", "\u73ed\u7ea7", "\u624b\u673a\u53f7"
+                            "\u5b66\u53f7", "\u59d3\u540d", "\u6027\u522b", "\u5e74\u9f84", "\u5b66\u9662", "\u73ed\u7ea7", "\u624b\u673a\u53f7"
                         }
                     ) {
                         Class<?>[] columnTypes = new Class<?>[] {
-                            String.class, String.class, String.class, String.class, String.class, String.class
+                            String.class, String.class, String.class, String.class, String.class, String.class, String.class
                         };
                         boolean[] columnEditable = new boolean[] {
-                            false, false, false, false, false, false
+                            false, false, false, true, false, false, false
                         };
                         @Override
                         public Class<?> getColumnClass(int columnIndex) {
@@ -310,10 +340,16 @@ public class TeacherControllerGui extends JFrame {
                     scrollPane1.setViewportView(tableStudentInfo);
                 }
                 panel2.add(scrollPane1);
-                scrollPane1.setBounds(0, 35, 555, 380);
+                scrollPane1.setBounds(0, 35, 660, 455);
 
                 //---- buttonQuery ----
                 buttonQuery.setText("\u67e5\u8be2");
+                buttonQuery.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonQueryMouseClicked(e);
+                    }
+                });
                 panel2.add(buttonQuery);
                 buttonQuery.setBounds(new Rectangle(new Point(470, 3), buttonQuery.getPreferredSize()));
 
@@ -321,15 +357,15 @@ public class TeacherControllerGui extends JFrame {
                 label6.setText("\u59d3\u540d");
                 panel2.add(label6);
                 label6.setBounds(5, 15, 25, 15);
-                panel2.add(textField1);
-                textField1.setBounds(35, 5, 80, 25);
+                panel2.add(inputStudentName);
+                inputStudentName.setBounds(35, 5, 80, 25);
 
                 //---- label9 ----
                 label9.setText("\u73ed\u7ea7");
                 panel2.add(label9);
                 label9.setBounds(120, 10, 40, 17);
-                panel2.add(textField2);
-                textField2.setBounds(145, 5, 80, 25);
+                panel2.add(inputClass);
+                inputClass.setBounds(145, 5, 80, 25);
 
                 //---- label11 ----
                 label11.setText("\u6027\u522b");
@@ -355,9 +391,9 @@ public class TeacherControllerGui extends JFrame {
             tabbedPaneMain.addTab("\u5b66\u751f\u67e5\u8be2", panel2);
         }
         contentPane.add(tabbedPaneMain);
-        tabbedPaneMain.setBounds(0, 0, 770, 475);
+        tabbedPaneMain.setBounds(0, 0, 770, 485);
 
-        contentPane.setPreferredSize(new Dimension(650, 410));
+        contentPane.setPreferredSize(new Dimension(760, 500));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -396,9 +432,9 @@ public class TeacherControllerGui extends JFrame {
     private JTable tableStudentInfo;
     private JButton buttonQuery;
     private JLabel label6;
-    private JTextField textField1;
+    private JTextField inputStudentName;
     private JLabel label9;
-    private JTextField textField2;
+    private JTextField inputClass;
     private JLabel label11;
     private JComboBox<String> checkboxSexForStudent;
     private JLabel label13;
@@ -420,9 +456,8 @@ public class TeacherControllerGui extends JFrame {
         }
     }
     // 展示所有学生
-    private void showAllStudent(){
+    private void showAllStudent(List<Student> students){
         try {
-            List<Student> students = new TeacherServiceImpl().getAllStudent();
             // 往表格添加数据
             DefaultTableModel model = (DefaultTableModel) tableStudentInfo.getModel();
             model.setRowCount(0);
@@ -431,6 +466,7 @@ public class TeacherControllerGui extends JFrame {
                         student.getStudentId(),
                         student.getName(),
                         student.getSex() == 1 ? "男" : "女",
+                        student.getAge(),
                         new CollegeServiceImpl().getCollegeNameById(student.getCollegeId()),
                         student.getClassId(),
                         student.getPhoneNumber()

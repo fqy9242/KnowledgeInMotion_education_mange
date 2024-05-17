@@ -52,4 +52,6 @@ public class StudentServiceImpl implements StudentService {
 	public Integer modifyPassWord(String studentId, String passWord, String passWordNew) {
 		return studentMapper.modifyPassWord(studentId, passWord, passWordNew);
 	}
+
+
 }
