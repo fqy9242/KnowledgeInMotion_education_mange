@@ -26,21 +26,39 @@ public class ModifyPassword extends JFrame {
     private void modifyPassWord() throws Exception {
         if (inputNowPassWord.getPassword().length == 0){
             JOptionPane.showMessageDialog(this, "请输入原密码！");
+            return;
 		} else if (inputNewPassWord.getPassword().length == 0){
             JOptionPane.showMessageDialog(this, "请输入新密码！");
+            return;
         }else if (inputNewPassWordRe.getPassword().length == 0){
             JOptionPane.showMessageDialog(this, "请再次输入新密码！");
+            return;
         }else if (!new String(inputNewPassWord.getPassword()).equals(new String(inputNewPassWordRe.getPassword()))){
-            JOptionPane.showMessageDialog(this, "两次输入的新密码不一致！");}
-        Integer impactRow = new StudentServiceImpl().modifyPassWord(studentId, new String(inputNowPassWord.getPassword()), new String(inputNewPassWord.getPassword()));
-        if (impactRow == 1){
+            JOptionPane.showMessageDialog(this, "两次输入的新密码不一致！");
+            return;
+        }else if (!(new StudentServiceImpl().login(studentId, new String(inputNowPassWord.getPassword())))){
+            JOptionPane.showMessageDialog(this, "原密码错误！");
+            return;
+        }
+        // 开始那啥
+        // 没报错就是修改成功（大概） 报错就是修改失败
+        try {
+            new StudentServiceImpl().modifyPassWord(studentId, new String(inputNowPassWord.getPassword()),
+                    new String(inputNewPassWord.getPassword()));
             JOptionPane.showMessageDialog(this, "修改成功！");
             JOptionPane.showMessageDialog(this, "登录已失效，请重新登录！");
+            {
+                // 关闭所有窗口
+                Window[] windows = getWindows();
+                for (Window window : windows) {
+                    window.dispose();
+                }
+            }
             new LoginForGui().setVisible(true);
-            this.dispose();
-        }else {
+        } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "修改失败！");
-        }
+		}
     }
     // 确认修改按钮被点击
     private void button1MouseClicked(MouseEvent e) {
@@ -53,7 +71,6 @@ public class ModifyPassword extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-
         panel1 = new JPanel();
         label1 = new JLabel();
         label2 = new JLabel();
@@ -66,6 +83,7 @@ public class ModifyPassword extends JFrame {
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("\u4fee\u6539\u5bc6\u7801");
+        setAlwaysOnTop(true);
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 

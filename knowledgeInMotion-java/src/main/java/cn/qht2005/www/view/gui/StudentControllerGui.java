@@ -18,10 +18,17 @@ import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.*;
@@ -115,9 +122,10 @@ public class StudentControllerGui extends JFrame {
             // 那啥按钮是完成 也就是用户点击了修改
             // 取消事件逻辑
             cancelModify();
+            return;
 
         }// 用户没点击过修改 那就是导出
-
+        JOptionPane.showMessageDialog(this, "这功能突然感觉没l用，不实现了！！");
     }
     private void cancelModify(){
         // 取消修改
@@ -132,6 +140,12 @@ public class StudentControllerGui extends JFrame {
     // 修改密码按钮被点击
     private void buttonModifyPasswordMouseClicked(MouseEvent e) {
         new ModifyPassword(studentId).setVisible(true);
+    }
+    // 导出按钮被点击事件
+    private void button1MouseClicked(MouseEvent e) {
+        // 导出所有成绩
+        List<Score> scores = studentService.getScoreById(studentId);
+        exportScore(scores);
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -395,6 +409,12 @@ public class StudentControllerGui extends JFrame {
 
                 //---- button1 ----
                 button1.setText("\u5bfc\u51fa");
+                button1.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        button1MouseClicked(e);
+                    }
+                });
                 panelScore.add(button1);
                 button1.setBounds(5, 0, button1.getPreferredSize().width, 35);
             }
@@ -538,6 +558,47 @@ public class StudentControllerGui extends JFrame {
             return new CollegeServiceImpl().getCollegeNameById(collegeId);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    // 导出所有成绩 成excel
+    public void exportScore(List<Score> scores) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Scores");
+
+        // 操作表头
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("课程编号");
+        headerRow.createCell(1).setCellValue("课程名称");
+        headerRow.createCell(2).setCellValue("成绩");
+
+        // 行数据
+        for (int i = 0; i < scores.size(); i++) {
+            Score score = scores.get(i);
+            Row row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(score.getCourseId());
+            row.createCell(1).setCellValue(score.getCourseName());
+            row.createCell(2).setCellValue(score.getScore());
+        }
+
+        // 输出文件
+        // 创建一个文件选择器
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("选择保存位置");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        // 显示文件选择器对话框
+        int userSelection = fileChooser.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            // 如果用户点击了"保存"，则获取用户选择的目录
+            File fileToSave = fileChooser.getSelectedFile();
+            // 输出文件
+            String fileName = fileToSave.getAbsolutePath() + "/" + studentId + "的成绩.xlsx"; // 导出的文件名，啊不，是路径。
+            try (FileOutputStream fileOut = new FileOutputStream(fileName)) {
+                workbook.write(fileOut);
+                JOptionPane.showMessageDialog(this, "导出成功！");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     private void upDateTimeNow(){
