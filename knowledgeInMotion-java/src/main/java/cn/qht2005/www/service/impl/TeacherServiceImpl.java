@@ -9,11 +9,14 @@ import cn.qht2005.www.util.SqlSessionFactoryUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.util.List;
+
 public class TeacherServiceImpl implements TeacherService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	SqlSession sqlSession = sqlSessionFactory.openSession();
 
     public TeacherServiceImpl() throws Exception {
+
     }
 
     /**
@@ -38,5 +41,11 @@ public class TeacherServiceImpl implements TeacherService {
 		StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 		Student res = studentMapper.getStudentById(studentId);
 		return res;
+	}
+
+	@Override
+	public List<Student> getAllStudent() {
+		StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+		return studentMapper.selectAll();
 	}
 }

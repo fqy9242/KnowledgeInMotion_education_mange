@@ -1,6 +1,7 @@
 package cn.qht2005.www.dao;
 
 import cn.qht2005.www.pojo.College;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -14,12 +15,14 @@ public interface CollegeMapper {
 	 * @return
 	 */
 	@Select("select * from t_college")
+	@ResultMap("collegeResultMapper")
 	List<College> selectAll();
 	/**
 	 * 根据学院id查询学院名称
 	 * @param college
 	 * @return
 	 */
-	@Select("select college_name from t_college where college_id = #{college}")
-	String selectCollegeNameById(int college);
+	@Select("select * from t_college where college_id = #{college}")
+	@ResultMap("collegeResultMapper")
+	College selectCollegeNameById(int college);
 }

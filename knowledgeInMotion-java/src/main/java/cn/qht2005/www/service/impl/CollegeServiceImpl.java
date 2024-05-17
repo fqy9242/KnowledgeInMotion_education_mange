@@ -38,6 +38,6 @@ public class CollegeServiceImpl implements CollegeService {
 	 */
 	@Override
 	public String getCollegeNameById(int college) {
-		return mapper.selectCollegeNameById(college);
+		return mapper.selectCollegeNameById(college).getCollegeName();
 	}
 }

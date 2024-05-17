@@ -4,6 +4,9 @@ import cn.qht2005.www.pojo.Student;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+
 public interface StudentMapper {
 	/**
 	 *  根据id查询学生对象
@@ -37,6 +40,12 @@ public interface StudentMapper {
 	@Select("update t_student set student_login_password = #{passWordNew} where student_id = #{studentId} and student_login_password = #{passWord}")
 	@ResultMap("studentResultMap")
 	Integer modifyPassWord(@Param("studentId") String studentId, @Param("passWord") String passWord, @Param("passWordNew") String passWordNew);
-
+	/**
+	 * 查询所有学生
+	 * @return
+	 */
+	@Select("select * from t_student")
+	@ResultMap("studentResultMap")
+	List<Student> selectAll();
 
 }

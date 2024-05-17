@@ -32,7 +32,6 @@ public class AliOSSUtil{
 	public static String ACCESS_KEY_ID;
 	public static String ACCESS_KEY_SECRET;
 
-
 	static {
 		Yaml yaml = new Yaml();
 		AliOssConfig aliOssConfig = yaml.loadAs(AliOSSUtil.class.getClassLoader().getResourceAsStream("aliyunOss.yml"), AliOssConfig.class);
