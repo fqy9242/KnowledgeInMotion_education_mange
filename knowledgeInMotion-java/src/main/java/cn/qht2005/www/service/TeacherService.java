@@ -1,6 +1,7 @@
 package cn.qht2005.www.service;
 
 import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.Teacher;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface TeacherService {
 	List<Student> getAllStudent();
 	// 动态查询学生
 	List<Student> getStudentByDynamic(Student student);
+	// 根据id 查询教师信息
+	Teacher getTeacherById(String teacherId);
+
 }

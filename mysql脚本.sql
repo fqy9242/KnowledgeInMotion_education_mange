@@ -46,7 +46,7 @@ CREATE TABLE t_teacher(
 	-- 姓名
 	teacher_name VARCHAR(20) NOT NULL,
 	-- 级别，职位。
-	teacher_positon VARCHAR(10),
+	teacher_position VARCHAR(10),
 	-- 年龄
 	teacher_age INT,
 	-- 性别 1.男 2.女
@@ -61,7 +61,7 @@ CREATE TABLE t_teacher(
 -- 往学生表添加初始数据
 INSERT INTO t_teacher VALUES(2005333,3, 39, '李白','班主任', 35, 1, '18888888888','gxnzd123','http://pic.wankacn.com/2017-05-19_591f05253b542.jpeg');
 INSERT INTO t_teacher VALUES(2005355,2, 33, '杜甫','班主任', 42, 1, '19999999999', null , null);
-INSERT INTO t_teacher VALUES(2001333,3, null, '冯诺依曼','专任教师', 555, 1, '13333333333','iloveChina',null);
+INSERT INTO t_teacher VALUES(2001333,3, null, '冯诺依曼','专任教师', 555, 1, '13333333333','iloveChina','https://www.caiwanghao.com/wp-content/uploads/2023/03/2023030413544352.jpg');
 -- 查询教师表
 SELECT * FROM t_teacher;
 -- 创建学院表

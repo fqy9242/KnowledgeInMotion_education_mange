@@ -43,7 +43,6 @@ public class StudentServiceImpl implements StudentService {
 		if (upDateRow == 1){
 			// 更新成功
 			return studentMapper.getStudentById(studentId);
-
 		}
 		return null;
 	}

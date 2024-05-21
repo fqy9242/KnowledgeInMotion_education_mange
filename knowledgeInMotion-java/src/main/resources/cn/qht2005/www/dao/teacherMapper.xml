@@ -15,7 +15,6 @@
         <result column="teacher_phone_number" property="phoneNumber"/>
         <result column="teacher_login_password" property="passWord"/>
         <result column="teacher_photograph" property="photograph"/>
-
     </resultMap>
 
 </mapper>

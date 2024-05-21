@@ -14,7 +14,10 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	SqlSession sqlSession = sqlSessionFactory.openSession();
-	StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+	// 通过sqlSession获取学生mapper接口的代理对象
+	private final StudentMapper STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
+	// 通过sqlSession获取教师mapper接口的代理对象
+	private final TeacherMapper TEACHER_MAPPER = sqlSession.getMapper(TeacherMapper.class);
 
     public TeacherServiceImpl() throws Exception {
 
@@ -28,14 +31,13 @@ public class TeacherServiceImpl implements TeacherService {
      */
 	@Override
 	public boolean login(String studentId, String passWord) {
-
-		TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
-		Teacher res = mapper.getTeacherByIdAndPassword(studentId, passWord);
+		Teacher res = TEACHER_MAPPER.getTeacherByIdAndPassword(studentId, passWord);
 		if (res == null) {
 			return false;
 		}
 		return true;
 	}
+
 
 	@Override
 	public Student getStudentById(String studentId) {
@@ -46,11 +48,21 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public List<Student> getAllStudent() {
-		return studentMapper.selectAll();
+		return STUDENT_MAPPER.selectAll();
 	}
 
 	@Override
 	public List<Student> getStudentByDynamic(Student student) {
-		return studentMapper.selectDynamic(student);
+		return STUDENT_MAPPER.selectDynamic(student);
+	}
+
+	/**
+	 * 根据id 查询教师信息
+	 * @param teacherId 教师工号
+	 * @return 教师实体对象
+	 */
+	@Override
+	public Teacher getTeacherById(String teacherId) {
+		return TEACHER_MAPPER.getTeacherById(teacherId);
 	}
 }

@@ -1,4 +1,5 @@
 import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.Teacher;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +30,11 @@ public class TestForTeacher {
 		LocalDateTime now = LocalDateTime.now();
 		String s = now.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss"));
 		System.out.println(s);
+	}
 
+	@Test
+	public void testGetTeacherById() throws Exception {
+		Teacher s = new TeacherServiceImpl().getTeacherById("2001333");
+		assertNotNull(s);
 	}
 }

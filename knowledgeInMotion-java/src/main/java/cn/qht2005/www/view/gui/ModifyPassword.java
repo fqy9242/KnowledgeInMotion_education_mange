@@ -15,11 +15,11 @@ import javax.swing.*;
  * @author 覃
  */
 public class ModifyPassword extends JFrame {
-    // 学号
-    private final String studentId;
+    // 学号、工号等主键
+    private final String id;
 
-    public ModifyPassword(String studentId) {
-        this.studentId = studentId;
+    public ModifyPassword(String id) {
+        this.id = id;
         initComponents();
     }
     // 修改密码
@@ -36,14 +36,14 @@ public class ModifyPassword extends JFrame {
         }else if (!new String(inputNewPassWord.getPassword()).equals(new String(inputNewPassWordRe.getPassword()))){
             JOptionPane.showMessageDialog(this, "两次输入的新密码不一致！");
             return;
-        }else if (!(new StudentServiceImpl().login(studentId, new String(inputNowPassWord.getPassword())))){
+        }else if (!(new StudentServiceImpl().login(id, new String(inputNowPassWord.getPassword())))){
             JOptionPane.showMessageDialog(this, "原密码错误！");
             return;
         }
         // 开始那啥
         // 没报错就是修改成功（大概） 报错就是修改失败
         try {
-            new StudentServiceImpl().modifyPassWord(studentId, new String(inputNowPassWord.getPassword()),
+            new StudentServiceImpl().modifyPassWord(id, new String(inputNowPassWord.getPassword()),
                     new String(inputNewPassWord.getPassword()));
             JOptionPane.showMessageDialog(this, "修改成功！");
             JOptionPane.showMessageDialog(this, "登录已失效，请重新登录！");

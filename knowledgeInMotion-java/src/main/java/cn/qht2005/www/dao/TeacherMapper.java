@@ -14,7 +14,7 @@ public interface TeacherMapper {
 	 */
 	@Select("select * from t_teacher where teacher_id = #{teacherId}")
 	@ResultMap("teacherResultMap")
-	Student getTeacherById(String teacherId);
+	Teacher getTeacherById(String teacherId);
 	/**
 	 * 根据id和密码查询教师对象
 	 * @param teacherId  工号

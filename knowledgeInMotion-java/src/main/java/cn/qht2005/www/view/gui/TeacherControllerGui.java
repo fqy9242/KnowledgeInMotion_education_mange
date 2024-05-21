@@ -6,13 +6,17 @@ package cn.qht2005.www.view.gui;
 
 import cn.qht2005.www.pojo.College;
 import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.Teacher;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.beans.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.*;
@@ -24,43 +28,68 @@ import javax.swing.table.*;
  * @author 覃
  */
 public class TeacherControllerGui extends JFrame {
-    public TeacherControllerGui() {
+    // 教师工号，主键
+    private final String teacherId;
+    // 当前登录的教师对象
+    private Teacher teacher;
+    public TeacherControllerGui(String teacherId) {
+        this.teacherId = teacherId;
         initComponents();
-        showCollegeToCheckBox();
+        upDateTimeNow();
     }
 
     private void thisPropertyChange(PropertyChangeEvent e) {
         // TODO add your code here
     }
-
+    // 那啥文件夹菜单被切换
     private void tabbedPaneMainStateChanged(ChangeEvent e) {
+        // 展示个人信息菜单
         if (tabbedPaneMain.getSelectedIndex() == 0){
+            showTeacherInfo();
 
         }else if (tabbedPaneMain.getSelectedIndex() == 1){
 
+
         } else if (tabbedPaneMain.getSelectedIndex() == 2){
+            // 查询学生页
             try {
+                showCollegeToCheckBox();
                 showAllStudent(new TeacherServiceImpl().getAllStudent());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
+    // 获取当前时间
+    private void upDateTimeNow(){
+        LocalDateTime now = LocalDateTime.now();
+        // 格式化时间
+        String time = now.getYear() + "年" + now.getMonthValue() +
+                "月" + now.getDayOfMonth() + "日" + now.getHour() + "时" + now.getMinute() + "分" + now.getSecond() + "秒";
+        labelTime.setText(time);
+    }
 
     private void buttonModifyMouseClicked(MouseEvent e) {
-        // TODO add your code here
+        if (buttonModify.getText().equals("修改")) {
+            buttonModify.setText("完成");
+            // 将那几个输入框设置为可编辑
+            letInfoEditable(true);
+            labelPhotoTip.setVisible(true);
+        }
     }
 
     private void buttonPrintMouseClicked(MouseEvent e) {
         // TODO add your code here
     }
-
+    // 修改信息按钮被点击
     private void labelPhotoMouseClicked(MouseEvent e) {
-        // TODO add your code here
+        // 将那几个输入框设置为可编辑
+        letInfoEditable(true);
     }
 
+    // 修改密码按钮被点击 然后弹出修改密码的对话框
     private void buttonModifyPasswordMouseClicked(MouseEvent e) {
-        // TODO add your code here
+//        new ModifyPassword().setVisible(true);
     }
     // 查询按钮被点击
 
@@ -75,7 +104,6 @@ public class TeacherControllerGui extends JFrame {
     private void showQueryResult() throws Exception{
         String studentName = inputStudentName.getText();
         String classId = inputClass.getText();
-        short sex = checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0;
         String collegeName = Objects.requireNonNull(checkboxCollege.getSelectedItem()).toString();
         Student s = new Student();
         s.setName(studentName);
@@ -159,7 +187,7 @@ public class TeacherControllerGui extends JFrame {
                 //---- label2 ----
                 label2.setText("\u59d3\u540d");
                 panelInfo.add(label2);
-                label2.setBounds(165, 50, 30, 15);
+                label2.setBounds(160, 50, 30, 15);
 
                 //---- inputTeacherName ----
                 inputTeacherName.setEditable(false);
@@ -234,7 +262,7 @@ public class TeacherControllerGui extends JFrame {
                     }
                 });
                 panelInfo.add(labelPhoto);
-                labelPhoto.setBounds(345, 15, 180, 170);
+                labelPhoto.setBounds(345, 15, 190, 200);
 
                 //---- label7 ----
                 label7.setText("\u5b66\u9662");
@@ -266,12 +294,12 @@ public class TeacherControllerGui extends JFrame {
                 //---- label12 ----
                 label12.setText("\u767b\u5f55\u65f6\u95f4");
                 panelInfo.add(label12);
-                label12.setBounds(5, 365, 55, 17);
+                label12.setBounds(5, 445, 55, 17);
 
                 //---- labelTime ----
                 labelTime.setText("date");
                 panelInfo.add(labelTime);
-                labelTime.setBounds(75, 365, 365, 15);
+                labelTime.setBounds(75, 445, 365, 15);
 
                 //---- buttonModifyPassword ----
                 buttonModifyPassword.setText("\u4fee\u6539\u5bc6\u7801");
@@ -287,7 +315,7 @@ public class TeacherControllerGui extends JFrame {
                 //---- label8 ----
                 label8.setText("\u804c\u4f4d");
                 panelInfo.add(label8);
-                label8.setBounds(155, 170, 30, 15);
+                label8.setBounds(160, 170, 30, 15);
 
                 //---- inputPosition ----
                 inputPosition.setEditable(false);
@@ -445,6 +473,8 @@ public class TeacherControllerGui extends JFrame {
         try {
             CollegeServiceImpl collegeService = new CollegeServiceImpl();
             List<College> allColleges = collegeService.getAllCollege();
+            // 先清空学院下拉框
+            checkboxCollege.removeAllItems();
             for (College college : allColleges) {
                 if (college != null){
                     checkboxCollege.addItem(college.getCollegeName());
@@ -482,6 +512,66 @@ public class TeacherControllerGui extends JFrame {
             throw new RuntimeException(e);
         }
     }
+    // 修改个人信息
+    private void modifyTeacherInfo(){
+        try {
+            TeacherServiceImpl service = new TeacherServiceImpl();
+            Teacher teacher = new Teacher();
+            teacher.setTeacherId(inputTeacherId.getText());
+            teacher.setName(inputTeacherName.getText());
+            teacher.setAge(Integer.parseInt(inputAge.getText()));
+            teacher.setPhoneNumber(inputPhoneNumber.getText());
+            teacher.setSex(checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0);
+//            service.updateTeacher(teacher);
+            JOptionPane.showMessageDialog(this, "修改成功！");
+            buttonModify.setText("修改");
+            letInfoEditable(false);
+            labelPhotoTip.setVisible(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // 将当前登录的教师信息显示到个人信息界面上
+    private void showTeacherInfo(){
+        try {
+            TeacherServiceImpl service = new TeacherServiceImpl();
+            Teacher teacher = service.getTeacherById(teacherId);
+            this.teacher = teacher;
+            inputTeacherId.setText(teacher.getTeacherId());
+            inputTeacherName.setText(teacher.getName());
+            inputAge.setText(teacher.getAge().toString());
+            inputPhoneNumber.setText(teacher.getPhoneNumber());
+            inputCollegeId.setText(new CollegeServiceImpl().getCollegeNameById(teacher.getCollegeId()));
+            inputPosition.setText(teacher.getPosition());
+            String sex = teacher.getSex() == 1 ? "男":"女";
+            checkboxSex.setSelectedItem(sex);
+            // 获取证件照url并展示到那啥标签上
+            BufferedImage photograph; // 证件照url
+            try {
+                photograph = ImgUtil.getImgByUrl(teacher.getPhotograph());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            ImageIcon photo = new ImageIcon(photograph);
+            photo.setImage(photo.getImage().getScaledInstance(labelPhoto.getWidth(), labelPhoto.getHeight(), Image.SCALE_DEFAULT)); // 设置图片大小
+            labelPhoto.setIcon(photo);  // 展示图片到标签
+            // 判断教师对象的管理班级id是否为空，空则说明不是班主任
+            if (teacher.getMangeClassId() == null){
+                inputClassId.setText("非班主任；未管理班级");
+            }else{
+                inputClassId.setText(teacher.getMangeClassId());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // 设置那几个输入框是否可编辑
+    private void letInfoEditable(boolean flag){
+        inputTeacherName.setEditable(flag);
+        inputAge.setEditable(flag);
+        inputPhoneNumber.setEditable(flag);
+        checkboxSex.setEnabled(flag);
+    }
 
     public static void main(String[] args) {
         // 使用FlatLaf皮肤包
@@ -491,6 +581,6 @@ public class TeacherControllerGui extends JFrame {
         } catch (Exception e) {
             System.out.println("皮肤包导入失败！");
         }
-        new TeacherControllerGui().setVisible(true);
+        new TeacherControllerGui("2001333").setVisible(true);
     }
 }

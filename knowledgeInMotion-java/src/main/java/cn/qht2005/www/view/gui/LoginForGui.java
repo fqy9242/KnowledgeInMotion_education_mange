@@ -41,6 +41,7 @@ public class LoginForGui extends JFrame {
         boolean res = teacherService.login(userName, passWord);
         if (res) {
             JOptionPane.showMessageDialog(this, "登录成功");
+            new TeacherControllerGui(userName).setVisible(true);
 
         } else {
             JOptionPane.showMessageDialog(this, "登录失败");
