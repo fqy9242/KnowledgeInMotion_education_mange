@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TeacherServiceImpl implements TeacherService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
-	SqlSession sqlSession = sqlSessionFactory.openSession();
+	SqlSession sqlSession = sqlSessionFactory.openSession(true);
 	// 通过sqlSession获取学生mapper接口的代理对象
 	private final StudentMapper STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
 	// 通过sqlSession获取教师mapper接口的代理对象
@@ -64,5 +64,20 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public Teacher getTeacherById(String teacherId) {
 		return TEACHER_MAPPER.getTeacherById(teacherId);
+	}
+	/**
+	 * 根据教师对象修改教师信息
+	 * @param teacher 教师对象
+	 * @return 是否修改成功
+	 */
+	@Override
+	public boolean setTeacherByTeacher(Teacher teacher) {
+		try {
+			TEACHER_MAPPER.modifyTeacherByTeacher(teacher);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

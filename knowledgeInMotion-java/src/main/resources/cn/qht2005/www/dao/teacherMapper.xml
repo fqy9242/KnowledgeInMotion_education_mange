@@ -16,5 +16,20 @@
         <result column="teacher_login_password" property="passWord"/>
         <result column="teacher_photograph" property="photograph"/>
     </resultMap>
+    <!--动态修改数据-->
+    <update id="modifyTeacherByTeacher">
+        UPDATE t_teacher
+        <set>
+
+            <if test="age != null">teacher_age = #{age},</if>
+
+            <if test="sex != null and sex != ''">teacher_sex = #{sex},</if>
+
+            <if test="phoneNumber != null and phoneNumber != ''">teacher_phone_number = #{phoneNumber},</if>
+
+            <if test="photograph != null and photograph != ''">teacher_photograph = #{photograph},</if>
+        </set>
+        WHERE teacher_id = #{teacherId}
+    </update>
 
 </mapper>

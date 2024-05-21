@@ -68,23 +68,75 @@ public class TeacherControllerGui extends JFrame {
                 "月" + now.getDayOfMonth() + "日" + now.getHour() + "时" + now.getMinute() + "分" + now.getSecond() + "秒";
         labelTime.setText(time);
     }
-
+    // 修改个人信息按钮被点击事件
     private void buttonModifyMouseClicked(MouseEvent e) {
-        if (buttonModify.getText().equals("修改")) {
+        // 如果按钮的那啥是修改，就证明是要修改信息 否则就是完成修改信息
+        if ("修改".equals(buttonModify.getText())) {
             buttonModify.setText("完成");
+            buttonExport.setText("取消");
             // 将那几个输入框设置为可编辑
             letInfoEditable(true);
             labelPhotoTip.setVisible(true);
+        } else if ("完成".equals(buttonModify.getText())) {
+            // 完成修改
+            modifyInfo();
+            modifyInfoSuccess();
         }
     }
+    // 修改信息成功后的状态
+    private void modifyInfoSuccess(){
+            buttonModify.setText("修改");
+            buttonExport.setText("导出");
+            letInfoEditable(false);
+            labelPhotoTip.setVisible(false);
 
-    private void buttonPrintMouseClicked(MouseEvent e) {
-        // TODO add your code here
+
     }
-    // 修改信息按钮被点击
+    // 修改个人信息
+    private void modifyInfo(){
+        try {
+            TeacherServiceImpl service = new TeacherServiceImpl();
+            Teacher teacher = new Teacher();
+            teacher.setTeacherId(inputTeacherId.getText());
+            teacher.setAge(Integer.parseInt(inputAge.getText()));
+            teacher.setPhoneNumber(inputPhoneNumber.getText());
+            teacher.setSex(checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0);
+            boolean res = service.setTeacherByTeacher(teacher);
+            if (res) {
+                // 那啥返回true 表示修改成功
+                JOptionPane.showMessageDialog(this, "修改成功！");
+
+            }else{
+                // 修改失败
+                JOptionPane.showMessageDialog(this, "修改失败！");
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "修改失败！");
+        }
+
+    }
+    // 导出按钮点击事件
+    private void buttonPrintMouseClicked(MouseEvent e) {
+        if ("取消".equals(buttonExport.getText())){
+            buttonModify.setText("修改");
+            buttonExport.setText("导出");
+            letInfoEditable(false);
+            labelPhotoTip.setVisible(false);
+            showTeacherInfo();
+        }else{
+            // 导出
+            try {
+                JOptionPane.showMessageDialog(this, "突然发现这个功能没什么用，没实现！！");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+    }
+
     private void labelPhotoMouseClicked(MouseEvent e) {
-        // 将那几个输入框设置为可编辑
-        letInfoEditable(true);
+
     }
 
     // 修改密码按钮被点击 然后弹出修改密码的对话框
@@ -262,7 +314,7 @@ public class TeacherControllerGui extends JFrame {
                     }
                 });
                 panelInfo.add(labelPhoto);
-                labelPhoto.setBounds(345, 15, 190, 200);
+                labelPhoto.setBounds(345, 15, 190, 195);
 
                 //---- label7 ----
                 label7.setText("\u5b66\u9662");
@@ -289,7 +341,7 @@ public class TeacherControllerGui extends JFrame {
                 labelPhotoTip.setForeground(Color.red);
                 labelPhotoTip.setVisible(false);
                 panelInfo.add(labelPhotoTip);
-                labelPhotoTip.setBounds(350, 185, 190, 20);
+                labelPhotoTip.setBounds(350, 205, 190, 20);
 
                 //---- label12 ----
                 label12.setText("\u767b\u5f55\u65f6\u95f4");
@@ -512,25 +564,7 @@ public class TeacherControllerGui extends JFrame {
             throw new RuntimeException(e);
         }
     }
-    // 修改个人信息
-    private void modifyTeacherInfo(){
-        try {
-            TeacherServiceImpl service = new TeacherServiceImpl();
-            Teacher teacher = new Teacher();
-            teacher.setTeacherId(inputTeacherId.getText());
-            teacher.setName(inputTeacherName.getText());
-            teacher.setAge(Integer.parseInt(inputAge.getText()));
-            teacher.setPhoneNumber(inputPhoneNumber.getText());
-            teacher.setSex(checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0);
-//            service.updateTeacher(teacher);
-            JOptionPane.showMessageDialog(this, "修改成功！");
-            buttonModify.setText("修改");
-            letInfoEditable(false);
-            labelPhotoTip.setVisible(false);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
     // 将当前登录的教师信息显示到个人信息界面上
     private void showTeacherInfo(){
         try {
@@ -567,7 +601,6 @@ public class TeacherControllerGui extends JFrame {
     }
     // 设置那几个输入框是否可编辑
     private void letInfoEditable(boolean flag){
-        inputTeacherName.setEditable(flag);
         inputAge.setEditable(flag);
         inputPhoneNumber.setEditable(flag);
         checkboxSex.setEnabled(flag);

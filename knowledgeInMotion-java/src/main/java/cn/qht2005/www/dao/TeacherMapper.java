@@ -24,4 +24,10 @@ public interface TeacherMapper {
 	@Select("select * from t_teacher where teacher_id = #{teacherId} and teacher_login_password = #{passWord}")
 	@ResultMap("teacherResultMap")
 	Teacher getTeacherByIdAndPassword(@Param("teacherId") String teacherId, @Param("passWord") String passWord);
+	/**
+	 * 根据teacher对象修改教师信息
+	 */
+
+	Integer modifyTeacherByTeacher (Teacher teacher);
+
 }

@@ -21,5 +21,7 @@ public interface TeacherService {
 	List<Student> getStudentByDynamic(Student student);
 	// 根据id 查询教师信息
 	Teacher getTeacherById(String teacherId);
+	// 根据教师对象修改教师信息
+	boolean setTeacherByTeacher(Teacher teacher);
 
 }

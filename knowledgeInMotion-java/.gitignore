@@ -38,4 +38,4 @@ build/
 .DS_Store
 
 ### 隐私配置文件 ###
-knowledgeInMotion-java/src/main/resources/aliyunOss.yml
+aliyunOss.yml
