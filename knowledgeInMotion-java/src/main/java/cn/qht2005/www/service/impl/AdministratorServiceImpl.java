@@ -1,7 +1,7 @@
 package cn.qht2005.www.service.impl;
 
 import cn.qht2005.www.dao.AdministratorMapper;
-import cn.qht2005.www.pojo.Administrator;
+import cn.qht2005.www.pojo.people.Administrator;
 import cn.qht2005.www.util.SqlSessionFactoryUtil;
 import cn.qht2005.www.service.AdministratorService;
 import org.apache.ibatis.session.SqlSession;

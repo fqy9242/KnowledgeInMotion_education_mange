@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.qht2005.www.dao.StudentMapper">
     <!--学生数据库结果映射-->
-    <resultMap id="studentResultMap" type="cn.qht2005.www.pojo.Student">
+    <resultMap id="studentResultMap" type="cn.qht2005.www.pojo.people.Student">
         <result column="student_id" property="studentId"/>
         <result column="student_name" property="name"/>
         <result column="student_age" property="age"/>

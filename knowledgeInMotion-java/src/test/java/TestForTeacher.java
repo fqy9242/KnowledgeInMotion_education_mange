@@ -1,11 +1,10 @@
-import cn.qht2005.www.pojo.Student;
-import cn.qht2005.www.pojo.Teacher;
+import cn.qht2005.www.pojo.people.Student;
+import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

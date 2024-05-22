@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qht2005.www.dao.NoticeMapper">
+    <!--公告表数据库结果映射-->
+    <resultMap id="noticeResultMap" type="cn.qht2005.www.pojo.Notice">
+        <result column="notice_id" property="noticeId"/>
+        <result column="notice_publisher" property="publisher"/>
+        <result column="notice_recipient" property="recipient"/>
+        <result column="notice_title" property="title"/>
+        <result column="notice_body" property="body"/>
+    </resultMap>
+
+</mapper>

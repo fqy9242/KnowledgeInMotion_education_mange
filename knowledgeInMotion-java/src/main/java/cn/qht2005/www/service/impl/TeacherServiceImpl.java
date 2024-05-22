@@ -1,8 +1,8 @@
 package cn.qht2005.www.service.impl;
 
 import cn.qht2005.www.dao.StudentMapper;
-import cn.qht2005.www.pojo.Student;
-import cn.qht2005.www.pojo.Teacher;
+import cn.qht2005.www.pojo.people.Student;
+import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.dao.TeacherMapper;
 import cn.qht2005.www.service.TeacherService;
 import cn.qht2005.www.util.SqlSessionFactoryUtil;
@@ -97,4 +97,5 @@ public class TeacherServiceImpl implements TeacherService {
 			return false;
 		}
 	}
+
 }

@@ -1,5 +1,5 @@
 import cn.qht2005.www.pojo.Score;
-import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.Test;
 

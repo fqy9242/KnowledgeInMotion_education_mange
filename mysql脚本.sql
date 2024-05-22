@@ -145,3 +145,27 @@ CREATE TABLE t_notice(
 INSERT INTO t_notice VALUES(null, '教务处', 0 , '新学期', '新的学期，共同努力！');
 -- 查询公告表中的数据
 SELECT * FROM t_notice;
+
+-- 创建一个请假表
+CREATE TABLE t_leave(
+	-- 主键 递增
+	leave_id INT PRIMARY KEY auto_increment,
+	-- 用户类型 0.其他 1.教职工 2.学生
+	user_type TINYINT NOT NULL,
+	-- 用户id 学号或者工号
+	user_id VARCHAR(32),
+	-- 学院id
+	college_id TINYINT,
+	-- 班级id
+	class_id INT,
+	-- 请假类型 ： 0.其他 1.病假 2.事假 3.公假
+	leave_type TINYINT,
+	-- 请假理由
+	leave_reason VARCHAR(255),
+	-- 请假开始时间 
+	leave_start DATETIME,
+	-- 请假结束时间
+	leave_end DATETIME
+);
+-- 查询是否那啥成功
+SELECT * FROM t_leave;

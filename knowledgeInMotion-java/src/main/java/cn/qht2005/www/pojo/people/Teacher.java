@@ -1,4 +1,4 @@
-package cn.qht2005.www.pojo;
+package cn.qht2005.www.pojo.people;
 
 /**
  * 教师实体类

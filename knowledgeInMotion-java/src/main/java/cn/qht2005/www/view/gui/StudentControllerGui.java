@@ -9,9 +9,8 @@ import java.beans.*;
 import javax.imageio.ImageIO;
 import javax.swing.event.*;
 
-import cn.qht2005.www.dao.CollegeMapper;
 import cn.qht2005.www.pojo.Score;
-import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
@@ -26,7 +25,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -186,6 +184,10 @@ public class StudentControllerGui extends JFrame {
         scrollPane1 = new JScrollPane();
         tableScore = new JTable();
         button1 = new JButton();
+        panel1 = new JPanel();
+        scrollPane2 = new JScrollPane();
+        table1 = new JTable();
+        panel2 = new JPanel();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u5b66\u751f\u7528\u6237      by\u8983\u60e0\u901a");
@@ -423,6 +425,25 @@ public class StudentControllerGui extends JFrame {
                 button1.setBounds(5, 0, button1.getPreferredSize().width, 35);
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u6210\u7ee9", panelScore);
+
+            //======== panel1 ========
+            {
+                panel1.setLayout(null);
+
+                //======== scrollPane2 ========
+                {
+                    scrollPane2.setViewportView(table1);
+                }
+                panel1.add(scrollPane2);
+                scrollPane2.setBounds(0, 0, 540, 390);
+            }
+            tabbedPaneMain.addTab("\u516c\u544a\u901a\u77e5", panel1);
+
+            //======== panel2 ========
+            {
+                panel2.setLayout(null);
+            }
+            tabbedPaneMain.addTab("\u8bf7\u5047", panel2);
         }
         contentPane.add(tabbedPaneMain);
         tabbedPaneMain.setBounds(0, 0, 770, 475);
@@ -468,6 +489,10 @@ public class StudentControllerGui extends JFrame {
     private JScrollPane scrollPane1;
     private JTable tableScore;
     private JButton button1;
+    private JPanel panel1;
+    private JScrollPane scrollPane2;
+    private JTable table1;
+    private JPanel panel2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 上传图片
     public void uploadImage() {

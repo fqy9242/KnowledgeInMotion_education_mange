@@ -5,9 +5,8 @@
 package cn.qht2005.www.view.gui;
 
 import cn.qht2005.www.pojo.College;
-import cn.qht2005.www.pojo.Score;
-import cn.qht2005.www.pojo.Student;
-import cn.qht2005.www.pojo.Teacher;
+import cn.qht2005.www.pojo.people.Student;
+import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
@@ -306,6 +305,8 @@ public class TeacherControllerGui extends JFrame {
         buttonModifyPassword = new JButton();
         label8 = new JLabel();
         inputPosition = new JTextField();
+        scrollPane2 = new JScrollPane();
+        tableNotice = new JTable();
         panel1 = new JPanel();
         panel2 = new JPanel();
         buttonExport = new JButton();
@@ -320,6 +321,7 @@ public class TeacherControllerGui extends JFrame {
         checkboxSexForStudent = new JComboBox<>();
         label13 = new JLabel();
         checkboxCollege = new JComboBox();
+        panel3 = new JPanel();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u6559\u5e08\u7528\u6237      by\u8983\u60e0\u901a");
@@ -484,6 +486,13 @@ public class TeacherControllerGui extends JFrame {
                 inputPosition.setEditable(false);
                 panelInfo.add(inputPosition);
                 inputPosition.setBounds(210, 160, 110, 30);
+
+                //======== scrollPane2 ========
+                {
+                    scrollPane2.setViewportView(tableNotice);
+                }
+                panelInfo.add(scrollPane2);
+                scrollPane2.setBounds(0, 230, 675, 210);
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
 
@@ -586,6 +595,12 @@ public class TeacherControllerGui extends JFrame {
                 checkboxCollege.setBounds(255, 5, 85, 25);
             }
             tabbedPaneMain.addTab("\u5b66\u751f\u67e5\u8be2", panel2);
+
+            //======== panel3 ========
+            {
+                panel3.setLayout(null);
+            }
+            tabbedPaneMain.addTab("\u6279\u5047", panel3);
         }
         contentPane.add(tabbedPaneMain);
         tabbedPaneMain.setBounds(0, 0, 770, 485);
@@ -622,6 +637,8 @@ public class TeacherControllerGui extends JFrame {
     private JButton buttonModifyPassword;
     private JLabel label8;
     private JTextField inputPosition;
+    private JScrollPane scrollPane2;
+    private JTable tableNotice;
     private JPanel panel1;
     private JPanel panel2;
     private JButton buttonExport;
@@ -636,6 +653,7 @@ public class TeacherControllerGui extends JFrame {
     private JComboBox<String> checkboxSexForStudent;
     private JLabel label13;
     private JComboBox checkboxCollege;
+    private JPanel panel3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 获取到所有的学院 并且显示到下拉框中
     private void showCollegeToCheckBox(){

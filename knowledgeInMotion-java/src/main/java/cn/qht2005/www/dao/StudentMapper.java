@@ -1,6 +1,6 @@
 package cn.qht2005.www.dao;
 
-import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.people.Student;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;

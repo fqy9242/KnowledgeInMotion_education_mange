@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.qht2005.www.dao.AdministratorMapper">
     <!--管理员数据库结果映射-->
-    <resultMap id="administratorResultMap" type="cn.qht2005.www.pojo.Administrator">
+    <resultMap id="administratorResultMap" type="cn.qht2005.www.pojo.people.Administrator">
         <result column="user_name" property="userName"/>
         <result column="password" property="passWord"/>
     </resultMap>

@@ -232,6 +232,17 @@ new FormModel {
 						"x": 210
 						"y": 160
 					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane2"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "tableNotice"
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 0
+						"y": 230
+						"height": 210
+						"width": 675
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "个人信息"
 				} )
@@ -381,6 +392,13 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "学生查询"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
+					"autoSize": false
+				} ) {
+					name: "panel3"
+				}, new FormLayoutConstraints( null ) {
+					"title": "批假"
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 0

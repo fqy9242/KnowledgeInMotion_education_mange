@@ -1,7 +1,7 @@
 package cn.qht2005.www.service;
 
-import cn.qht2005.www.pojo.Student;
-import cn.qht2005.www.pojo.Teacher;
+import cn.qht2005.www.pojo.people.Student;
+import cn.qht2005.www.pojo.people.Teacher;
 
 import java.util.List;
 
