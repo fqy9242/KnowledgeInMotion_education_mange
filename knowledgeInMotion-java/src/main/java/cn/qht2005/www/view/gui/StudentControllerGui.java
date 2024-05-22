@@ -139,13 +139,17 @@ public class StudentControllerGui extends JFrame {
     }
     // 修改密码按钮被点击
     private void buttonModifyPasswordMouseClicked(MouseEvent e) {
-        new ModifyPassword(studentId).setVisible(true);
+        new ModifyPassword(student).setVisible(true);
     }
     // 导出按钮被点击事件
     private void button1MouseClicked(MouseEvent e) {
         // 导出所有成绩
         List<Score> scores = studentService.getScoreById(studentId);
-        exportScore(scores);
+        try {
+            exportScore(scores);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -561,7 +565,7 @@ public class StudentControllerGui extends JFrame {
         }
     }
     // 导出所有成绩 成excel
-    public void exportScore(List<Score> scores) {
+    public void exportScore(List<Score> scores) throws Exception{
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Scores");
 
@@ -600,6 +604,8 @@ public class StudentControllerGui extends JFrame {
                 e.printStackTrace();
             }
         }
+
+        workbook.close();
     }
     private void upDateTimeNow(){
         // 获取当前时间

@@ -42,6 +42,7 @@ public class LoginForGui extends JFrame {
         if (res) {
             JOptionPane.showMessageDialog(this, "登录成功");
             new TeacherControllerGui(userName).setVisible(true);
+            this.setVisible(false);
 
         } else {
             JOptionPane.showMessageDialog(this, "登录失败");
@@ -54,7 +55,6 @@ public class LoginForGui extends JFrame {
             // JOptionPane.showMessageDialog(this, "登录成功");
             // 跳转到学生界面
             new StudentControllerGui(userName).setVisible(true);
-
 //            new StudentControllerGui(userName).setVisible(true);
             this.setVisible(false);
         } else {

@@ -5,7 +5,12 @@
 package cn.qht2005.www.view.gui;
 
 import java.awt.event.*;
+
+import cn.qht2005.www.pojo.People;
+import cn.qht2005.www.pojo.Student;
+import cn.qht2005.www.pojo.Teacher;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
+import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import java.awt.*;
@@ -15,11 +20,18 @@ import javax.swing.*;
  * @author 覃
  */
 public class ModifyPassword extends JFrame {
-    // 学号、工号等主键
-    private final String id;
+    // 学生对象
+    private Student student = null;
+    // 教师对象
+    private Teacher teacher = null;
 
-    public ModifyPassword(String id) {
-        this.id = id;
+    public <T extends People> ModifyPassword(T people) {
+        if ("Student".equals(people.getClass().getSimpleName())){
+            // 也就是传进来的是个学生类型的对象
+            student = (Student) people;
+        }else{
+            teacher = (Teacher) people;
+        }
         initComponents();
     }
     // 修改密码
@@ -36,15 +48,22 @@ public class ModifyPassword extends JFrame {
         }else if (!new String(inputNewPassWord.getPassword()).equals(new String(inputNewPassWordRe.getPassword()))){
             JOptionPane.showMessageDialog(this, "两次输入的新密码不一致！");
             return;
-        }else if (!(new StudentServiceImpl().login(id, new String(inputNowPassWord.getPassword())))){
+        }/*else if (!(new StudentServiceImpl().login(id, new String(inputNowPassWord.getPassword())))){
             JOptionPane.showMessageDialog(this, "原密码错误！");
             return;
-        }
+        }*/
         // 开始那啥
         // 没报错就是修改成功（大概） 报错就是修改失败
         try {
-            new StudentServiceImpl().modifyPassWord(id, new String(inputNowPassWord.getPassword()),
-                    new String(inputNewPassWord.getPassword()));
+            if (student != null){
+                // 学生用户修改密码
+                new StudentServiceImpl().modifyPassWord(student.getStudentId(), new String(inputNowPassWord.getPassword()),
+                        new String(inputNewPassWord.getPassword()));
+            }else{
+                // 教师用户修改密码
+                new TeacherServiceImpl().modifyPassWord(teacher.getTeacherId(), new String((inputNowPassWord.getPassword())),
+                        new String(inputNewPassWord.getPassword()));
+            }
             JOptionPane.showMessageDialog(this, "修改成功！");
             JOptionPane.showMessageDialog(this, "登录已失效，请重新登录！");
             {
@@ -57,7 +76,7 @@ public class ModifyPassword extends JFrame {
             new LoginForGui().setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "修改失败！");
+            JOptionPane.showMessageDialog(this, "修改失败！请再次检查重试！");
 		}
     }
     // 确认修改按钮被点击
@@ -152,6 +171,8 @@ public class ModifyPassword extends JFrame {
         } catch (Exception e) {
             System.out.println("皮肤包导入失败！");
         }
-        new ModifyPassword("2331020130229").setVisible(true);
+        Student s =  new Student();
+        s.setStudentId("2331020130229");
+        new ModifyPassword(s).setVisible(true);
     }
 }

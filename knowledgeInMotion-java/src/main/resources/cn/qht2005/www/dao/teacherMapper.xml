@@ -31,5 +31,11 @@
         </set>
         WHERE teacher_id = #{teacherId}
     </update>
+    <!--修改密码-->
+    <update id="modifyPassWord">
+        UPDATE t_teacher
+        SET teacher_login_password = #{passWordNew}
+        WHERE teacher_id = #{teacherId} and teacher_login_password = #{passWord}
+    </update>
 
 </mapper>

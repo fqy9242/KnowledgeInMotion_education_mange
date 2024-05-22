@@ -5,6 +5,7 @@
 package cn.qht2005.www.view.gui;
 
 import cn.qht2005.www.pojo.College;
+import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.pojo.Teacher;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
@@ -12,13 +13,20 @@ import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.beans.*;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.imageio.ImageIO;
@@ -176,7 +184,7 @@ public class TeacherControllerGui extends JFrame {
 
     // 修改密码按钮被点击 然后弹出修改密码的对话框
     private void buttonModifyPasswordMouseClicked(MouseEvent e) {
-//        new ModifyPassword().setVisible(true);
+        new ModifyPassword(teacher).setVisible(true);
     }
     // 查询按钮被点击
 
@@ -201,6 +209,74 @@ public class TeacherControllerGui extends JFrame {
         s.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
         List<Student> students = new TeacherServiceImpl().getStudentByDynamic(s);
         showAllStudent(students);
+    }
+    // 导出学生信息 传进去一个学生id的集合
+    private void exportStudent(List<String> studentIds) throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("student_info");
+        // 操作表头
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("学号");
+        headerRow.createCell(1).setCellValue("姓名");
+        headerRow.createCell(2).setCellValue("性别");
+        headerRow.createCell(3).setCellValue("年龄");
+        headerRow.createCell(4).setCellValue("学院");
+        headerRow.createCell(5).setCellValue("班级");
+        headerRow.createCell(6).setCellValue("手机号");
+        // 行数据
+        for (int i = 0; i < studentIds.size(); i++) {
+            // 学号
+            String id = studentIds.get(i);
+            // 根据学号拿到对应的学生对象
+            Student student = new TeacherServiceImpl().getStudentById(id);
+            Row row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(student.getStudentId());
+            row.createCell(1).setCellValue(student.getName());
+            row.createCell(2).setCellValue(student.getSex() == 1 ? "男":"女");
+            row.createCell(3).setCellValue(student.getAge());
+            row.createCell(4).setCellValue(new CollegeServiceImpl().getCollegeNameById(student.getCollegeId()));
+            row.createCell(5).setCellValue(student.getClassId());
+            row.createCell(6).setCellValue(student.getPhoneNumber());
+        }
+        // 输出文件
+        // 创建一个文件选择器
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("选择保存位置");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        // 显示文件选择器对话框
+        int userSelection = fileChooser.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            // 如果用户点击了"保存"，则获取用户选择的目录
+            File fileToSave = fileChooser.getSelectedFile();
+            // 输出文件
+            String fileName = fileToSave.getAbsolutePath() + "/"  + "导出的学生信息.xlsx"; // 导出的文件名，啊不，是路径。
+            try (FileOutputStream fileOut = new FileOutputStream(fileName)) {
+                workbook.write(fileOut);
+                JOptionPane.showMessageDialog(this, "导出成功！");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        workbook.close();
+    }
+    // 导出查询到的学生信息按钮被点击
+    private void buttonExportMouseClicked(MouseEvent e) {
+        try {
+            // 获取表格模型
+            DefaultTableModel model = (DefaultTableModel) tableStudentInfo.getModel();
+            // 获取学生信息
+            List<String> students = new ArrayList<>();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                // 从表格模型中拿到学号
+                students.add(model.getValueAt(i, 0).toString());
+            }
+            // 导出学生信息
+            exportStudent(students);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     private void initComponents() {
@@ -423,6 +499,12 @@ public class TeacherControllerGui extends JFrame {
 
                 //---- buttonExport ----
                 buttonExport.setText("\u5bfc\u51fa");
+                buttonExport.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonExportMouseClicked(e);
+                    }
+                });
                 panel2.add(buttonExport);
                 buttonExport.setBounds(new Rectangle(new Point(575, 435), buttonExport.getPreferredSize()));
 

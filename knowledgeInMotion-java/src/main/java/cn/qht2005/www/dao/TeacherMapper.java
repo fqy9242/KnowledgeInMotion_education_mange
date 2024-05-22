@@ -29,5 +29,14 @@ public interface TeacherMapper {
 	 */
 
 	Integer modifyTeacherByTeacher (Teacher teacher);
+	/**
+	 * 修改教师密码
+	 * @param teacherId 工号
+	 * @param passWord 原密码
+	 * @param passWordNew 新密码
+	 * @return 返回影响行数？
+	 */
+	Integer modifyPassWord(@Param("teacherId") String teacherId, @Param("passWord") String passWord,
+						   @Param("passWordNew") String passWordNew);
 
 }

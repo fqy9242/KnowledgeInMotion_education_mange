@@ -1,6 +1,6 @@
 package cn.qht2005.www.pojo;
 
-public class Administrator{
+public class Administrator extends People{
 	private String userName;
 	private String passWord;
 

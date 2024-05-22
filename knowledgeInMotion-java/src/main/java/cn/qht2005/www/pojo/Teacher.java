@@ -4,7 +4,7 @@ package cn.qht2005.www.pojo;
  * 教师实体类
  * @author 覃
  */
-public class Teacher {
+public class Teacher extends People{
 	// 教师id、工号 主键
 	private String teacherId;
 	// 所属学院id

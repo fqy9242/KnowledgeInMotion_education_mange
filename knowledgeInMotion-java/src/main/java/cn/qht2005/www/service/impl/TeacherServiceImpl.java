@@ -80,4 +80,21 @@ public class TeacherServiceImpl implements TeacherService {
 			return false;
 		}
 	}
+	/**
+	 * 修改教师密码
+	 * @param teacherId 教师工号
+	 * @param passWord 原密码
+	 * @param passWordNew 新密码
+	 * @return 是否修改成功
+	 */
+	@Override
+	public boolean modifyPassWord(String teacherId, String passWord, String passWordNew) {
+		try {
+			TEACHER_MAPPER.modifyPassWord(teacherId, passWord, passWordNew);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

@@ -23,5 +23,7 @@ public interface TeacherService {
 	Teacher getTeacherById(String teacherId);
 	// 根据教师对象修改教师信息
 	boolean setTeacherByTeacher(Teacher teacher);
+	// 修改教师密码
+	boolean modifyPassWord(String teacherId, String passWord, String passWordNew);
 
 }

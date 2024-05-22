@@ -4,7 +4,7 @@ package cn.qht2005.www.pojo;
  * 学生实体类
  * @author 覃
  */
-public class Student {
+public class Student extends People{
 	// 学号 主键
 	private String studentId;
 	// 密码 初始为123456
