@@ -9,6 +9,7 @@ import cn.qht2005.www.pojo.Student;
 import cn.qht2005.www.pojo.Teacher;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -16,12 +17,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.beans.*;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 
 /**
@@ -32,6 +36,8 @@ public class TeacherControllerGui extends JFrame {
     private final String teacherId;
     // 当前登录的教师对象
     private Teacher teacher;
+    // 上传的图片
+    private File uploadPhoto;
     public TeacherControllerGui(String teacherId) {
         this.teacherId = teacherId;
         initComponents();
@@ -73,7 +79,7 @@ public class TeacherControllerGui extends JFrame {
         // 如果按钮的那啥是修改，就证明是要修改信息 否则就是完成修改信息
         if ("修改".equals(buttonModify.getText())) {
             buttonModify.setText("完成");
-            buttonExport.setText("取消");
+            buttonPrint.setText("取消");
             // 将那几个输入框设置为可编辑
             letInfoEditable(true);
             labelPhotoTip.setVisible(true);
@@ -86,11 +92,9 @@ public class TeacherControllerGui extends JFrame {
     // 修改信息成功后的状态
     private void modifyInfoSuccess(){
             buttonModify.setText("修改");
-            buttonExport.setText("导出");
+            buttonPrint.setText("导出");
             letInfoEditable(false);
             labelPhotoTip.setVisible(false);
-
-
     }
     // 修改个人信息
     private void modifyInfo(){
@@ -101,6 +105,12 @@ public class TeacherControllerGui extends JFrame {
             teacher.setAge(Integer.parseInt(inputAge.getText()));
             teacher.setPhoneNumber(inputPhoneNumber.getText());
             teacher.setSex(checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0);
+            if (uploadPhoto != null){
+                // 把图片上传到阿里云OSS并获取url
+                String photoUrl = AliOSSUtil.uploadFile(uploadPhoto);
+                // 设置图片url
+                teacher.setPhotograph(photoUrl);
+            }
             boolean res = service.setTeacherByTeacher(teacher);
             if (res) {
                 // 那啥返回true 表示修改成功
@@ -116,11 +126,11 @@ public class TeacherControllerGui extends JFrame {
         }
 
     }
-    // 导出按钮点击事件
+    // 导出个人信息按钮点击事件
     private void buttonPrintMouseClicked(MouseEvent e) {
-        if ("取消".equals(buttonExport.getText())){
+        if ("取消".equals(buttonPrint.getText())){
             buttonModify.setText("修改");
-            buttonExport.setText("导出");
+            buttonPrint.setText("导出");
             letInfoEditable(false);
             labelPhotoTip.setVisible(false);
             showTeacherInfo();
@@ -134,9 +144,34 @@ public class TeacherControllerGui extends JFrame {
         }
 
     }
-
+    // 放图片那个标签被点击事件
     private void labelPhotoMouseClicked(MouseEvent e) {
-
+        if ("完成".equals(buttonModify.getText())){
+            uploadImage();
+        }
+    }
+    // 上传图片
+    public void uploadImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        // 限制选择的文件类型
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png");
+        fileChooser.setFileFilter(filter);
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            uploadPhoto = fileChooser.getSelectedFile();
+            try {
+                // 将上传的文件展示到标签
+                BufferedImage image = ImageIO.read(uploadPhoto);
+                ImageIcon imageIcon = new ImageIcon(image);
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(labelPhoto.getWidth(), labelPhoto.getHeight(), Image.SCALE_DEFAULT)); // 设置图片大小
+                labelPhoto.setIcon(imageIcon);
+/*                // 上传图片
+                String photoUrl = AliOSSUtil.uploadFile(photo);
+                student.setPhotograph(photoUrl);*/
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     // 修改密码按钮被点击 然后弹出修改密码的对话框

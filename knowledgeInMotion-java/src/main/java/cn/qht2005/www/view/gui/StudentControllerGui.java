@@ -100,7 +100,7 @@ public class StudentControllerGui extends JFrame {
             letInfoEditable(false);
         }
     }
-    // 完成按钮点击事件 也就是提交修改信息
+    // 提交修改个人信息
     private void upDateInfo() throws Exception{
         student.setStudentId(inputStudentId.getText());
         student.setAge(Integer.parseInt(inputAge.getText()));
