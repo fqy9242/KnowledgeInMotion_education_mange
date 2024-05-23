@@ -53,4 +53,5 @@ public interface StudentMapper {
 	 * @return 学生
 	 */
 	List<Student>selectDynamic(Student student);
+
 }

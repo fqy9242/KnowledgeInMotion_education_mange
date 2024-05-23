@@ -1,5 +1,6 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.people.Student;
 
@@ -36,5 +37,11 @@ public interface StudentService {
 	 * @return 影响行数
 	 */
 	Integer modifyPassWord(String studentId, String passWord, String passWordNew);
+
+	/**
+	 * 学生对象获取公告
+	 * @return  学生接收的公告内容
+	 */
+	List<Notice>getNotice();
 
 }

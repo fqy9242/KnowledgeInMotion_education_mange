@@ -25,10 +25,8 @@ import java.beans.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -734,7 +732,8 @@ public class TeacherControllerGui extends JFrame {
         DefaultTableModel model = (DefaultTableModel) tableNotice.getModel();
         model.setRowCount(0);
 
-        for (Notice n : notice) {
+        for (int i = notice.size() - 1; i >= 0; i--) {
+            Notice n = notice.get(i);
             LocalDateTime publishDate = n.getPublishDate();
             // 格式化时间
             String date = publishDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

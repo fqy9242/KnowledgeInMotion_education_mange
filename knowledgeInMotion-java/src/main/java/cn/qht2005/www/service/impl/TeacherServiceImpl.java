@@ -106,7 +106,7 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public List<Notice> getNoticeByTeacher() {
 		List<Notice> noticeForTeacher = NOTICE_MAPPER.getByRecipient(Short.valueOf("0"));
-		noticeForTeacher.addAll(NOTICE_MAPPER.getByRecipient(Short.valueOf("1")));
+		noticeForTeacher.addAll(NOTICE_MAPPER.getByRecipient(Short.valueOf("2")));
 		return noticeForTeacher;
 	}
 

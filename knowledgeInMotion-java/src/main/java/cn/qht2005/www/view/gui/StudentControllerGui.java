@@ -9,6 +9,7 @@ import java.beans.*;
 import javax.imageio.ImageIO;
 import javax.swing.event.*;
 
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -61,6 +63,36 @@ public class StudentControllerGui extends JFrame {
 
 
     }
+    // 获取公告并展示到列表
+    private void showNotice(){
+        List<Notice> notice = null;
+        try {
+            notice = new StudentServiceImpl().getNotice();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // 往表格添加数据
+        DefaultTableModel model = (DefaultTableModel) tableNotice.getModel();
+        model.setRowCount(0);
+        for (int i = notice.size() - 1; i >= 0; i--) {
+            Notice n = notice.get(i);
+            LocalDateTime publishDate = n.getPublishDate();
+            // 格式化时间
+            String date = publishDate.format(DateTimeFormatter.ofPattern("yy-MM-dd"));
+            Object[] row = new Object[]{
+                    n.getNoticeId(),
+                    n.getPublisher(),
+                    date,
+                    n.getTitle(),
+                    n.getBody()
+            };
+            model.addRow(row);
+        }
+        // 设置居中对齐
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        tableNotice.setDefaultRenderer(Object.class, r);
+    }
 
     private void thisPropertyChange(PropertyChangeEvent e) {
         // TODO add your code here
@@ -72,6 +104,8 @@ public class StudentControllerGui extends JFrame {
             showInfo();
         } else if (index == 1) {
             showScore();
+        } else if (index == 2) {
+            showNotice();
         }
     }
 
@@ -185,9 +219,10 @@ public class StudentControllerGui extends JFrame {
         tableScore = new JTable();
         button1 = new JButton();
         panel1 = new JPanel();
-        scrollPane2 = new JScrollPane();
-        table1 = new JTable();
+        scrollPaneForNotice = new JScrollPane();
+        tableNotice = new JTable();
         panel2 = new JPanel();
+        button2 = new JButton();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u5b66\u751f\u7528\u6237      by\u8983\u60e0\u901a");
@@ -430,12 +465,46 @@ public class StudentControllerGui extends JFrame {
             {
                 panel1.setLayout(null);
 
-                //======== scrollPane2 ========
+                //======== scrollPaneForNotice ========
                 {
-                    scrollPane2.setViewportView(table1);
+
+                    //---- tableNotice ----
+                    tableNotice.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {"", null, null, null, null},
+                            {null, null, null, null, null},
+                        },
+                        new String[] {
+                            "id", "\u53d1\u6587", "\u65f6\u95f4", "\u6807\u9898", "\u5185\u5bb9"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, String.class, String.class, String.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    {
+                        TableColumnModel cm = tableNotice.getColumnModel();
+                        cm.getColumn(0).setResizable(false);
+                        cm.getColumn(1).setResizable(false);
+                        cm.getColumn(3).setResizable(false);
+                    }
+                    tableNotice.setShowHorizontalLines(false);
+                    tableNotice.setShowVerticalLines(false);
+                    scrollPaneForNotice.setViewportView(tableNotice);
                 }
-                panel1.add(scrollPane2);
-                scrollPane2.setBounds(0, 0, 540, 390);
+                panel1.add(scrollPaneForNotice);
+                scrollPaneForNotice.setBounds(0, 0, 540, 370);
             }
             tabbedPaneMain.addTab("\u516c\u544a\u901a\u77e5", panel1);
 
@@ -447,6 +516,11 @@ public class StudentControllerGui extends JFrame {
         }
         contentPane.add(tabbedPaneMain);
         tabbedPaneMain.setBounds(0, 0, 770, 475);
+
+        //---- button2 ----
+        button2.setText("text");
+        contentPane.add(button2);
+        button2.setBounds(new Rectangle(new Point(250, -25), button2.getPreferredSize()));
 
         contentPane.setPreferredSize(new Dimension(615, 410));
         pack();
@@ -490,9 +564,10 @@ public class StudentControllerGui extends JFrame {
     private JTable tableScore;
     private JButton button1;
     private JPanel panel1;
-    private JScrollPane scrollPane2;
-    private JTable table1;
+    private JScrollPane scrollPaneForNotice;
+    private JTable tableNotice;
     private JPanel panel2;
+    private JButton button2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 上传图片
     public void uploadImage() {
