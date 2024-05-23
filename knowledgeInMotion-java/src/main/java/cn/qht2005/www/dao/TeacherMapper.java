@@ -1,9 +1,12 @@
 package cn.qht2005.www.dao;
 
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Teacher;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 public interface TeacherMapper {
 	/**

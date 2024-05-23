@@ -1,4 +1,8 @@
+import cn.qht2005.www.pojo.Notice;
+import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class TestForNotice {
 /**
@@ -10,7 +14,9 @@ public class TestForNotice {
 	 * 测试根据接收者查询通知
 	 */
 	@Test
-	public void testgetNoticeByRecipient() {
+	public void testgetNoticeByRecipientForTeacher() throws Exception {
+		List<Notice> notice = new TeacherServiceImpl().getNoticeByTeacher();
+		System.out.println(notice);
 
 	}
 }

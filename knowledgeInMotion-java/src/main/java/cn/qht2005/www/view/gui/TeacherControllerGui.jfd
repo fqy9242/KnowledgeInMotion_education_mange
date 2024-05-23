@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.10" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -233,15 +233,55 @@ new FormModel {
 						"y": 160
 					} )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-						name: "scrollPane2"
+						name: "scrollPaneNotice"
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "tableNotice"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+								add( new java.util.Vector {
+									add( "" )
+									add( "" )
+									add( "" )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( "" )
+									add( "" )
+									add( null )
+									add( null )
+									add( null )
+								} )
+							}, new java.util.Vector {
+								add( "公告id" )
+								add( "发文" )
+								add( "时间" )
+								add( "标题" )
+								add( "公告" )
+							}, new java.util.Vector {
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 0
 						"y": 230
 						"height": 210
-						"width": 675
+						"width": 660
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "个人信息"

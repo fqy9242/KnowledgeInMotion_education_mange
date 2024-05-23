@@ -1,5 +1,6 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 
@@ -25,5 +26,7 @@ public interface TeacherService {
 	boolean setTeacherByTeacher(Teacher teacher);
 	// 修改教师密码
 	boolean modifyPassWord(String teacherId, String passWord, String passWordNew);
+	// 获取公告
+	List<Notice> getNoticeByTeacher();
 
 }

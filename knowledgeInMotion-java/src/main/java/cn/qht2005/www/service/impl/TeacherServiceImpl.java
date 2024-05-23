@@ -1,6 +1,8 @@
 package cn.qht2005.www.service.impl;
 
+import cn.qht2005.www.dao.NoticeMapper;
 import cn.qht2005.www.dao.StudentMapper;
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.dao.TeacherMapper;
@@ -18,6 +20,8 @@ public class TeacherServiceImpl implements TeacherService {
 	private final StudentMapper STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
 	// 通过sqlSession获取教师mapper接口的代理对象
 	private final TeacherMapper TEACHER_MAPPER = sqlSession.getMapper(TeacherMapper.class);
+	// 通过sqlSession获取公告mapper接口的代理对象
+	private final NoticeMapper NOTICE_MAPPER = sqlSession.getMapper(NoticeMapper.class);
 
     public TeacherServiceImpl() throws Exception {
 
@@ -96,6 +100,14 @@ public class TeacherServiceImpl implements TeacherService {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+
+	@Override
+	public List<Notice> getNoticeByTeacher() {
+		List<Notice> noticeForTeacher = NOTICE_MAPPER.getByRecipient(Short.valueOf("0"));
+		noticeForTeacher.addAll(NOTICE_MAPPER.getByRecipient(Short.valueOf("1")));
+		return noticeForTeacher;
 	}
 
 }

@@ -10,6 +10,7 @@
         <result column="notice_recipient" property="recipient"/>
         <result column="notice_title" property="title"/>
         <result column="notice_body" property="body"/>
+        <result column="notice_time" property="publishDate"/>
     </resultMap>
 
 </mapper>

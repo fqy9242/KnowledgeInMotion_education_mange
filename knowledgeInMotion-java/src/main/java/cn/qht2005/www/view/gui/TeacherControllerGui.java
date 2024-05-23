@@ -5,6 +5,7 @@
 package cn.qht2005.www.view.gui;
 
 import cn.qht2005.www.pojo.College;
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
@@ -24,10 +25,12 @@ import java.beans.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -59,6 +62,7 @@ public class TeacherControllerGui extends JFrame {
         // 展示个人信息菜单
         if (tabbedPaneMain.getSelectedIndex() == 0){
             showTeacherInfo();
+            showNotice();
 
         }else if (tabbedPaneMain.getSelectedIndex() == 1){
 
@@ -305,7 +309,7 @@ public class TeacherControllerGui extends JFrame {
         buttonModifyPassword = new JButton();
         label8 = new JLabel();
         inputPosition = new JTextField();
-        scrollPane2 = new JScrollPane();
+        scrollPaneNotice = new JScrollPane();
         tableNotice = new JTable();
         panel1 = new JPanel();
         panel2 = new JPanel();
@@ -487,12 +491,31 @@ public class TeacherControllerGui extends JFrame {
                 panelInfo.add(inputPosition);
                 inputPosition.setBounds(210, 160, 110, 30);
 
-                //======== scrollPane2 ========
+                //======== scrollPaneNotice ========
                 {
-                    scrollPane2.setViewportView(tableNotice);
+
+                    //---- tableNotice ----
+                    tableNotice.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {"", "", "", null, null},
+                            {"", "", null, null, null},
+                        },
+                        new String[] {
+                            "\u516c\u544aid", "\u53d1\u6587", "\u65f6\u95f4", "\u6807\u9898", "\u516c\u544a"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, String.class, String.class, String.class
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                    });
+                    scrollPaneNotice.setViewportView(tableNotice);
                 }
-                panelInfo.add(scrollPane2);
-                scrollPane2.setBounds(0, 230, 675, 210);
+                panelInfo.add(scrollPaneNotice);
+                scrollPaneNotice.setBounds(0, 230, 660, 210);
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
 
@@ -637,7 +660,7 @@ public class TeacherControllerGui extends JFrame {
     private JButton buttonModifyPassword;
     private JLabel label8;
     private JTextField inputPosition;
-    private JScrollPane scrollPane2;
+    private JScrollPane scrollPaneNotice;
     private JTable tableNotice;
     private JPanel panel1;
     private JPanel panel2;
@@ -698,6 +721,36 @@ public class TeacherControllerGui extends JFrame {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    // 获取公告并展示
+    private void showNotice(){
+        List<Notice> notice = null;
+        try {
+            notice = new TeacherServiceImpl().getNoticeByTeacher();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // 往表格添加数据
+        DefaultTableModel model = (DefaultTableModel) tableNotice.getModel();
+        model.setRowCount(0);
+
+        for (Notice n : notice) {
+            LocalDateTime publishDate = n.getPublishDate();
+            // 格式化时间
+            String date = publishDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Object[] row = new Object[]{
+                    n.getNoticeId(),
+                    n.getPublisher(),
+                    date,
+                    n.getTitle(),
+                    n.getBody()
+            };
+            model.addRow(row);
+        }
+        // 设置居中对齐
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        tableNotice.setDefaultRenderer(Object.class, r);
     }
 
     // 将当前登录的教师信息显示到个人信息界面上

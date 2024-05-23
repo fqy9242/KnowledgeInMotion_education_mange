@@ -29,7 +29,7 @@ public class TestForStudent {
 	@Test
 	public void testForDynamicUpdate() throws Exception{
 		Student s = new Student();
-		s.setSex((short) 2);
+		s.setSex(Short.valueOf((short) 2));
 		Student student = new StudentServiceImpl().modifyStudentByDynamic("2331020133133", s);
 		System.out.println(student);
 	}

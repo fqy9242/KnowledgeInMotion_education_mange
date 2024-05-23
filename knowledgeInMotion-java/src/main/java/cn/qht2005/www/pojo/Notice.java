@@ -1,11 +1,17 @@
 package cn.qht2005.www.pojo;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+
 // 公告实体类
 public class Notice {
 	// 公告id 主键
 	private Integer noticeId;
 	// 发文人
 	private String publisher;
-	// 接收人
+	// 发文时间
+	private LocalDateTime publishDate;
+	// 接收人 0全体师生 1学生 2教职工
 	private short recipient;
 	// 公告标题
 	private String title;
@@ -15,8 +21,9 @@ public class Notice {
 	public Notice() {
 	}
 
-	public Notice(String publisher, short recipient, String title, String body) {
+	public Notice(String publisher, LocalDateTime publishDate, short recipient, String title, String body) {
 		this.publisher = publisher;
+		this.publishDate = publishDate;
 		this.recipient = recipient;
 		this.title = title;
 		this.body = body;
@@ -62,11 +69,21 @@ public class Notice {
 		this.body = body;
 	}
 
+
+	public LocalDateTime getPublishDate() {
+		return publishDate;
+	}
+
+	public void setPublishDate(LocalDateTime publishDate) {
+		this.publishDate = publishDate;
+	}
+
 	@Override
 	public String toString() {
 		return "Notice{" +
 				"noticeId=" + noticeId +
 				", publisher='" + publisher + '\'' +
+				", publishDate=" + publishDate +
 				", recipient=" + recipient +
 				", title='" + title + '\'' +
 				", body='" + body + '\'' +

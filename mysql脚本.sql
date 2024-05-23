@@ -134,15 +134,17 @@ CREATE TABLE t_notice(
 	notice_id INT PRIMARY KEY auto_increment,
 	-- 发文人
 	notice_publisher VARCHAR(64),
+	-- 发文时间
+	notice_time datetime,
 	-- 接收人 类型tinyInt 0:所有人 1:学生用户 2:教师用户
 	notice_recipient TINYINT NOT NULL,
 	-- 公告标题
-	notice_titile VARCHAR(32),
+	notice_title VARCHAR(32),
 	-- 公告内容
 	notice_body VARCHAR(255) NOT NULL
 );
 -- 往公告表中添加一条数据
-INSERT INTO t_notice VALUES(null, '教务处', 0 , '新学期', '新的学期，共同努力！');
+INSERT INTO t_notice VALUES(null, '教务处', '2024-05-20 13:14:00' , 0 , '新学期', '新的学期，共同努力！');
 -- 查询公告表中的数据
 SELECT * FROM t_notice;
 
