@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -106,6 +107,8 @@ public class StudentControllerGui extends JFrame {
             showScore();
         } else if (index == 2) {
             showNotice();
+        } else if (index == 3) {
+            initLeavePage();
         }
     }
 
@@ -221,7 +224,41 @@ public class StudentControllerGui extends JFrame {
         panel1 = new JPanel();
         scrollPaneForNotice = new JScrollPane();
         tableNotice = new JTable();
-        panel2 = new JPanel();
+        panelForLeave = new JPanel();
+        label11 = new JLabel();
+        scrollPaneForLeaveTable = new JScrollPane();
+        tableForLeave = new JTable();
+        inputForApplicationTitle = new JTextField();
+        scrollPane2 = new JScrollPane();
+        textAreaForLeaveReason = new JTextArea();
+        label14 = new JLabel();
+        selectForLeaveType = new JComboBox<>();
+        label15 = new JLabel();
+        selectForYearStart = new JComboBox();
+        label16 = new JLabel();
+        selectForMonthStart = new JComboBox();
+        label17 = new JLabel();
+        label18 = new JLabel();
+        selectForDayStart = new JComboBox();
+        label19 = new JLabel();
+        selectForHourStart = new JComboBox();
+        label20 = new JLabel();
+        comboBox6 = new JComboBox();
+        label21 = new JLabel();
+        selectForminuteStart = new JComboBox();
+        label22 = new JLabel();
+        buttonApplicationLeave = new JButton();
+        label23 = new JLabel();
+        selectForYearEnd = new JComboBox();
+        label24 = new JLabel();
+        selectForMonthEnd = new JComboBox();
+        label25 = new JLabel();
+        selectForDayEnd = new JComboBox();
+        label26 = new JLabel();
+        selectForHourEnd = new JComboBox();
+        label27 = new JLabel();
+        selectForminuteEnd = new JComboBox();
+        label28 = new JLabel();
         button2 = new JButton();
 
         //======== this ========
@@ -338,7 +375,7 @@ public class StudentControllerGui extends JFrame {
                     }
                 });
                 panelInfo.add(labelPhoto);
-                labelPhoto.setBounds(345, 15, 195, 170);
+                labelPhoto.setBounds(345, 15, 190, 180);
 
                 //---- label7 ----
                 label7.setText("\u5b66\u9662");
@@ -390,12 +427,12 @@ public class StudentControllerGui extends JFrame {
                 //---- label12 ----
                 label12.setText("\u767b\u5f55\u65f6\u95f4");
                 panelInfo.add(label12);
-                label12.setBounds(5, 365, 55, 17);
+                label12.setBounds(0, 455, 55, 17);
 
                 //---- labelTime ----
                 labelTime.setText("date");
                 panelInfo.add(labelTime);
-                labelTime.setBounds(75, 365, 365, 15);
+                labelTime.setBounds(70, 455, 365, 15);
 
                 //---- buttonModifyPassword ----
                 buttonModifyPassword.setText("\u4fee\u6539\u5bc6\u7801");
@@ -504,15 +541,180 @@ public class StudentControllerGui extends JFrame {
                     scrollPaneForNotice.setViewportView(tableNotice);
                 }
                 panel1.add(scrollPaneForNotice);
-                scrollPaneForNotice.setBounds(0, 0, 540, 370);
+                scrollPaneForNotice.setBounds(0, 0, 540, 495);
             }
             tabbedPaneMain.addTab("\u516c\u544a\u901a\u77e5", panel1);
 
-            //======== panel2 ========
+            //======== panelForLeave ========
             {
-                panel2.setLayout(null);
+                panelForLeave.setLayout(null);
+
+                //---- label11 ----
+                label11.setText("\u7533\u8bf7\u6807\u9898");
+                panelForLeave.add(label11);
+                label11.setBounds(new Rectangle(new Point(10, 30), label11.getPreferredSize()));
+
+                //======== scrollPaneForLeaveTable ========
+                {
+
+                    //---- tableForLeave ----
+                    tableForLeave.setModel(new DefaultTableModel(
+                        new Object[][] {
+                        },
+                        new String[] {
+                            "\u8bf7\u5047\u6807\u9898", "\u8bf7\u5047\u65f6\u95f4", "\u7ed3\u675f\u65f6\u95f4", "\u7533\u8bf7\u72b6\u6001", "\u56de\u590d"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, String.class, String.class, String.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, true, false, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    tableForLeave.setShowVerticalLines(false);
+                    tableForLeave.setShowHorizontalLines(false);
+                    scrollPaneForLeaveTable.setViewportView(tableForLeave);
+                }
+                panelForLeave.add(scrollPaneForLeaveTable);
+                scrollPaneForLeaveTable.setBounds(0, 290, 535, 185);
+
+                //---- inputForApplicationTitle ----
+                inputForApplicationTitle.setText("\u8bf7\u5047");
+                panelForLeave.add(inputForApplicationTitle);
+                inputForApplicationTitle.setBounds(65, 25, 130, 30);
+
+                //======== scrollPane2 ========
+                {
+
+                    //---- textAreaForLeaveReason ----
+                    textAreaForLeaveReason.setToolTipText("\u8bf7\u5728\u6b64\u8f93\u5165\u60a8\u7684\u8bf7\u5047\u7406\u7531\u3002");
+                    scrollPane2.setViewportView(textAreaForLeaveReason);
+                }
+                panelForLeave.add(scrollPane2);
+                scrollPane2.setBounds(0, 180, 535, 110);
+
+                //---- label14 ----
+                label14.setText("\u8bf7\u5047\u7c7b\u578b");
+                panelForLeave.add(label14);
+                label14.setBounds(new Rectangle(new Point(210, 30), label14.getPreferredSize()));
+
+                //---- selectForLeaveType ----
+                selectForLeaveType.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u5176\u4ed6",
+                    "\u4e8b\u5047",
+                    "\u75c5\u5047",
+                    "\u516c\u5047"
+                }));
+                panelForLeave.add(selectForLeaveType);
+                selectForLeaveType.setBounds(new Rectangle(new Point(260, 25), selectForLeaveType.getPreferredSize()));
+
+                //---- label15 ----
+                label15.setText("\u5f00\u59cb\u65f6\u95f4");
+                panelForLeave.add(label15);
+                label15.setBounds(new Rectangle(new Point(5, 80), label15.getPreferredSize()));
+                panelForLeave.add(selectForYearStart);
+                selectForYearStart.setBounds(60, 75, 75, 30);
+
+                //---- label16 ----
+                label16.setText("\u5e74");
+                panelForLeave.add(label16);
+                label16.setBounds(new Rectangle(new Point(135, 80), label16.getPreferredSize()));
+                panelForLeave.add(selectForMonthStart);
+                selectForMonthStart.setBounds(145, 75, 70, 30);
+
+                //---- label17 ----
+                label17.setText("\u6708");
+                panelForLeave.add(label17);
+                label17.setBounds(215, 80, 13, 17);
+
+                //---- label18 ----
+                label18.setText("\u8bf7\u5047\u7406\u7531");
+                panelForLeave.add(label18);
+                label18.setBounds(new Rectangle(new Point(215, 160), label18.getPreferredSize()));
+                panelForLeave.add(selectForDayStart);
+                selectForDayStart.setBounds(230, 75, 60, 30);
+
+                //---- label19 ----
+                label19.setText("\u65e5");
+                panelForLeave.add(label19);
+                label19.setBounds(295, 80, 13, 17);
+                panelForLeave.add(selectForHourStart);
+                selectForHourStart.setBounds(310, 75, 85, 30);
+
+                //---- label20 ----
+                label20.setText("\u65f6");
+                panelForLeave.add(label20);
+                label20.setBounds(395, 80, 13, 17);
+                panelForLeave.add(comboBox6);
+                comboBox6.setBounds(0, 480, 85, 30);
+
+                //---- label21 ----
+                label21.setText("\u5e74");
+                panelForLeave.add(label21);
+                label21.setBounds(85, 485, 13, 17);
+                panelForLeave.add(selectForminuteStart);
+                selectForminuteStart.setBounds(410, 75, 85, 30);
+
+                //---- label22 ----
+                label22.setText("\u5206");
+                panelForLeave.add(label22);
+                label22.setBounds(495, 80, 13, 17);
+
+                //---- buttonApplicationLeave ----
+                buttonApplicationLeave.setText("\u7533\u8bf7\u8bf7\u5047");
+                panelForLeave.add(buttonApplicationLeave);
+                buttonApplicationLeave.setBounds(new Rectangle(new Point(360, 25), buttonApplicationLeave.getPreferredSize()));
+
+                //---- label23 ----
+                label23.setText("\u7ed3\u675f\u65f6\u95f4");
+                panelForLeave.add(label23);
+                label23.setBounds(5, 120, 51, 17);
+                panelForLeave.add(selectForYearEnd);
+                selectForYearEnd.setBounds(60, 115, 75, 30);
+
+                //---- label24 ----
+                label24.setText("\u5e74");
+                panelForLeave.add(label24);
+                label24.setBounds(135, 120, 13, 17);
+                panelForLeave.add(selectForMonthEnd);
+                selectForMonthEnd.setBounds(145, 115, 70, 30);
+
+                //---- label25 ----
+                label25.setText("\u6708");
+                panelForLeave.add(label25);
+                label25.setBounds(215, 120, 13, 17);
+                panelForLeave.add(selectForDayEnd);
+                selectForDayEnd.setBounds(230, 115, 60, 30);
+
+                //---- label26 ----
+                label26.setText("\u65e5");
+                panelForLeave.add(label26);
+                label26.setBounds(295, 120, 13, 17);
+                panelForLeave.add(selectForHourEnd);
+                selectForHourEnd.setBounds(310, 115, 85, 30);
+
+                //---- label27 ----
+                label27.setText("\u65f6");
+                panelForLeave.add(label27);
+                label27.setBounds(395, 120, 13, 17);
+                panelForLeave.add(selectForminuteEnd);
+                selectForminuteEnd.setBounds(410, 115, 85, 30);
+
+                //---- label28 ----
+                label28.setText("\u5206");
+                panelForLeave.add(label28);
+                label28.setBounds(495, 120, 13, 17);
             }
-            tabbedPaneMain.addTab("\u8bf7\u5047", panel2);
+            tabbedPaneMain.addTab("\u8bf7\u5047", panelForLeave);
         }
         contentPane.add(tabbedPaneMain);
         tabbedPaneMain.setBounds(0, 0, 770, 475);
@@ -522,7 +724,7 @@ public class StudentControllerGui extends JFrame {
         contentPane.add(button2);
         button2.setBounds(new Rectangle(new Point(250, -25), button2.getPreferredSize()));
 
-        contentPane.setPreferredSize(new Dimension(615, 410));
+        contentPane.setPreferredSize(new Dimension(615, 510));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -566,7 +768,41 @@ public class StudentControllerGui extends JFrame {
     private JPanel panel1;
     private JScrollPane scrollPaneForNotice;
     private JTable tableNotice;
-    private JPanel panel2;
+    private JPanel panelForLeave;
+    private JLabel label11;
+    private JScrollPane scrollPaneForLeaveTable;
+    private JTable tableForLeave;
+    private JTextField inputForApplicationTitle;
+    private JScrollPane scrollPane2;
+    private JTextArea textAreaForLeaveReason;
+    private JLabel label14;
+    private JComboBox<String> selectForLeaveType;
+    private JLabel label15;
+    private JComboBox selectForYearStart;
+    private JLabel label16;
+    private JComboBox selectForMonthStart;
+    private JLabel label17;
+    private JLabel label18;
+    private JComboBox selectForDayStart;
+    private JLabel label19;
+    private JComboBox selectForHourStart;
+    private JLabel label20;
+    private JComboBox comboBox6;
+    private JLabel label21;
+    private JComboBox selectForminuteStart;
+    private JLabel label22;
+    private JButton buttonApplicationLeave;
+    private JLabel label23;
+    private JComboBox selectForYearEnd;
+    private JLabel label24;
+    private JComboBox selectForMonthEnd;
+    private JLabel label25;
+    private JComboBox selectForDayEnd;
+    private JLabel label26;
+    private JComboBox selectForHourEnd;
+    private JLabel label27;
+    private JComboBox selectForminuteEnd;
+    private JLabel label28;
     private JButton button2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 上传图片
@@ -609,6 +845,38 @@ public class StudentControllerGui extends JFrame {
         for (Score score : scores) {
             model.addRow(new Object[]{score.getCourseId(), score.getCourseName(), score.getScore()});
         }
+    }
+    // 初始化请假页面
+    private void initLeavePage(){
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 请假开始时间的年，那必须是今年！
+        selectForYearStart.addItem(now.getYear());
+        // 请假结束时间的年，那必须近几年！
+        for (int i = now.getYear(); i <= now.getYear() + 3; i++) {
+            selectForYearEnd.addItem(i);
+        }
+        // 请假时间的月
+        for (int i = 1; i <= 12; i++) {
+            selectForMonthStart.addItem(i);
+            selectForMonthEnd.addItem(i);
+        }
+        // 请假时间的日
+        for (int i = 1; i <= 31; i++) {
+            selectForDayStart.addItem(i);
+            selectForDayEnd.addItem(i);
+        }
+        // 请假时间的时
+        for (int i = 0; i <= 23; i++) {
+            selectForHourStart.addItem(i);
+            selectForHourEnd.addItem(i);
+        }
+        // 请假时间的分
+        for (int i = 0; i <= 59; i++) {
+            selectForminuteStart.addItem(i);
+            selectForminuteEnd.addItem(i);
+        }
+
     }
     // 将学生的个人信息展示到文本框
     private void showInfo(){

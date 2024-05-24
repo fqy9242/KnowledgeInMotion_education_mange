@@ -27,6 +27,6 @@ public interface TeacherService {
 	// 修改教师密码
 	boolean modifyPassWord(String teacherId, String passWord, String passWordNew);
 	// 获取公告
-	List<Notice> getNoticeByTeacher();
+	List<Notice> getNotice();
 
 }

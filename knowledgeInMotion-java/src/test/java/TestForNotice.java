@@ -16,7 +16,7 @@ public class TestForNotice {
 	 */
 	@Test
 	public void testGetNoticeByRecipientForTeacher() throws Exception {
-		List<Notice> notice = new TeacherServiceImpl().getNoticeByTeacher();
+		List<Notice> notice = new TeacherServiceImpl().getNotice();
 		System.out.println(notice);
 	}
 

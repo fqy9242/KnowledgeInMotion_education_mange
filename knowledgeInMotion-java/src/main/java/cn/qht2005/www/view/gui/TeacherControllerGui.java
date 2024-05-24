@@ -13,6 +13,7 @@ import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.intellij.uiDesigner.core.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -302,13 +303,13 @@ public class TeacherControllerGui extends JFrame {
         label10 = new JLabel();
         inputClassId = new JTextField();
         labelPhotoTip = new JLabel();
-        label12 = new JLabel();
-        labelTime = new JLabel();
         buttonModifyPassword = new JButton();
         label8 = new JLabel();
         inputPosition = new JTextField();
         scrollPaneNotice = new JScrollPane();
         tableNotice = new JTable();
+        label12 = new JLabel();
+        labelTime = new JLabel();
         panel1 = new JPanel();
         panel2 = new JPanel();
         buttonExport = new JButton();
@@ -328,6 +329,7 @@ public class TeacherControllerGui extends JFrame {
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u6559\u5e08\u7528\u6237      by\u8983\u60e0\u901a");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addPropertyChangeListener("selectPageOnAler", e -> thisPropertyChange(e));
         var contentPane = getContentPane();
         contentPane.setLayout(null);
@@ -458,16 +460,6 @@ public class TeacherControllerGui extends JFrame {
                 panelInfo.add(labelPhotoTip);
                 labelPhotoTip.setBounds(350, 205, 190, 20);
 
-                //---- label12 ----
-                label12.setText("\u767b\u5f55\u65f6\u95f4");
-                panelInfo.add(label12);
-                label12.setBounds(5, 445, 55, 17);
-
-                //---- labelTime ----
-                labelTime.setText("date");
-                panelInfo.add(labelTime);
-                labelTime.setBounds(75, 445, 365, 15);
-
                 //---- buttonModifyPassword ----
                 buttonModifyPassword.setText("\u4fee\u6539\u5bc6\u7801");
                 buttonModifyPassword.addMouseListener(new MouseAdapter() {
@@ -495,8 +487,6 @@ public class TeacherControllerGui extends JFrame {
                     //---- tableNotice ----
                     tableNotice.setModel(new DefaultTableModel(
                         new Object[][] {
-                            {"", "", "", null, null},
-                            {"", "", null, null, null},
                         },
                         new String[] {
                             "\u516c\u544aid", "\u53d1\u6587", "\u65f6\u95f4", "\u6807\u9898", "\u516c\u544a"
@@ -505,15 +495,33 @@ public class TeacherControllerGui extends JFrame {
                         Class<?>[] columnTypes = new Class<?>[] {
                             String.class, String.class, String.class, String.class, String.class
                         };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false
+                        };
                         @Override
                         public Class<?> getColumnClass(int columnIndex) {
                             return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
                         }
                     });
                     scrollPaneNotice.setViewportView(tableNotice);
                 }
                 panelInfo.add(scrollPaneNotice);
-                scrollPaneNotice.setBounds(0, 230, 660, 210);
+                scrollPaneNotice.setBounds(0, 230, 660, 235);
+
+                //---- label12 ----
+                label12.setText("\u767b\u5f55\u65f6\u95f4");
+                panelInfo.add(label12);
+                label12.setBounds(50, 465, 55, label12.getPreferredSize().height);
+
+                //---- labelTime ----
+                labelTime.setText("date");
+                labelTime.setForeground(Color.red);
+                panelInfo.add(labelTime);
+                labelTime.setBounds(120, 465, 365, 15);
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
 
@@ -624,9 +632,9 @@ public class TeacherControllerGui extends JFrame {
             tabbedPaneMain.addTab("\u6279\u5047", panel3);
         }
         contentPane.add(tabbedPaneMain);
-        tabbedPaneMain.setBounds(0, 0, 770, 485);
+        tabbedPaneMain.setBounds(0, 0, 770, 480);
 
-        contentPane.setPreferredSize(new Dimension(760, 500));
+        contentPane.setPreferredSize(new Dimension(760, 510));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -653,13 +661,13 @@ public class TeacherControllerGui extends JFrame {
     private JLabel label10;
     private JTextField inputClassId;
     private JLabel labelPhotoTip;
-    private JLabel label12;
-    private JLabel labelTime;
     private JButton buttonModifyPassword;
     private JLabel label8;
     private JTextField inputPosition;
     private JScrollPane scrollPaneNotice;
     private JTable tableNotice;
+    private JLabel label12;
+    private JLabel labelTime;
     private JPanel panel1;
     private JPanel panel2;
     private JButton buttonExport;
@@ -724,7 +732,7 @@ public class TeacherControllerGui extends JFrame {
     private void showNotice(){
         List<Notice> notice = null;
         try {
-            notice = new TeacherServiceImpl().getNoticeByTeacher();
+            notice = new TeacherServiceImpl().getNotice();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

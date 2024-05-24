@@ -148,6 +148,7 @@ INSERT INTO t_notice VALUES(null, '教务处', '2024-05-20 13:14:00' , 0 , '新�
 -- 查询公告表中的数据
 SELECT * FROM t_notice;
 
+DROP TABLE IF EXISTS t_leave;
 -- 创建一个请假表
 CREATE TABLE t_leave(
 	-- 主键 递增
@@ -167,7 +168,11 @@ CREATE TABLE t_leave(
 	-- 请假开始时间 
 	leave_start DATETIME,
 	-- 请假结束时间
-	leave_end DATETIME
+	leave_end DATETIME,
+	-- 申请状态 -1 待处理 0 已驳回 1 已通过
+	application_status TINYINT DEFAULT -1,
+	-- 回复
+	response VARCHAR(64)
 );
 -- 查询是否那啥成功
 SELECT * FROM t_leave;
