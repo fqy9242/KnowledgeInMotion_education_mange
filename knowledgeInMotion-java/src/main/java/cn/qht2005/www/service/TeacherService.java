@@ -30,6 +30,10 @@ public interface TeacherService {
 	List<Notice> getNotice();
 	// 处理请假申请
 	boolean disposeApply(Leave leave);
+	// 根据班级获取请假列表
+	List<Leave> getLeaveByClassId(String classId);
+	// 根据请假id获取请假信息
+	Leave getLeaveByLeaveId(String leaveId);
 
 
 }

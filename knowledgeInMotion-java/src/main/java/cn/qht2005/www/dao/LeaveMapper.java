@@ -31,4 +31,21 @@ public interface LeaveMapper {
 	 */
 	Integer updateByLeave(Leave leave);
 
+	/**
+	 * 根据班级id查询请假数据
+	 * @param classId 班级id
+	 * @return 一个请假列表
+	 */
+	@Select("select * from t_leave where class_id = #{classId}")
+	@ResultMap("leaveResultMap")
+	List<Leave>selectByClassId(String classId);
+	/**
+	 * 根据请假id查询请假数据
+	 * @param leaveId 请假id
+	 * @return 一个请假对象
+	 */
+	@Select("select * from t_leave where leave_id = #{leaveId}")
+	@ResultMap("leaveResultMap")
+	Leave selectByLeaveId(String leaveId);
+
 }

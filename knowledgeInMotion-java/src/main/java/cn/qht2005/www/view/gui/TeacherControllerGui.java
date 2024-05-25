@@ -5,6 +5,7 @@
 package cn.qht2005.www.view.gui;
 
 import cn.qht2005.www.pojo.College;
+import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
@@ -13,7 +14,6 @@ import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.intellij.uiDesigner.core.*;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -74,6 +74,10 @@ public class TeacherControllerGui extends JFrame {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
+        } else if (tabbedPaneMain.getSelectedIndex() == 3){
+            // 请假页
+            showLeaveApplyList();
+
         }
     }
     // 获取当前时间
@@ -280,6 +284,28 @@ public class TeacherControllerGui extends JFrame {
             throw new RuntimeException(ex);
         }
     }
+    // 批假按钮被点击
+    private void buttonDisposeMouseClicked(MouseEvent e) {
+        // 获取选中行的索引
+        int selectedRow = tableForLeaveApply.getSelectedRow();
+        // 如果有行被选中
+        Integer leaveId = null;
+        if (selectedRow != -1) {
+            // 获取选中行的请假id
+            leaveId = (Integer) tableForLeaveApply.getValueAt(selectedRow, 0);
+        }else{
+            JOptionPane.showMessageDialog(this, "请选择要处理的请假申请！");
+            return;
+        }
+        try {
+            Leave leave = new TeacherServiceImpl().getLeaveByLeaveId(String.valueOf(leaveId));
+            // 弹出处理请假的对话框
+            new DisposeLeaveWindowsAndController(this,leave).setVisible(true);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -325,6 +351,11 @@ public class TeacherControllerGui extends JFrame {
         label13 = new JLabel();
         checkboxCollege = new JComboBox();
         panel3 = new JPanel();
+        scrollPaneForLeaveApply = new JScrollPane();
+        tableForLeaveApply = new JTable();
+        buttonDispose = new JButton();
+        notClassMangeTip = new JLabel();
+        disposeTip = new JLabel();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u6559\u5e08\u7528\u6237      by\u8983\u60e0\u901a");
@@ -628,6 +659,65 @@ public class TeacherControllerGui extends JFrame {
             //======== panel3 ========
             {
                 panel3.setLayout(null);
+
+                //======== scrollPaneForLeaveApply ========
+                {
+
+                    //---- tableForLeaveApply ----
+                    tableForLeaveApply.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {null, null, null, null, "", null, null, null},
+                        },
+                        new String[] {
+                            "\u8bf7\u5047ID", "\u59d3\u540d", "\u5b66\u53f7", "\u7c7b\u578b", "\u7406\u7531", "\u5f00\u59cb\u65f6\u95f4", "\u7ed3\u675f\u65f6\u95f4", "\u72b6\u6001"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false, false, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    tableForLeaveApply.setShowHorizontalLines(false);
+                    tableForLeaveApply.setShowVerticalLines(false);
+                    scrollPaneForLeaveApply.setViewportView(tableForLeaveApply);
+                }
+                panel3.add(scrollPaneForLeaveApply);
+                scrollPaneForLeaveApply.setBounds(0, 40, 650, 435);
+
+                //---- buttonDispose ----
+                buttonDispose.setText("\u5904\u7406");
+                buttonDispose.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonDisposeMouseClicked(e);
+                    }
+                });
+                panel3.add(buttonDispose);
+                buttonDispose.setBounds(new Rectangle(new Point(510, 5), buttonDispose.getPreferredSize()));
+
+                //---- notClassMangeTip ----
+                notClassMangeTip.setText("\u8be5\u7cfb\u7edf\u4ec5\u53ef\u73ed\u4e3b\u4efb\u6279\u5047\u672c\u73ed\u5b66\u751f\uff01");
+                notClassMangeTip.setForeground(new Color(0xcc3300));
+                notClassMangeTip.setEnabled(false);
+                panel3.add(notClassMangeTip);
+                notClassMangeTip.setBounds(new Rectangle(new Point(15, 10), notClassMangeTip.getPreferredSize()));
+
+                //---- disposeTip ----
+                disposeTip.setText("\u9009\u4e2d\u884c\u540e\u70b9\u51fb\u5904\u7406\u5373\u53ef\u6279\u5047\uff01");
+                disposeTip.setEnabled(false);
+                disposeTip.setForeground(new Color(0xff0033));
+                panel3.add(disposeTip);
+                disposeTip.setBounds(240, 10, 205, disposeTip.getPreferredSize().height);
             }
             tabbedPaneMain.addTab("\u6279\u5047", panel3);
         }
@@ -638,6 +728,46 @@ public class TeacherControllerGui extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+    }
+    // 获取请假申请列表
+    private void showLeaveApplyList(){
+        if (teacher.getMangeClassId() == null){
+            // 如果没有管理的班级
+            notClassMangeTip.setEnabled(true);
+            buttonDispose.setEnabled(false);
+            return;
+        }
+        try {
+            List<Leave> leaveApplies = new TeacherServiceImpl().getLeaveByClassId(teacher.getMangeClassId());
+            // 往表格添加数据
+            DefaultTableModel model = (DefaultTableModel) tableForLeaveApply.getModel();
+            model.setRowCount(0);
+            for (Leave leaveApply : leaveApplies) {
+                // 创建一个格式化时间对象
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yy-MM-dd");
+                // 获取学生对象
+                Student student = new TeacherServiceImpl().getStudentById(leaveApply.getUserId());
+                Object[] row = new Object[]{
+                        leaveApply.getLeaveId(),
+                        leaveApply.getUserId(),
+                        student.getName(),
+                        leaveApply.getUserId(),
+                        leaveApply.getLeaveType() == 1 ? "事假" : leaveApply.getLeaveType() == 2 ? "病假" : "其他",
+                        leaveApply.getLeaveReason(),
+                        leaveApply.getLeaveStartTime().format(dateTimeFormatter),
+                        leaveApply.getLeaveEndTime().format(dateTimeFormatter),
+                        leaveApply.getApplicationStatus() == 0 ? "未处理" :
+                                leaveApply.getApplicationStatus() == 1 ? "已同意" : "已拒绝"
+                };
+                model.addRow(row);
+            }
+            // 设置居中对齐
+            DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+            r.setHorizontalAlignment(JLabel.CENTER);
+            tableForLeaveApply.setDefaultRenderer(Object.class, r);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
@@ -683,6 +813,11 @@ public class TeacherControllerGui extends JFrame {
     private JLabel label13;
     private JComboBox checkboxCollege;
     private JPanel panel3;
+    private JScrollPane scrollPaneForLeaveApply;
+    private JTable tableForLeaveApply;
+    private JButton buttonDispose;
+    private JLabel notClassMangeTip;
+    private JLabel disposeTip;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 获取到所有的学院 并且显示到下拉框中
     private void showCollegeToCheckBox(){
@@ -810,5 +945,6 @@ public class TeacherControllerGui extends JFrame {
             System.out.println("皮肤包导入失败！");
         }
         new TeacherControllerGui("2001333").setVisible(true);
+
     }
 }

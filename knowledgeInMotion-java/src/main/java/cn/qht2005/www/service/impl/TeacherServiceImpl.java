@@ -33,17 +33,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     /**
 	 * 教师服务层实现类
-	 * @param studentId
-	 * @param passWord
-	 * @return
-     */
+	 */
 	@Override
 	public boolean login(String studentId, String passWord) {
 		Teacher res = TEACHER_MAPPER.getTeacherByIdAndPassword(studentId, passWord);
-		if (res == null) {
-			return false;
-		}
-		return true;
+		return res != null;
 	}
 
 
@@ -126,6 +120,20 @@ public class TeacherServiceImpl implements TeacherService {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public List<Leave> getLeaveByClassId(String classId) {
+		return LEAVE_MAPPER.selectByClassId(classId);
+	}
+	/**
+	 * 根据请假id获取请假信息
+	 * @param leaveId 请假id
+	 * @return 请假实体对象
+	 */
+	@Override
+	public Leave getLeaveByLeaveId(String leaveId) {
+		return LEAVE_MAPPER.selectByLeaveId(leaveId);
 	}
 
 }
