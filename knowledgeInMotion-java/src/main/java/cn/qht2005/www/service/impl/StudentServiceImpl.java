@@ -1,8 +1,10 @@
 package cn.qht2005.www.service.impl;
 
+import cn.qht2005.www.dao.LeaveMapper;
 import cn.qht2005.www.dao.NoticeMapper;
 import cn.qht2005.www.dao.ScoreMapper;
 import cn.qht2005.www.dao.StudentMapper;
+import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.util.SqlSessionFactoryUtil;
@@ -19,6 +21,8 @@ public class StudentServiceImpl implements StudentService {
 	StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
 	ScoreMapper scoreMapper = sqlSession.getMapper(ScoreMapper.class);
 	private final NoticeMapper NOTICEMAPPER = sqlSession.getMapper(NoticeMapper.class);
+	// 请假映射对象
+	private final LeaveMapper LEAVE_MAPPER = sqlSession.getMapper(LeaveMapper.class);
 	public StudentServiceImpl() throws Exception {
 	}
 
@@ -62,6 +66,22 @@ public class StudentServiceImpl implements StudentService {
 		// 获取接收列表为学生的公告列表 然后和上面的拼接在一起
 		notices.addAll(NOTICEMAPPER.getByRecipient(Short.valueOf("1")));
 		return notices;
+	}
+	// 学生请假
+	@Override
+	public boolean leaveForStudent(Leave leave) {
+		try {
+			LEAVE_MAPPER.insertByLeave(leave);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public List<Leave> getLeaveByStudentId(String studentId) {
+		return LEAVE_MAPPER.selectByUserId(studentId);
 	}
 
 

@@ -25,5 +25,6 @@
         <mapper resource="cn/qht2005/www/dao/scoreMapper.xml"/>
         <mapper resource="cn/qht2005/www/dao/collegeMapper.xml"/>
         <mapper resource="cn/qht2005/www/dao/noticeMapper.xml"/>
+        <mapper resource="cn/qht2005/www/dao/leaveMapper.xml"/>
     </mappers>
 </configuration>

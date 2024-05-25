@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qht2005.www.dao.LeaveMapper">
+    <!--请假表数据库结果映射-->
+    <resultMap id="leaveResultMap" type="cn.qht2005.www.pojo.Leave">
+        <result column="leave_id" property="leaveId"/>
+        <result column="user_type" property="userType"/>
+        <result column="user_id" property="userId"/>
+        <result column="college_id" property="collegeId"/>
+        <result column="class_id" property="classId"/>
+        <result column="leave_type" property="leaveType"/>
+        <result column="leave_reason" property="leaveReason"/>
+        <result column="leave_start" property="leaveStartTime"/>
+        <result column="leave_end" property="leaveEndTime"/>
+        <result column="application_status" property="applicationStatus"/>
+        <result column="response" property="response"/>
+    </resultMap>
+    <!--往请假表中添加数据-->
+    <insert id="insertByLeave">
+        insert into t_leave (user_type, user_id, college_id, class_id, leave_type,
+                             leave_reason, leave_start, leave_end, application_status, response) values
+                             (#{userType}, #{userId}, #{collegeId}, #{classId}, #{leaveType},#{leaveReason},
+                              #{leaveStartTime},#{leaveEndTime},-1, null)
+    </insert>
+    <!--更新请假数据-->
+    <update id="updateByLeave">
+        update t_leave
+        <set>
+            <if test="applicationStatus != null">
+                application_status = #{applicationStatus},
+            </if>
+            <if test="response != null">
+                response = #{response},
+            </if>
+        </set>
+        where leave_id = #{leaveId}
+    </update>
+
+</mapper>

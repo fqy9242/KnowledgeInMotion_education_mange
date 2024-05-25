@@ -9,6 +9,7 @@ import java.beans.*;
 import javax.imageio.ImageIO;
 import javax.swing.event.*;
 
+import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.people.Student;
@@ -28,10 +29,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -109,6 +110,7 @@ public class StudentControllerGui extends JFrame {
             showNotice();
         } else if (index == 3) {
             initLeavePage();
+            showApplyLeave();
         }
     }
 
@@ -186,6 +188,11 @@ public class StudentControllerGui extends JFrame {
             throw new RuntimeException(ex);
         }
     }
+
+    // 请假按钮被点击
+    private void buttonApplicationLeaveMouseClicked(MouseEvent e) {
+        applyLeave();
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMain = new JTabbedPane();
@@ -225,10 +232,8 @@ public class StudentControllerGui extends JFrame {
         scrollPaneForNotice = new JScrollPane();
         tableNotice = new JTable();
         panelForLeave = new JPanel();
-        label11 = new JLabel();
         scrollPaneForLeaveTable = new JScrollPane();
         tableForLeave = new JTable();
-        inputForApplicationTitle = new JTextField();
         scrollPane2 = new JScrollPane();
         textAreaForLeaveReason = new JTextArea();
         label14 = new JLabel();
@@ -549,11 +554,6 @@ public class StudentControllerGui extends JFrame {
             {
                 panelForLeave.setLayout(null);
 
-                //---- label11 ----
-                label11.setText("\u7533\u8bf7\u6807\u9898");
-                panelForLeave.add(label11);
-                label11.setBounds(new Rectangle(new Point(10, 30), label11.getPreferredSize()));
-
                 //======== scrollPaneForLeaveTable ========
                 {
 
@@ -562,14 +562,14 @@ public class StudentControllerGui extends JFrame {
                         new Object[][] {
                         },
                         new String[] {
-                            "\u8bf7\u5047\u6807\u9898", "\u8bf7\u5047\u65f6\u95f4", "\u7ed3\u675f\u65f6\u95f4", "\u7533\u8bf7\u72b6\u6001", "\u56de\u590d"
+                            "\u8bf7\u5047\u7406\u7531", "\u8bf7\u5047\u65f6\u95f4", "\u7ed3\u675f\u65f6\u95f4", "\u7533\u8bf7\u72b6\u6001", "\u56de\u590d"
                         }
                     ) {
                         Class<?>[] columnTypes = new Class<?>[] {
                             String.class, String.class, String.class, String.class, String.class
                         };
                         boolean[] columnEditable = new boolean[] {
-                            false, true, false, false, false
+                            false, false, false, false, false
                         };
                         @Override
                         public Class<?> getColumnClass(int columnIndex) {
@@ -587,11 +587,6 @@ public class StudentControllerGui extends JFrame {
                 panelForLeave.add(scrollPaneForLeaveTable);
                 scrollPaneForLeaveTable.setBounds(0, 290, 535, 185);
 
-                //---- inputForApplicationTitle ----
-                inputForApplicationTitle.setText("\u8bf7\u5047");
-                panelForLeave.add(inputForApplicationTitle);
-                inputForApplicationTitle.setBounds(65, 25, 130, 30);
-
                 //======== scrollPane2 ========
                 {
 
@@ -605,7 +600,7 @@ public class StudentControllerGui extends JFrame {
                 //---- label14 ----
                 label14.setText("\u8bf7\u5047\u7c7b\u578b");
                 panelForLeave.add(label14);
-                label14.setBounds(new Rectangle(new Point(210, 30), label14.getPreferredSize()));
+                label14.setBounds(new Rectangle(new Point(5, 30), label14.getPreferredSize()));
 
                 //---- selectForLeaveType ----
                 selectForLeaveType.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -615,7 +610,7 @@ public class StudentControllerGui extends JFrame {
                     "\u516c\u5047"
                 }));
                 panelForLeave.add(selectForLeaveType);
-                selectForLeaveType.setBounds(new Rectangle(new Point(260, 25), selectForLeaveType.getPreferredSize()));
+                selectForLeaveType.setBounds(new Rectangle(new Point(55, 25), selectForLeaveType.getPreferredSize()));
 
                 //---- label15 ----
                 label15.setText("\u5f00\u59cb\u65f6\u95f4");
@@ -671,8 +666,14 @@ public class StudentControllerGui extends JFrame {
 
                 //---- buttonApplicationLeave ----
                 buttonApplicationLeave.setText("\u7533\u8bf7\u8bf7\u5047");
+                buttonApplicationLeave.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonApplicationLeaveMouseClicked(e);
+                    }
+                });
                 panelForLeave.add(buttonApplicationLeave);
-                buttonApplicationLeave.setBounds(new Rectangle(new Point(360, 25), buttonApplicationLeave.getPreferredSize()));
+                buttonApplicationLeave.setBounds(new Rectangle(new Point(410, 25), buttonApplicationLeave.getPreferredSize()));
 
                 //---- label23 ----
                 label23.setText("\u7ed3\u675f\u65f6\u95f4");
@@ -769,10 +770,8 @@ public class StudentControllerGui extends JFrame {
     private JScrollPane scrollPaneForNotice;
     private JTable tableNotice;
     private JPanel panelForLeave;
-    private JLabel label11;
     private JScrollPane scrollPaneForLeaveTable;
     private JTable tableForLeave;
-    private JTextField inputForApplicationTitle;
     private JScrollPane scrollPane2;
     private JTextArea textAreaForLeaveReason;
     private JLabel label14;
@@ -982,6 +981,80 @@ public class StudentControllerGui extends JFrame {
         String time = now.getYear() + "年" + now.getMonthValue() +
                 "月" + now.getDayOfMonth() + "日" + now.getHour() + "时" + now.getMinute() + "分" + now.getSecond() + "秒";
         labelTime.setText(time);
+    }
+    // 请假
+    private void applyLeave(){
+        Leave leave = new Leave();
+        // 用户类型 1学生 2教师
+        leave.setUserType((short) 1);
+        // 用户id 学生为学号
+        leave.setUserId(studentId);
+        // 请假类型 1事假 2病假 3公假 4其他
+        String t = (String) selectForLeaveType.getSelectedItem();
+        Short leaveType = (short) (Objects.equals(t, "病假") ? 1 : Objects.equals(t, "事假") ?
+                2 : Objects.equals(t, "公假") ? 3 : 0);
+        leave.setLeaveType(leaveType);
+        // 班级id
+        leave.setClassId(student.getClassId());
+        // 学院id
+        leave.setCollegeId(student.getCollegeId());
+        // 请假理由
+        leave.setLeaveReason(textAreaForLeaveReason.getText());
+        // 请假开始时间
+        LocalDateTime startTime = LocalDateTime.of((int) selectForYearStart.getSelectedItem(),
+                (int) selectForMonthStart.getSelectedItem(), (int) selectForDayStart.getSelectedItem(),
+                (int) selectForHourStart.getSelectedItem(), (int) selectForminuteStart.getSelectedItem());
+        leave.setLeaveStartTime(startTime);
+        // 请假结束时间
+        LocalDateTime endTime = LocalDateTime.of((int) selectForYearEnd.getSelectedItem(),
+                (int) selectForMonthEnd.getSelectedItem(), (int) selectForDayEnd.getSelectedItem(),
+                (int) selectForHourEnd.getSelectedItem(), (int) selectForminuteEnd.getSelectedItem());
+        leave.setLeaveEndTime(endTime);
+
+        try {
+            new StudentServiceImpl().leaveForStudent(leave);
+            JOptionPane.showMessageDialog(this, "请假成功！");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "请假失败！");
+            throw new RuntimeException(e);
+        }
+
+    }
+    // 展示自己的请假记录并展示到表格
+    private void showApplyLeave(){
+        // 获取用户请假记录
+        List<Leave> leaveList = null;
+        try {
+            leaveList = new StudentServiceImpl().getLeaveByStudentId(studentId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // 将表格数据居中显示
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        tableForLeave.setDefaultRenderer(Object.class, r);
+        // 将请假记录添加到表格
+        DefaultTableModel model = (DefaultTableModel) tableForLeave.getModel();
+        model.setRowCount(0); // 先删后增
+        for (Leave leave : leaveList) {
+            // 格式化时间
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yy-MM-dd");
+            model.addRow(new Object[]{
+                    // 请假理由
+                    leave.getLeaveReason(),
+                    // 请假开始时间
+                    leave.getLeaveStartTime().format(dateTimeFormatter),
+                    // 请假结束时间
+                    leave.getLeaveEndTime().format(dateTimeFormatter),
+                    // 请假申请状态
+                    leave.getApplicationStatus() == -1 ? "未处理" : leave.getApplicationStatus() == 1 ? "同意" : "拒绝",
+                    // 回复
+                    leave.getResponse()
+            });
+
+        }
+
+
     }
     public static void main(String[] args) {
         // 使用FlatLaf皮肤包

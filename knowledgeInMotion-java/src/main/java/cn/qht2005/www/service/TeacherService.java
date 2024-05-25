@@ -1,18 +1,18 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 
 import java.util.List;
 
+/**
+ * @author 覃
+ */
 public interface TeacherService {
 	/**
 	 *
-	 * @param teacherId
-	 * @param passWord
-	 * @return
-	 * @throws Exception
 	 */
     boolean login(String teacherId, String passWord) throws Exception;
 	Student getStudentById(String studentId);
@@ -28,5 +28,8 @@ public interface TeacherService {
 	boolean modifyPassWord(String teacherId, String passWord, String passWordNew);
 	// 获取公告
 	List<Notice> getNotice();
+	// 处理请假申请
+	boolean disposeApply(Leave leave);
+
 
 }

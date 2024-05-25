@@ -1,5 +1,6 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.people.Student;
@@ -43,5 +44,17 @@ public interface StudentService {
 	 * @return  学生接收的公告内容
 	 */
 	List<Notice>getNotice();
+	/**
+	 * 学生请假
+	 * @param leave 请假对象
+	 * @return 是否申请成功
+	 */
+	boolean leaveForStudent(Leave leave);
+	/**
+	 * 根据学生id查询请假数据
+	 * @param studentId 学号
+	 * @return 请假数据
+	 */
+	List<Leave> getLeaveByStudentId(String studentId);
 
 }

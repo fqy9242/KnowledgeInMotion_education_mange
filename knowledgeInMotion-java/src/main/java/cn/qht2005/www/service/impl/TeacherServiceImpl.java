@@ -1,7 +1,9 @@
 package cn.qht2005.www.service.impl;
 
+import cn.qht2005.www.dao.LeaveMapper;
 import cn.qht2005.www.dao.NoticeMapper;
 import cn.qht2005.www.dao.StudentMapper;
+import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
@@ -22,6 +24,8 @@ public class TeacherServiceImpl implements TeacherService {
 	private final TeacherMapper TEACHER_MAPPER = sqlSession.getMapper(TeacherMapper.class);
 	// 通过sqlSession获取公告mapper接口的代理对象
 	private final NoticeMapper NOTICE_MAPPER = sqlSession.getMapper(NoticeMapper.class);
+	// 获取请假的映射代理对象
+	private final LeaveMapper LEAVE_MAPPER = sqlSession.getMapper(LeaveMapper.class);
 
     public TeacherServiceImpl() throws Exception {
 
@@ -107,6 +111,21 @@ public class TeacherServiceImpl implements TeacherService {
 		List<Notice> noticeForTeacher = NOTICE_MAPPER.getByRecipient(Short.valueOf("0"));
 		noticeForTeacher.addAll(NOTICE_MAPPER.getByRecipient(Short.valueOf("2")));
 		return noticeForTeacher;
+	}
+	/**
+	 * 处理请假申请
+	 * @param leave 请假实体对象
+	 * @return 是否处理成功
+	 */
+	@Override
+	public boolean disposeApply(Leave leave) {
+		try {
+			LEAVE_MAPPER.updateByLeave(leave);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }
