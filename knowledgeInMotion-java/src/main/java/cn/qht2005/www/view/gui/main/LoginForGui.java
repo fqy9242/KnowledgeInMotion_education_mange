@@ -2,13 +2,14 @@
  * Created by JFormDesigner on Sun May 12 14:39:54 CST 2024
  */
 
-package cn.qht2005.www.view.gui;
+package cn.qht2005.www.view.gui.main;
 
 import java.awt.event.*;
 
 import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.view.gui.ForgotPassWord;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
 import javax.swing.*;
@@ -92,6 +93,10 @@ public class LoginForGui extends JFrame {
             adminLogin(userName, passWord);
         }
     }
+    // 找回密码按钮被点击
+    private void label4MouseClicked(MouseEvent e) {
+        new ForgotPassWord(this, inputUserName.getText()).setVisible(true);
+    }
 
 
 
@@ -141,6 +146,12 @@ public class LoginForGui extends JFrame {
         //---- label4 ----
         label4.setText("\u5fd8\u8bb0\u5bc6\u7801\uff1f");
         label4.setForeground(Color.blue);
+        label4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                label4MouseClicked(e);
+            }
+        });
         contentPane.add(label4);
         label4.setBounds(new Rectangle(new Point(230, 135), label4.getPreferredSize()));
 

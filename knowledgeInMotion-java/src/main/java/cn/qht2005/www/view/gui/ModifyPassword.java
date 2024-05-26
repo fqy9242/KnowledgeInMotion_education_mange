@@ -11,6 +11,7 @@ import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.view.gui.main.LoginForGui;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import java.awt.*;

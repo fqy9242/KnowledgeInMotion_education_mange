@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Fri May 17 10:01:37 CST 2024
  */
 
-package cn.qht2005.www.view.gui;
+package cn.qht2005.www.view.gui.main;
 
 import cn.qht2005.www.pojo.College;
 import cn.qht2005.www.pojo.Leave;
@@ -13,6 +13,8 @@ import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
+import cn.qht2005.www.view.gui.DisposeLeaveWindowsAndController;
+import cn.qht2005.www.view.gui.ModifyPassword;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

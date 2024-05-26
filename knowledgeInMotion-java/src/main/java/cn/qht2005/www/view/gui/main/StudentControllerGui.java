@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue May 14 18:27:58 CST 2024
  */
 
-package cn.qht2005.www.view.gui;
+package cn.qht2005.www.view.gui.main;
 
 import java.awt.event.*;
 import java.beans.*;
@@ -18,6 +18,7 @@ import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.util.AliOSSUtil;
 import cn.qht2005.www.util.ImgUtil;
+import cn.qht2005.www.view.gui.ModifyPassword;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
