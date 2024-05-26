@@ -12,14 +12,25 @@ import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.view.gui.ForgotPassWord;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 
 /**
  * @author 覃
  */
 public class LoginForGui extends JFrame {
+    // 账户配置文件
+    private Preferences pref;
     public LoginForGui() {
         initComponents();
+        init();
+    }
+    // 初始化
+    private void init(){
+        pref = Preferences.userNodeForPackage(LoginForGui.class);
+        // 读取账户信息
+        inputUserName.setText(pref.get("userName", ""));
+        inputPassWord.setText(pref.get("passWord", ""));
     }
 
     private void adminLogin(String userName, String passWord) {
@@ -63,9 +74,6 @@ public class LoginForGui extends JFrame {
         }
     }
 
-    private void login(ActionEvent e) {
-        // TODO add your code here
-    }
     // 登录按钮被点击
     private void loginButtonOnClick(ActionEvent e) {
         String userName = inputUserName.getText();
@@ -75,7 +83,15 @@ public class LoginForGui extends JFrame {
             JOptionPane.showMessageDialog(this, "用户名及密码都要输入哦！");
             return;
         }
-
+        // 判断用户是否勾选了记住账户 若，则保存。
+        if (checkBoxSaveAccount.isSelected()){
+            pref.put("userName", userName);
+            pref.put("passWord", passWord);
+        }else {
+            // 否则，清空保存过的账户信息
+            pref.remove("userName");
+            pref.remove("passWord");
+        }
         String loginType = (String) checkBoxLoginType.getSelectedItem();
         if ("学生".equals(loginType)) {
             try {
@@ -98,8 +114,11 @@ public class LoginForGui extends JFrame {
         new ForgotPassWord(this, inputUserName.getText()).setVisible(true);
     }
 
-    private void label4MouseClicked(MouseEvent e) {
-        // TODO add your code here
+
+    // 忘记密码标签被点击
+    private void labelFindPassWordMouseClicked(MouseEvent e) {
+        new ForgotPassWord(this, inputUserName.getText()).setVisible(true);
+
     }
 
 
@@ -111,11 +130,12 @@ public class LoginForGui extends JFrame {
         label2 = new JLabel();
         buttonLogin = new JButton();
         label3 = new JLabel();
-        label4 = new JLabel();
+        labelFindPassWord = new JLabel();
         label5 = new JLabel();
         checkBoxLoginType = new JComboBox<>();
         label6 = new JLabel();
         inputPassWord = new JPasswordField();
+        checkBoxSaveAccount = new JCheckBox();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf -\u767b\u5f55    by\u8983\u60e0\u901a");
@@ -147,17 +167,17 @@ public class LoginForGui extends JFrame {
         contentPane.add(label3);
         label3.setBounds(new Rectangle(new Point(100, 20), label3.getPreferredSize()));
 
-        //---- label4 ----
-        label4.setText("\u5fd8\u8bb0\u5bc6\u7801\uff1f");
-        label4.setForeground(Color.blue);
-        label4.addMouseListener(new MouseAdapter() {
+        //---- labelFindPassWord ----
+        labelFindPassWord.setText("\u5fd8\u8bb0\u5bc6\u7801\uff1f");
+        labelFindPassWord.setForeground(Color.blue);
+        labelFindPassWord.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                label4MouseClicked(e);
+                labelFindPassWordMouseClicked(e);
             }
         });
-        contentPane.add(label4);
-        label4.setBounds(new Rectangle(new Point(230, 135), label4.getPreferredSize()));
+        contentPane.add(labelFindPassWord);
+        labelFindPassWord.setBounds(new Rectangle(new Point(320, 140), labelFindPassWord.getPreferredSize()));
 
         //---- label5 ----
         label5.setText("\u7528\u6237\u540d:\u6559\u5e08\u4e3a\u5de5\u53f7\uff0c\u5b66\u751f\u4e3a\u5b66\u53f7\u3002");
@@ -180,6 +200,12 @@ public class LoginForGui extends JFrame {
         contentPane.add(inputPassWord);
         inputPassWord.setBounds(100, 130, 130, 30);
 
+        //---- checkBoxSaveAccount ----
+        checkBoxSaveAccount.setText("\u8bb0\u4f4f\u8d26\u6237");
+        checkBoxSaveAccount.setSelected(true);
+        contentPane.add(checkBoxSaveAccount);
+        checkBoxSaveAccount.setBounds(new Rectangle(new Point(240, 140), checkBoxSaveAccount.getPreferredSize()));
+
         contentPane.setPreferredSize(new Dimension(420, 265));
         pack();
         setLocationRelativeTo(getOwner());
@@ -192,11 +218,12 @@ public class LoginForGui extends JFrame {
     private JLabel label2;
     private JButton buttonLogin;
     private JLabel label3;
-    private JLabel label4;
+    private JLabel labelFindPassWord;
     private JLabel label5;
     private JComboBox<String> checkBoxLoginType;
     private JLabel label6;
     private JPasswordField inputPassWord;
+    private JCheckBox checkBoxSaveAccount;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
 
