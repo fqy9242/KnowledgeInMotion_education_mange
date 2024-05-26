@@ -64,6 +64,7 @@ public class TeacherControllerGui extends JFrame {
             showNotice();
 
         }else if (tabbedPaneMain.getSelectedIndex() == 1){
+            // 录入学生成绩
 
 
         } else if (tabbedPaneMain.getSelectedIndex() == 2){
@@ -251,7 +252,6 @@ public class TeacherControllerGui extends JFrame {
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         // 显示文件选择器对话框
         int userSelection = fileChooser.showSaveDialog(null);
-
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             // 如果用户点击了"保存"，则获取用户选择的目录
             File fileToSave = fileChooser.getSelectedFile();
@@ -264,7 +264,6 @@ public class TeacherControllerGui extends JFrame {
                 e.printStackTrace();
             }
         }
-
         workbook.close();
     }
     // 导出查询到的学生信息按钮被点击
@@ -301,6 +300,8 @@ public class TeacherControllerGui extends JFrame {
             Leave leave = new TeacherServiceImpl().getLeaveByLeaveId(String.valueOf(leaveId));
             // 弹出处理请假的对话框
             new DisposeLeaveWindowsAndController(this,leave).setVisible(true);
+            // 回到主窗口，然后更新状态
+            showLeaveApplyList();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -666,10 +667,9 @@ public class TeacherControllerGui extends JFrame {
                     //---- tableForLeaveApply ----
                     tableForLeaveApply.setModel(new DefaultTableModel(
                         new Object[][] {
-                            {null, null, null, null, "", null, null, null},
                         },
                         new String[] {
-                            "\u8bf7\u5047ID", "\u59d3\u540d", "\u5b66\u53f7", "\u7c7b\u578b", "\u7406\u7531", "\u5f00\u59cb\u65f6\u95f4", "\u7ed3\u675f\u65f6\u95f4", "\u72b6\u6001"
+                            "\u8bf7\u5047ID", "\u5b66\u53f7", "\u59d3\u540d", "\u7c7b\u578b", "\u7406\u7531", "\u5f00\u59cb\u65f6\u95f4", "\u7ed3\u675f\u65f6\u95f4", "\u72b6\u6001"
                         }
                     ) {
                         Class<?>[] columnTypes = new Class<?>[] {
@@ -689,6 +689,7 @@ public class TeacherControllerGui extends JFrame {
                     });
                     tableForLeaveApply.setShowHorizontalLines(false);
                     tableForLeaveApply.setShowVerticalLines(false);
+                    tableForLeaveApply.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                     scrollPaneForLeaveApply.setViewportView(tableForLeaveApply);
                 }
                 panel3.add(scrollPaneForLeaveApply);
@@ -708,13 +709,12 @@ public class TeacherControllerGui extends JFrame {
                 //---- notClassMangeTip ----
                 notClassMangeTip.setText("\u8be5\u7cfb\u7edf\u4ec5\u53ef\u73ed\u4e3b\u4efb\u6279\u5047\u672c\u73ed\u5b66\u751f\uff01");
                 notClassMangeTip.setForeground(new Color(0xcc3300));
-                notClassMangeTip.setEnabled(false);
+                notClassMangeTip.setVisible(false);
                 panel3.add(notClassMangeTip);
                 notClassMangeTip.setBounds(new Rectangle(new Point(15, 10), notClassMangeTip.getPreferredSize()));
 
                 //---- disposeTip ----
                 disposeTip.setText("\u9009\u4e2d\u884c\u540e\u70b9\u51fb\u5904\u7406\u5373\u53ef\u6279\u5047\uff01");
-                disposeTip.setEnabled(false);
                 disposeTip.setForeground(new Color(0xff0033));
                 panel3.add(disposeTip);
                 disposeTip.setBounds(240, 10, 205, disposeTip.getPreferredSize().height);
@@ -733,7 +733,11 @@ public class TeacherControllerGui extends JFrame {
     private void showLeaveApplyList(){
         if (teacher.getMangeClassId() == null){
             // 如果没有管理的班级
+            // 将那啥标签设置为可见
             notClassMangeTip.setEnabled(true);
+            // 将批假小提示设置为不可见
+            disposeTip.setVisible(false);
+            // 将批假按钮设置为不可用
             buttonDispose.setEnabled(false);
             return;
         }
@@ -748,15 +752,18 @@ public class TeacherControllerGui extends JFrame {
                 // 获取学生对象
                 Student student = new TeacherServiceImpl().getStudentById(leaveApply.getUserId());
                 Object[] row = new Object[]{
+                        // 请假id
                         leaveApply.getLeaveId(),
+                        // 学号
                         leaveApply.getUserId(),
+                        // 姓名
                         student.getName(),
-                        leaveApply.getUserId(),
+                        // 请假类型
                         leaveApply.getLeaveType() == 1 ? "事假" : leaveApply.getLeaveType() == 2 ? "病假" : "其他",
                         leaveApply.getLeaveReason(),
                         leaveApply.getLeaveStartTime().format(dateTimeFormatter),
                         leaveApply.getLeaveEndTime().format(dateTimeFormatter),
-                        leaveApply.getApplicationStatus() == 0 ? "未处理" :
+                        leaveApply.getApplicationStatus() == -1 ? "未处理" :
                                 leaveApply.getApplicationStatus() == 1 ? "已同意" : "已拒绝"
                 };
                 model.addRow(row);
