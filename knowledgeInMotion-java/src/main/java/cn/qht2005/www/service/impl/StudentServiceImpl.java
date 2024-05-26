@@ -18,7 +18,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	SqlSession sqlSession = sqlSessionFactory.openSession(true);
-	StudentMapper studentMapper = sqlSession.getMapper(StudentMapper.class);
+	private final StudentMapper STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
 	ScoreMapper scoreMapper = sqlSession.getMapper(ScoreMapper.class);
 	private final NoticeMapper NOTICEMAPPER = sqlSession.getMapper(NoticeMapper.class);
 	// 请假映射对象
@@ -28,7 +28,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public boolean login(String studentId, String passWord) throws Exception {
-		Student res = studentMapper.getStudentByIdAndPassword(studentId, passWord);
+		Student res = STUDENT_MAPPER.getStudentByIdAndPassword(studentId, passWord);
 		if (res == null) {
 			return false;
 		}
@@ -46,17 +46,17 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student modifyStudentByDynamic(String studentId, Student student) {
-		Integer upDateRow = studentMapper.modifyByDynamic(studentId, student);
+		Integer upDateRow = STUDENT_MAPPER.modifyByDynamic(studentId, student);
 		if (upDateRow == 1){
 			// 更新成功
-			return studentMapper.getStudentById(studentId);
+			return STUDENT_MAPPER.getStudentById(studentId);
 		}
 		return null;
 	}
 
 	@Override
 	public Integer modifyPassWord(String studentId, String passWord, String passWordNew) {
-		return studentMapper.modifyPassWord(studentId, passWord, passWordNew);
+		return STUDENT_MAPPER.modifyPassWord(studentId, passWord, passWordNew);
 	}
 	// 获取所有学生可以接收的公告
 	@Override
@@ -82,6 +82,17 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<Leave> getLeaveByStudentId(String studentId) {
 		return LEAVE_MAPPER.selectByUserId(studentId);
+	}
+	// 找回密码
+	@Override
+	public boolean updatePassWordForgot(String studentId, String studentName, String phoneNumber, String passWordNew) {
+		try {
+			STUDENT_MAPPER.updatePassWordForgot(studentId, studentName, phoneNumber, passWordNew);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 

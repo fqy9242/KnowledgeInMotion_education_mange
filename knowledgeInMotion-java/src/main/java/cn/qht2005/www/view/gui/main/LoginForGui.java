@@ -71,7 +71,7 @@ public class LoginForGui extends JFrame {
         String userName = inputUserName.getText();
         String passWord = inputPassWord.getText();
         // 防止空指针异常
-        if (userName == null || "".equals(userName) || passWord == null || "".equals(passWord)){
+        if (userName == null || userName.isEmpty() || passWord == null || passWord.isEmpty()){
             JOptionPane.showMessageDialog(this, "用户名及密码都要输入哦！");
             return;
         }
@@ -94,8 +94,12 @@ public class LoginForGui extends JFrame {
         }
     }
     // 找回密码按钮被点击
-    private void label4MouseClicked(MouseEvent e) {
+    private void label4MouseClicked() {
         new ForgotPassWord(this, inputUserName.getText()).setVisible(true);
+    }
+
+    private void label4MouseClicked(MouseEvent e) {
+        // TODO add your code here
     }
 
 

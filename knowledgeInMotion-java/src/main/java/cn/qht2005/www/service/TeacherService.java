@@ -34,6 +34,10 @@ public interface TeacherService {
 	List<Leave> getLeaveByClassId(String classId);
 	// 根据请假id获取请假信息
 	Leave getLeaveByLeaveId(String leaveId);
+	// 找回密码
+	boolean findPassWord(String teacherId, String teacherName, String phoneNumber, String passWordNew);
+	// 根据管理班级id来获取教师实体对象
+	Teacher getTeacherByManageClassId(String manageClassId);
 
 
 }

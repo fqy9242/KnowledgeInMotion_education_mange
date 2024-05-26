@@ -13,6 +13,7 @@ import cn.qht2005.www.pojo.Leave;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.people.Student;
+import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
@@ -893,7 +894,13 @@ public class StudentControllerGui extends JFrame {
         // 获取学院名称
         String collegeName = getCollegeName(collegeId);
         BufferedImage photograph; // 证件照url
+
         try {
+            // 获取班级任姓名及手机号
+            Teacher classMangeTeacher = new TeacherServiceImpl().getTeacherByManageClassId(student.getClassId());
+            inputClassTeacher.setText(classMangeTeacher.getName());
+            InputClassTeacherPhoneNumber.setText(classMangeTeacher.getPhoneNumber());
+            // 通过url获取图片
             photograph = ImgUtil.getImgByUrl(student.getPhotograph());
         } catch (Exception e) {
             throw new RuntimeException(e);

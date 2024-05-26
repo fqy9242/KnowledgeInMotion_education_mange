@@ -4,7 +4,11 @@
 
 package cn.qht2005.www.view.gui;
 
+import cn.qht2005.www.service.impl.StudentServiceImpl;
+import cn.qht2005.www.service.impl.TeacherServiceImpl;
+
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -23,9 +27,54 @@ public class ForgotPassWord extends JDialog {
     private void init(){
         inputUserName.setText(usrName);
     }
-    // 提交找回密码
-    private void findPassWord(){
+    // 修改
+    private void upDatePassWord() throws Exception {
+        // 账号
+        String userName = inputUserName.getText();
+        // 姓名
+        String name = inputName.getText();
+        // 手机号
+        String phoneNumber = inputPhoneNumber.getText();
+        // 新密码
+        String newPassWord = new String(inputNewPassWord.getPassword());
+        // 确认密码
+        String confirmPassWord = new String(passwordField2.getPassword());
+        if (userName.isEmpty() || name.isEmpty() || "".equals(phoneNumber) || newPassWord.isEmpty() || confirmPassWord.isEmpty()){
+            JOptionPane.showMessageDialog(this, "请填写完整信息");
+            return;
+        }
+        if (!newPassWord.equals(confirmPassWord)){
+            JOptionPane.showMessageDialog(this, "两次密码不一致");
+            return;
+        }
+        // 修改结果
+        boolean res = false;
+        if (radioButtonStudent.isSelected()){
+            // 学生
+            res = new StudentServiceImpl().updatePassWordForgot(userName, name, phoneNumber, newPassWord);
+        }else if (radioButtonTeacher.isSelected()){
+            // 教师
+            res = new TeacherServiceImpl().findPassWord(userName, name, phoneNumber, newPassWord);
+        }else {
+            JOptionPane.showMessageDialog(this, "请选择用户类型");
+            return;
+        }
+        // 判断是否修改成功
+        if (res){
+            JOptionPane.showMessageDialog(this, "修改成功");
+            this.setVisible(false);
+        }else{
+            JOptionPane.showMessageDialog(this, "修改失败");
+        }
 
+    }
+    // 提交按钮被点击
+    private void bottomSubmitMouseClicked(MouseEvent e) {
+        try {
+            upDatePassWord();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     private void initComponents() {
@@ -85,6 +134,12 @@ public class ForgotPassWord extends JDialog {
 
         //---- bottomSubmit ----
         bottomSubmit.setText("\u63d0\u4ea4");
+        bottomSubmit.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                bottomSubmitMouseClicked(e);
+            }
+        });
         contentPane.add(bottomSubmit);
         bottomSubmit.setBounds(new Rectangle(new Point(105, 220), bottomSubmit.getPreferredSize()));
 

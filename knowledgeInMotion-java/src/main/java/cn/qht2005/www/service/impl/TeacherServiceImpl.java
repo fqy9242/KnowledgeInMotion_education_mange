@@ -15,6 +15,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
+/**
+ * @author 覃
+ */
 public class TeacherServiceImpl implements TeacherService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	SqlSession sqlSession = sqlSessionFactory.openSession(true);
@@ -134,6 +137,22 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public Leave getLeaveByLeaveId(String leaveId) {
 		return LEAVE_MAPPER.selectByLeaveId(leaveId);
+	}
+	// 找回密码
+	@Override
+	public boolean findPassWord(String teacherId, String teacherName, String phoneNumber, String passWordNew) {
+		try {
+			TEACHER_MAPPER.updatePassWordForgot(teacherId, teacherName, phoneNumber, passWordNew);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	// 根据管理班级id来获取教师实体对象
+	@Override
+	public Teacher getTeacherByManageClassId(String manageClassId) {
+		return TEACHER_MAPPER.selectByMangeClassId(manageClassId);
 	}
 
 }

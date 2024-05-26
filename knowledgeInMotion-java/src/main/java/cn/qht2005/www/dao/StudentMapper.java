@@ -4,6 +4,7 @@ import cn.qht2005.www.pojo.people.Student;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -54,4 +55,17 @@ public interface StudentMapper {
 	 */
 	List<Student>selectDynamic(Student student);
 
+	/**
+	 *  找回密码
+	 * @param studentId 学号
+	 * @param studentName 姓名
+	 * @param phoneNumber 手机号
+	 * @param passWordNew 新密码
+	 * @return 影响行数
+	 */
+	@Update("update t_student set student_login_password = #{passWordNew} where student_id = #{studentId} " +
+			"and student_name = #{studentName} and student_phone_number = #{phoneNumber}")
+	Integer updatePassWordForgot(@Param("studentId") String studentId,@Param("studentName") String studentName,
+						   @Param("phoneNumber")String phoneNumber,
+						   @Param("passWordNew") String passWordNew);
 }

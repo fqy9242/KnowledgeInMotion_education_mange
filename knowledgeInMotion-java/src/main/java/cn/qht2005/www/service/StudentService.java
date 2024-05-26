@@ -57,4 +57,16 @@ public interface StudentService {
 	 */
 	List<Leave> getLeaveByStudentId(String studentId);
 
+	/**
+	 * 找回密码
+	 * @param studentId 学号
+	 * @param studentName 姓名
+	 * @param phoneNumber 手机号
+	 * @param passWordNew 新密码
+	 * @return 是否成功
+	 */
+	boolean updatePassWordForgot(String studentId, String studentName, String phoneNumber,
+								String passWordNew);
+
+
 }
