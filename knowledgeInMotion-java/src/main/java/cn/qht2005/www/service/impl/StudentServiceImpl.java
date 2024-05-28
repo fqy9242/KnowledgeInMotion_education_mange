@@ -15,6 +15,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.List;
 
+/**
+ * @author 覃
+ */
 public class StudentServiceImpl implements StudentService {
 	SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 	SqlSession sqlSession = sqlSessionFactory.openSession(true);

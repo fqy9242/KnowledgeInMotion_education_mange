@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
+/**
+ * @author 覃
+ */
 public interface TeacherMapper {
 	/**
 	 *  根据id查询教师对象

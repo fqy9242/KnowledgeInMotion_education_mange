@@ -13,7 +13,9 @@ import cn.qht2005.www.util.SqlSessionFactoryUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 覃
@@ -154,5 +156,19 @@ public class TeacherServiceImpl implements TeacherService {
 	public Teacher getTeacherByManageClassId(String manageClassId) {
 		return TEACHER_MAPPER.selectByMangeClassId(manageClassId);
 	}
-
+	// 获取学生男女人数
+	@Override
+	public Map<String, Integer> getStudentCountBySex(List<Student> students) {
+		HashMap<String, Integer> sexCount = new HashMap<>();
+		students.forEach(student -> {
+			if (student.getSex() == 1){
+				sexCount.put("男", sexCount.getOrDefault("男", 0) + 1);
+			}else {
+				sexCount.put("女", sexCount.getOrDefault("女", 0) + 1);
+			}
+		});
+		sexCount.putIfAbsent("女", 0);
+		sexCount.putIfAbsent("男", 0);
+		return sexCount;
+	}
 }

@@ -6,6 +6,7 @@ import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 覃
@@ -38,6 +39,8 @@ public interface TeacherService {
 	boolean findPassWord(String teacherId, String teacherName, String phoneNumber, String passWordNew);
 	// 根据管理班级id来获取教师实体对象
 	Teacher getTeacherByManageClassId(String manageClassId);
+	// 获取学生男女人数
+	Map<String, Integer>getStudentCountBySex(List<Student> students);
 
 
 }

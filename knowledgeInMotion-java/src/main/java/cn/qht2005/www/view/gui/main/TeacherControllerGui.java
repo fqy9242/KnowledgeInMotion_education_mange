@@ -339,8 +339,8 @@ public class TeacherControllerGui extends JFrame {
         tableNotice = new JTable();
         label12 = new JLabel();
         labelTime = new JLabel();
-        panel1 = new JPanel();
-        panel2 = new JPanel();
+        panelAddScore = new JPanel();
+        panelSeachInfo = new JPanel();
         buttonExport = new JButton();
         scrollPane1 = new JScrollPane();
         tableStudentInfo = new JTable();
@@ -353,12 +353,15 @@ public class TeacherControllerGui extends JFrame {
         checkboxSexForStudent = new JComboBox<>();
         label13 = new JLabel();
         checkboxCollege = new JComboBox();
-        panel3 = new JPanel();
+        panelDisposeScore = new JPanel();
         scrollPaneForLeaveApply = new JScrollPane();
         tableForLeaveApply = new JTable();
         buttonDispose = new JButton();
         notClassMangeTip = new JLabel();
         disposeTip = new JLabel();
+        panelScoreSeacher = new JPanel();
+        scrollPane2 = new JScrollPane();
+        table1 = new JTable();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u6559\u5e08\u7528\u6237      by\u8983\u60e0\u901a");
@@ -544,7 +547,7 @@ public class TeacherControllerGui extends JFrame {
                     scrollPaneNotice.setViewportView(tableNotice);
                 }
                 panelInfo.add(scrollPaneNotice);
-                scrollPaneNotice.setBounds(0, 230, 660, 235);
+                scrollPaneNotice.setBounds(0, 230, 655, 235);
 
                 //---- label12 ----
                 label12.setText("\u767b\u5f55\u65f6\u95f4");
@@ -559,15 +562,15 @@ public class TeacherControllerGui extends JFrame {
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
 
-            //======== panel1 ========
+            //======== panelAddScore ========
             {
-                panel1.setLayout(null);
+                panelAddScore.setLayout(null);
             }
-            tabbedPaneMain.addTab("\u5b66\u751f\u6210\u7ee9\u5f55\u5165", panel1);
+            tabbedPaneMain.addTab("\u5b66\u751f\u6210\u7ee9\u5f55\u5165", panelAddScore);
 
-            //======== panel2 ========
+            //======== panelSeachInfo ========
             {
-                panel2.setLayout(null);
+                panelSeachInfo.setLayout(null);
 
                 //---- buttonExport ----
                 buttonExport.setText("\u5bfc\u51fa");
@@ -577,7 +580,7 @@ public class TeacherControllerGui extends JFrame {
                         buttonExportMouseClicked(e);
                     }
                 });
-                panel2.add(buttonExport);
+                panelSeachInfo.add(buttonExport);
                 buttonExport.setBounds(new Rectangle(new Point(575, 435), buttonExport.getPreferredSize()));
 
                 //======== scrollPane1 ========
@@ -608,7 +611,7 @@ public class TeacherControllerGui extends JFrame {
                     });
                     scrollPane1.setViewportView(tableStudentInfo);
                 }
-                panel2.add(scrollPane1);
+                panelSeachInfo.add(scrollPane1);
                 scrollPane1.setBounds(0, 35, 660, 455);
 
                 //---- buttonQuery ----
@@ -619,26 +622,26 @@ public class TeacherControllerGui extends JFrame {
                         buttonQueryMouseClicked(e);
                     }
                 });
-                panel2.add(buttonQuery);
+                panelSeachInfo.add(buttonQuery);
                 buttonQuery.setBounds(new Rectangle(new Point(470, 3), buttonQuery.getPreferredSize()));
 
                 //---- label6 ----
                 label6.setText("\u59d3\u540d");
-                panel2.add(label6);
+                panelSeachInfo.add(label6);
                 label6.setBounds(5, 15, 25, 15);
-                panel2.add(inputStudentName);
+                panelSeachInfo.add(inputStudentName);
                 inputStudentName.setBounds(35, 5, 80, 25);
 
                 //---- label9 ----
                 label9.setText("\u73ed\u7ea7");
-                panel2.add(label9);
+                panelSeachInfo.add(label9);
                 label9.setBounds(120, 10, 40, 17);
-                panel2.add(inputClass);
+                panelSeachInfo.add(inputClass);
                 inputClass.setBounds(145, 5, 80, 25);
 
                 //---- label11 ----
                 label11.setText("\u6027\u522b");
-                panel2.add(label11);
+                panelSeachInfo.add(label11);
                 label11.setBounds(340, 10, 30, label11.getPreferredSize().height);
 
                 //---- checkboxSexForStudent ----
@@ -647,21 +650,21 @@ public class TeacherControllerGui extends JFrame {
                     "\u5973"
                 }));
                 checkboxSexForStudent.setSelectedIndex(-1);
-                panel2.add(checkboxSexForStudent);
+                panelSeachInfo.add(checkboxSexForStudent);
                 checkboxSexForStudent.setBounds(370, 5, 78, 25);
 
                 //---- label13 ----
                 label13.setText("\u5b66\u9662");
-                panel2.add(label13);
+                panelSeachInfo.add(label13);
                 label13.setBounds(228, 10, 30, 17);
-                panel2.add(checkboxCollege);
+                panelSeachInfo.add(checkboxCollege);
                 checkboxCollege.setBounds(255, 5, 85, 25);
             }
-            tabbedPaneMain.addTab("\u5b66\u751f\u67e5\u8be2", panel2);
+            tabbedPaneMain.addTab("\u5b66\u751f\u67e5\u8be2", panelSeachInfo);
 
-            //======== panel3 ========
+            //======== panelDisposeScore ========
             {
-                panel3.setLayout(null);
+                panelDisposeScore.setLayout(null);
 
                 //======== scrollPaneForLeaveApply ========
                 {
@@ -694,7 +697,7 @@ public class TeacherControllerGui extends JFrame {
                     tableForLeaveApply.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                     scrollPaneForLeaveApply.setViewportView(tableForLeaveApply);
                 }
-                panel3.add(scrollPaneForLeaveApply);
+                panelDisposeScore.add(scrollPaneForLeaveApply);
                 scrollPaneForLeaveApply.setBounds(0, 40, 650, 435);
 
                 //---- buttonDispose ----
@@ -705,23 +708,36 @@ public class TeacherControllerGui extends JFrame {
                         buttonDisposeMouseClicked(e);
                     }
                 });
-                panel3.add(buttonDispose);
+                panelDisposeScore.add(buttonDispose);
                 buttonDispose.setBounds(new Rectangle(new Point(510, 5), buttonDispose.getPreferredSize()));
 
                 //---- notClassMangeTip ----
                 notClassMangeTip.setText("\u8be5\u7cfb\u7edf\u4ec5\u53ef\u73ed\u4e3b\u4efb\u6279\u5047\u672c\u73ed\u5b66\u751f\uff01");
                 notClassMangeTip.setForeground(new Color(0xcc3300));
                 notClassMangeTip.setVisible(false);
-                panel3.add(notClassMangeTip);
+                panelDisposeScore.add(notClassMangeTip);
                 notClassMangeTip.setBounds(new Rectangle(new Point(15, 10), notClassMangeTip.getPreferredSize()));
 
                 //---- disposeTip ----
                 disposeTip.setText("\u9009\u4e2d\u884c\u540e\u70b9\u51fb\u5904\u7406\u5373\u53ef\u6279\u5047\uff01");
                 disposeTip.setForeground(new Color(0xff0033));
-                panel3.add(disposeTip);
+                panelDisposeScore.add(disposeTip);
                 disposeTip.setBounds(240, 10, 205, disposeTip.getPreferredSize().height);
             }
-            tabbedPaneMain.addTab("\u6279\u5047", panel3);
+            tabbedPaneMain.addTab("\u6279\u5047", panelDisposeScore);
+
+            //======== panelScoreSeacher ========
+            {
+                panelScoreSeacher.setLayout(null);
+
+                //======== scrollPane2 ========
+                {
+                    scrollPane2.setViewportView(table1);
+                }
+                panelScoreSeacher.add(scrollPane2);
+                scrollPane2.setBounds(0, 35, 655, 440);
+            }
+            tabbedPaneMain.addTab("\u5b66\u751f\u6210\u7ee9\u67e5\u8be2", panelScoreSeacher);
         }
         contentPane.add(tabbedPaneMain);
         tabbedPaneMain.setBounds(0, 0, 770, 480);
@@ -807,8 +823,8 @@ public class TeacherControllerGui extends JFrame {
     private JTable tableNotice;
     private JLabel label12;
     private JLabel labelTime;
-    private JPanel panel1;
-    private JPanel panel2;
+    private JPanel panelAddScore;
+    private JPanel panelSeachInfo;
     private JButton buttonExport;
     private JScrollPane scrollPane1;
     private JTable tableStudentInfo;
@@ -821,12 +837,15 @@ public class TeacherControllerGui extends JFrame {
     private JComboBox<String> checkboxSexForStudent;
     private JLabel label13;
     private JComboBox checkboxCollege;
-    private JPanel panel3;
+    private JPanel panelDisposeScore;
     private JScrollPane scrollPaneForLeaveApply;
     private JTable tableForLeaveApply;
     private JButton buttonDispose;
     private JLabel notClassMangeTip;
     private JLabel disposeTip;
+    private JPanel panelScoreSeacher;
+    private JScrollPane scrollPane2;
+    private JTable table1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 获取到所有的学院 并且显示到下拉框中
     private void showCollegeToCheckBox(){
