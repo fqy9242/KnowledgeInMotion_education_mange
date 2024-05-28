@@ -12,15 +12,12 @@ import java.util.List;
 public interface CollegeMapper {
 	/**
 	 * 查询所有学院
-	 * @return
 	 */
 	@Select("select * from t_college")
 	@ResultMap("collegeResultMapper")
 	List<College> selectAll();
 	/**
 	 * 根据学院id查询学院名称
-	 * @param college
-	 * @return
 	 */
 	@Select("select * from t_college where college_id = #{college}")
 	@ResultMap("collegeResultMapper")

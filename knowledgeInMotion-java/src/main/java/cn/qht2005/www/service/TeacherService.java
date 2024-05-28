@@ -42,5 +42,11 @@ public interface TeacherService {
 	// 获取学生男女人数
 	Map<String, Integer>getStudentCountBySex(List<Student> students);
 
+	/**
+	 * 获取所有的教师对象
+	 * @return 教师对象列表
+	 */
+	List<Teacher> getAllTeacher();
+
 
 }

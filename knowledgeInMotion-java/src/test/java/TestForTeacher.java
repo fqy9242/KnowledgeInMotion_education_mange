@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,10 +35,5 @@ public class TestForTeacher {
 	public void testGetTeacherById() throws Exception {
 		Teacher s = new TeacherServiceImpl().getTeacherById("2001333");
 		assertNotNull(s);
-	}
-	@Test
-	public void testCountStudentSex() throws Exception {
-		Map<String, Integer> studentCountBySex = new TeacherServiceImpl().getStudentCountBySex();
-		System.out.println(studentCountBySex);
 	}
 }

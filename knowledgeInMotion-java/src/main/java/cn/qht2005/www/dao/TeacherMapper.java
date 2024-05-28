@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * @author 覃
  */
@@ -64,6 +66,15 @@ public interface TeacherMapper {
 	@Select("select * from t_teacher where teacher_mange_class_id = #{manageClassId}")
 	@ResultMap("teacherResultMap")
 	Teacher selectByMangeClassId(String manageClassId);
+	/**
+	 * 获取所有教师
+	 * @return 教师列表
+	 */
+	@Select("select * from t_teacher")
+	@ResultMap("teacherResultMap")
+	List<Teacher> selectAll();
+
+
 }
 
 

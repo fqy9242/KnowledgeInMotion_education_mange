@@ -171,4 +171,9 @@ public class TeacherServiceImpl implements TeacherService {
 		sexCount.putIfAbsent("男", 0);
 		return sexCount;
 	}
+
+	@Override
+	public List<Teacher> getAllTeacher() {
+		return TEACHER_MAPPER.selectAll();
+	}
 }

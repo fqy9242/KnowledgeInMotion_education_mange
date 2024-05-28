@@ -195,6 +195,17 @@ public class StudentControllerGui extends JFrame {
     private void buttonApplicationLeaveMouseClicked(MouseEvent e) {
         applyLeave();
     }
+    // 窗口将要被关闭
+    private void thisWindowClosing(WindowEvent e) {
+        //确认对话框
+        int option = JOptionPane.showConfirmDialog(null, "狗子，你真的要离开我么？", "翠花含情脉脉",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION){
+            // 关闭程序
+            this.dispose();
+        }
+
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMain = new JTabbedPane();
@@ -270,8 +281,13 @@ public class StudentControllerGui extends JFrame {
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u5b66\u751f\u7528\u6237      by\u8983\u60e0\u901a");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        addPropertyChangeListener("selectPageOnAler", e -> thisPropertyChange(e));
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                thisWindowClosing(e);
+            }
+        });
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 
