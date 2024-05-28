@@ -24,8 +24,12 @@ import com.formdev.flatlaf.FlatLightLaf;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
 
 /**
@@ -57,12 +61,54 @@ public class AdministratorControllerGui extends JFrame {
             // 学生管理
             try {
                 showStudentInfoToTable();
+                showStudentCountByCollegeToChart();
+
+
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
 
     }
+
+
+    // 展示各学院人数并展示到图表上
+    private void showStudentCountByCollegeToChart() {
+        try {
+            // 获取学院列表
+            List<College> colleges = new CollegeServiceImpl().getAllCollege();
+            // 获取各学院人数
+            Map<String, Integer> studentCountByCollege = new AdministratorServiceImpl().getStudentCountByCollege();
+            // 将其可视化
+            DefaultPieDataset dataset = new DefaultPieDataset();
+            for (College college : colleges) {
+                dataset.setValue(college.getCollegeName(), studentCountByCollege.get(college.getCollegeName()));
+            }
+            JFreeChart pieChart = ChartFactory.createPieChart(
+                    "studentCountByCollege", // 图标题
+                    dataset, // 数据集
+                    true, true, true);
+            PiePlot plot = (PiePlot) pieChart.getPlot();
+            // 关闭图表文字抗锯齿
+            pieChart.getRenderingHints().put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+            ChartPanel chartPanel = new ChartPanel(pieChart);
+            // 为那些玩意设置中文字体，不然不显示
+            Font LegendFont = new Font("宋体", Font.PLAIN, 15);
+            LegendTitle legend = pieChart.getLegend(0);
+            legend.setItemFont(LegendFont);
+            plot.setLabelFont(new Font("黑体", Font.PLAIN, 13));
+            // 设置那啥位置，让其能够显示
+            chartPanel.setBounds(0, 0, panelCountStudentByCollege.getWidth(), panelCountStudentByCollege.getHeight());
+            // 刷新一下组件
+            panelCountStudentByCollege.add(chartPanel);
+            panelCountStudentByCollege.revalidate();
+            panelCountStudentByCollege.repaint();
+
+
+        } catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
     // 自定义的初始化
     private void init()  {
         try {
@@ -130,6 +176,7 @@ public class AdministratorControllerGui extends JFrame {
                 dataset, // 数据集
                 true, true, true);
         PiePlot plot = (PiePlot) pieChart.getPlot();
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}-{2}"));
         // 关闭图表文字抗锯齿
         pieChart.getRenderingHints().put(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 /*             设置标签生成器
@@ -156,41 +203,6 @@ public class AdministratorControllerGui extends JFrame {
             this.dispose();
         }
     }
-    // 展示学生学院比例到图表上
-    private void showStudentByCollegeToChart(){
-        try {
-            // 获取学院列表
-            List<College> colleges = new CollegeServiceImpl().getAllCollege();
-
-            // 将其可视化
-            DefaultPieDataset dataset = new DefaultPieDataset();
-
-            JFreeChart pieChart = ChartFactory.createPieChart(
-                    "studentCountBySex", // 图标题
-                    dataset, // 数据集
-                    true, true, true);
-            PiePlot plot = (PiePlot) pieChart.getPlot();
-            // 关闭图表文字抗锯齿
-            pieChart.getRenderingHints().put(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-/*             设置标签生成器
-             "{0}" 表示 section name
-             "{1}" 表示 section value
-             "{2}" 表示 Percent*/
-            plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}-{2}"));
-            ChartPanel chartPanel = new ChartPanel(pieChart);
-            chartPanel.setBounds(0, 0, panelForStudentSexCount.getWidth(), panelForStudentSexCount.getHeight());
-            panelForStudentSexCount.add(chartPanel);
-            panelForStudentSexCount.revalidate();
-            panelForStudentSexCount.repaint();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
-
-
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMenu = new JTabbedPane();
@@ -203,13 +215,23 @@ public class AdministratorControllerGui extends JFrame {
         labelTeacherCount = new JLabel();
         panelStudentMange = new JPanel();
         scrollPane1 = new JScrollPane();
-        table1 = new JTable();
+        tableStudentList = new JTable();
         buttoneExport = new JButton();
-        button4 = new JButton();
-        button5 = new JButton();
-        button6 = new JButton();
-        buttoneExport2 = new JButton();
+        buttonAddStudent = new JButton();
+        buttonUpdateStudent = new JButton();
+        buttonDeleteStudent = new JButton();
+        buttoneQuery = new JButton();
         panelCountStudentByCollege = new JPanel();
+        label3 = new JLabel();
+        textField1 = new JTextField();
+        label4 = new JLabel();
+        textField2 = new JTextField();
+        label5 = new JLabel();
+        comboBox1 = new JComboBox<>();
+        label6 = new JLabel();
+        comboBox2 = new JComboBox<>();
+        label7 = new JLabel();
+        labelStudentListCount = new JLabel();
         panelTeacherMain = new JPanel();
         panelCollegeMain = new JPanel();
         panelCourseMange = new JPanel();
@@ -280,8 +302,8 @@ public class AdministratorControllerGui extends JFrame {
                 //======== scrollPane1 ========
                 {
 
-                    //---- table1 ----
-                    table1.setModel(new DefaultTableModel(
+                    //---- tableStudentList ----
+                    tableStudentList.setModel(new DefaultTableModel(
                         new Object[][] {
                         },
                         new String[] {
@@ -303,42 +325,92 @@ public class AdministratorControllerGui extends JFrame {
                             return columnEditable[columnIndex];
                         }
                     });
-                    scrollPane1.setViewportView(table1);
+                    scrollPane1.setViewportView(tableStudentList);
                 }
                 panelStudentMange.add(scrollPane1);
-                scrollPane1.setBounds(0, 50, 865, scrollPane1.getPreferredSize().height);
+                scrollPane1.setBounds(5, 50, 855, scrollPane1.getPreferredSize().height);
 
                 //---- buttoneExport ----
                 buttoneExport.setText("\u5bfc\u51fa");
                 panelStudentMange.add(buttoneExport);
-                buttoneExport.setBounds(new Rectangle(new Point(780, 5), buttoneExport.getPreferredSize()));
+                buttoneExport.setBounds(780, 5, 78, 30);
 
-                //---- button4 ----
-                button4.setText("\u6dfb\u52a0");
-                panelStudentMange.add(button4);
-                button4.setBounds(5, 5, 78, 30);
+                //---- buttonAddStudent ----
+                buttonAddStudent.setText("\u6dfb\u52a0");
+                panelStudentMange.add(buttonAddStudent);
+                buttonAddStudent.setBounds(5, 5, 78, 30);
 
-                //---- button5 ----
-                button5.setText("\u4fee\u6539");
-                panelStudentMange.add(button5);
-                button5.setBounds(90, 5, 78, 30);
+                //---- buttonUpdateStudent ----
+                buttonUpdateStudent.setText("\u4fee\u6539");
+                panelStudentMange.add(buttonUpdateStudent);
+                buttonUpdateStudent.setBounds(90, 5, 78, 30);
 
-                //---- button6 ----
-                button6.setText("\u5220\u9664");
-                panelStudentMange.add(button6);
-                button6.setBounds(185, 5, 78, 30);
+                //---- buttonDeleteStudent ----
+                buttonDeleteStudent.setText("\u5220\u9664");
+                panelStudentMange.add(buttonDeleteStudent);
+                buttonDeleteStudent.setBounds(185, 5, 78, 30);
 
-                //---- buttoneExport2 ----
-                buttoneExport2.setText("\u67e5\u8be2");
-                panelStudentMange.add(buttoneExport2);
-                buttoneExport2.setBounds(690, 5, 78, 30);
+                //---- buttoneQuery ----
+                buttoneQuery.setText("\u67e5\u8be2");
+                panelStudentMange.add(buttoneQuery);
+                buttoneQuery.setBounds(690, 5, 78, 30);
 
                 //======== panelCountStudentByCollege ========
                 {
                     panelCountStudentByCollege.setLayout(null);
                 }
                 panelStudentMange.add(panelCountStudentByCollege);
-                panelCountStudentByCollege.setBounds(0, 475, 215, 200);
+                panelCountStudentByCollege.setBounds(0, 475, 345, 200);
+
+                //---- label3 ----
+                label3.setText("\u59d3\u540d");
+                panelStudentMange.add(label3);
+                label3.setBounds(new Rectangle(new Point(265, 15), label3.getPreferredSize()));
+                panelStudentMange.add(textField1);
+                textField1.setBounds(395, 10, 70, 25);
+
+                //---- label4 ----
+                label4.setText("\u5b66\u53f7");
+                panelStudentMange.add(label4);
+                label4.setBounds(new Rectangle(new Point(365, 15), label4.getPreferredSize()));
+                panelStudentMange.add(textField2);
+                textField2.setBounds(290, 10, 70, 25);
+
+                //---- label5 ----
+                label5.setText("\u6027\u522b");
+                panelStudentMange.add(label5);
+                label5.setBounds(new Rectangle(new Point(470, 15), label5.getPreferredSize()));
+
+                //---- comboBox1 ----
+                comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u4e0d\u9650",
+                    "\u7537",
+                    "\u5973"
+                }));
+                panelStudentMange.add(comboBox1);
+                comboBox1.setBounds(500, 10, 60, comboBox1.getPreferredSize().height);
+
+                //---- label6 ----
+                label6.setText("\u5b66\u9662");
+                panelStudentMange.add(label6);
+                label6.setBounds(new Rectangle(new Point(565, 15), label6.getPreferredSize()));
+
+                //---- comboBox2 ----
+                comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u4e0d\u9650"
+                }));
+                panelStudentMange.add(comboBox2);
+                comboBox2.setBounds(595, 10, 90, comboBox2.getPreferredSize().height);
+
+                //---- label7 ----
+                label7.setText("\u5217\u8868\u4eba\u6570");
+                panelStudentMange.add(label7);
+                label7.setBounds(new Rectangle(new Point(360, 495), label7.getPreferredSize()));
+
+                //---- labelStudentListCount ----
+                labelStudentListCount.setText("text");
+                panelStudentMange.add(labelStudentListCount);
+                labelStudentListCount.setBounds(415, 495, 70, labelStudentListCount.getPreferredSize().height);
             }
             tabbedPaneMenu.addTab("\u5b66\u751f\u7ba1\u7406", panelStudentMange);
 
@@ -376,7 +448,7 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 展示学生列表到表格上
     private void showStudentInfoToTable() throws Exception {
-        DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableStudentList.getModel();
         model.setRowCount(0);
         for (Student student : students) {
             model.addRow(new Object[]{
@@ -394,10 +466,11 @@ public class AdministratorControllerGui extends JFrame {
             // 设置表格内容居中
             DefaultTableCellRenderer r = new DefaultTableCellRenderer();
             r.setHorizontalAlignment(JLabel.CENTER);
-            table1.setDefaultRenderer(Object.class, r);
-            table1.setDefaultRenderer(Integer.class, r);
-
+            tableStudentList.setDefaultRenderer(Object.class, r);
+            tableStudentList.setDefaultRenderer(Integer.class, r);
         }
+        // 展示总人数到那啥标签上
+        labelStudentListCount.setText(model.getRowCount() + "");
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
@@ -411,13 +484,23 @@ public class AdministratorControllerGui extends JFrame {
     private JLabel labelTeacherCount;
     private JPanel panelStudentMange;
     private JScrollPane scrollPane1;
-    private JTable table1;
+    private JTable tableStudentList;
     private JButton buttoneExport;
-    private JButton button4;
-    private JButton button5;
-    private JButton button6;
-    private JButton buttoneExport2;
+    private JButton buttonAddStudent;
+    private JButton buttonUpdateStudent;
+    private JButton buttonDeleteStudent;
+    private JButton buttoneQuery;
     private JPanel panelCountStudentByCollege;
+    private JLabel label3;
+    private JTextField textField1;
+    private JLabel label4;
+    private JTextField textField2;
+    private JLabel label5;
+    private JComboBox<String> comboBox1;
+    private JLabel label6;
+    private JComboBox<String> comboBox2;
+    private JLabel label7;
+    private JLabel labelStudentListCount;
     private JPanel panelTeacherMain;
     private JPanel panelCollegeMain;
     private JPanel panelCourseMange;

@@ -1,8 +1,10 @@
 package cn.qht2005.www.service.impl;
 
 import cn.qht2005.www.dao.AdministratorMapper;
+import cn.qht2005.www.dao.StudentMapper;
 import cn.qht2005.www.dao.TeacherMapper;
 import cn.qht2005.www.pojo.people.Administrator;
+import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.util.SqlSessionFactoryUtil;
 import cn.qht2005.www.service.AdministratorService;
@@ -14,14 +16,17 @@ import java.util.List;
 import java.util.Map;
 
 public class AdministratorServiceImpl implements AdministratorService {
-	// 教师服务对象映射对象
+	// 教师数据对象映射对象
 	private static TeacherMapper TEACHER_MAPPER = null;
+	// 学生数据映射对象
+	private static StudentMapper STUDENT_MAPPER = null;
 	static {
 		SqlSessionFactory sqlSessionFactory = null;
 		try {
 			sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
 			SqlSession sqlSession = sqlSessionFactory.openSession(true);
 			TEACHER_MAPPER = sqlSession.getMapper(TeacherMapper.class);
+			STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -60,4 +65,28 @@ public class AdministratorServiceImpl implements AdministratorService {
 
 		return map;
 	}
+
+	/**
+	 * 获取各学院学生人数
+	 * @return 一个map集合，key为学院名，value为人数
+	 */
+	@Override
+	public Map<String, Integer> getStudentCountByCollege() throws Exception {
+		// 创建一个用于存放各学院人数的map集合
+		Map<String, Integer> map = new HashMap<>();
+		// 获取所有学生
+		List<Student> students = STUDENT_MAPPER.selectAll();
+		students.forEach(student -> {
+			// 获取学生的学院名
+			try {
+				String collegeName = new CollegeServiceImpl().getCollegeNameById(student.getCollegeId());
+				// 将学生的学院名和人数存入map集合
+				map.put(collegeName, map.getOrDefault(collegeName, 0) + 1);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+		return map;
+	}
+
 }

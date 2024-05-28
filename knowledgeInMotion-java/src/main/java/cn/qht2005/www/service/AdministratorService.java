@@ -10,5 +10,10 @@ public interface AdministratorService {
 	 * @return 一个map集合，key为年龄段，value为人数
 	 */
 	Map<String, Integer> getTeacherCountByAge();
+	/**
+	 * 获取学生各学院的人数
+	 * @return 一个map集合，key为学院名，value为人数
+	 */
+	Map<String, Integer> getStudentCountByCollege() throws Exception;
 
 }
