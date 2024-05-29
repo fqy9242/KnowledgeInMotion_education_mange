@@ -199,7 +199,6 @@ public class AdministratorControllerGui extends JFrame {
         panelForTeacherAgeCount.revalidate();
         panelForTeacherAgeCount.repaint();
 
-
     }
 
     // 窗口将要被关闭
@@ -231,7 +230,7 @@ public class AdministratorControllerGui extends JFrame {
         // 学号
         String id = inputStudentId.getText();
         // 性别
-        Integer sex = selectBoxStudentSex.getSelectedIndex() == 0 ? null : selectBoxStudentSex.getSelectedIndex() == 1 ? 1 : 0;
+        Integer sex = selectBoxStudentSex.getSelectedIndex() == 0 ? null : selectBoxStudentSex.getSelectedIndex() == 1 ? 1 : 2;
         // 学院
         String collegeName = Objects.equals(Objects.requireNonNull(selectBoxStudentCollege.getSelectedItem())
                 .toString(), "不限") ? null : selectBoxStudentCollege.getSelectedItem().toString();

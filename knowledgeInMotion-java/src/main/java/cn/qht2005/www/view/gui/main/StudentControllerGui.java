@@ -974,7 +974,6 @@ public class StudentControllerGui extends JFrame {
             row.createCell(1).setCellValue(score.getCourseName());
             row.createCell(2).setCellValue(score.getScore());
         }
-
         // 输出文件
         // 创建一个文件选择器
         JFileChooser fileChooser = new JFileChooser();
