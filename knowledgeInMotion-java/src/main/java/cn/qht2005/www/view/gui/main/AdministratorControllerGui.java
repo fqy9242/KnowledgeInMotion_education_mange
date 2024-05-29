@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -62,6 +63,7 @@ public class AdministratorControllerGui extends JFrame {
             try {
                 showStudentInfoToTable();
                 showStudentCountByCollegeToChart();
+                showCollegeListToSelectBox(selectBoxStudentCollege);
 
 
             } catch (Exception ex) {
@@ -70,8 +72,15 @@ public class AdministratorControllerGui extends JFrame {
         }
 
     }
+    // 展示学院列表到选择框上 形参：一个选择框
+    private void showCollegeListToSelectBox(JComboBox<String> selectBox) {
+        try {
+            new CollegeServiceImpl().getAllCollege().forEach(college -> selectBox.addItem(college.getCollegeName()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-
+    }
     // 展示各学院人数并展示到图表上
     private void showStudentCountByCollegeToChart() {
         try {
@@ -203,6 +212,44 @@ public class AdministratorControllerGui extends JFrame {
             this.dispose();
         }
     }
+
+
+    // 查询按钮被点击
+    private void buttonQueryMouseClicked(MouseEvent e) {
+        try {
+            queryStudent();
+            showStudentInfoToTable();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+    // 动态条件查询学生
+    private void queryStudent() throws Exception {
+        // 姓名
+        String name = inputStudentName.getText();
+        // 学号
+        String id = inputStudentId.getText();
+        // 性别
+        Integer sex = selectBoxStudentSex.getSelectedIndex() == 0 ? null : selectBoxStudentSex.getSelectedIndex() == 1 ? 1 : 0;
+        // 学院
+        String collegeName = Objects.equals(Objects.requireNonNull(selectBoxStudentCollege.getSelectedItem())
+                .toString(), "不限") ? null : selectBoxStudentCollege.getSelectedItem().toString();
+        // 创建学生对象
+        Student student = new Student();
+        student.setName(name);
+        student.setStudentId(id);
+        if (collegeName != null) {
+            student.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+        }
+
+        if (sex != null) {
+            student.setSex(sex.shortValue());
+        }
+        // 将查询到的学生列表赋值给全局变量students
+        students = new TeacherServiceImpl().getStudentByDynamic(student);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMenu = new JTabbedPane();
@@ -220,16 +267,16 @@ public class AdministratorControllerGui extends JFrame {
         buttonAddStudent = new JButton();
         buttonUpdateStudent = new JButton();
         buttonDeleteStudent = new JButton();
-        buttoneQuery = new JButton();
+        buttonQuery = new JButton();
         panelCountStudentByCollege = new JPanel();
         label3 = new JLabel();
-        textField1 = new JTextField();
+        inputStudentId = new JTextField();
         label4 = new JLabel();
-        textField2 = new JTextField();
+        inputStudentName = new JTextField();
         label5 = new JLabel();
-        comboBox1 = new JComboBox<>();
+        selectBoxStudentSex = new JComboBox<>();
         label6 = new JLabel();
-        comboBox2 = new JComboBox<>();
+        selectBoxStudentCollege = new JComboBox<>();
         label7 = new JLabel();
         labelStudentListCount = new JLabel();
         panelTeacherMain = new JPanel();
@@ -350,10 +397,16 @@ public class AdministratorControllerGui extends JFrame {
                 panelStudentMange.add(buttonDeleteStudent);
                 buttonDeleteStudent.setBounds(185, 5, 78, 30);
 
-                //---- buttoneQuery ----
-                buttoneQuery.setText("\u67e5\u8be2");
-                panelStudentMange.add(buttoneQuery);
-                buttoneQuery.setBounds(690, 5, 78, 30);
+                //---- buttonQuery ----
+                buttonQuery.setText("\u67e5\u8be2");
+                buttonQuery.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonQueryMouseClicked(e);
+                    }
+                });
+                panelStudentMange.add(buttonQuery);
+                buttonQuery.setBounds(690, 5, 78, 30);
 
                 //======== panelCountStudentByCollege ========
                 {
@@ -366,41 +419,41 @@ public class AdministratorControllerGui extends JFrame {
                 label3.setText("\u59d3\u540d");
                 panelStudentMange.add(label3);
                 label3.setBounds(new Rectangle(new Point(265, 15), label3.getPreferredSize()));
-                panelStudentMange.add(textField1);
-                textField1.setBounds(395, 10, 70, 25);
+                panelStudentMange.add(inputStudentId);
+                inputStudentId.setBounds(395, 10, 70, 25);
 
                 //---- label4 ----
                 label4.setText("\u5b66\u53f7");
                 panelStudentMange.add(label4);
                 label4.setBounds(new Rectangle(new Point(365, 15), label4.getPreferredSize()));
-                panelStudentMange.add(textField2);
-                textField2.setBounds(290, 10, 70, 25);
+                panelStudentMange.add(inputStudentName);
+                inputStudentName.setBounds(290, 10, 70, 25);
 
                 //---- label5 ----
                 label5.setText("\u6027\u522b");
                 panelStudentMange.add(label5);
                 label5.setBounds(new Rectangle(new Point(470, 15), label5.getPreferredSize()));
 
-                //---- comboBox1 ----
-                comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+                //---- selectBoxStudentSex ----
+                selectBoxStudentSex.setModel(new DefaultComboBoxModel<>(new String[] {
                     "\u4e0d\u9650",
                     "\u7537",
                     "\u5973"
                 }));
-                panelStudentMange.add(comboBox1);
-                comboBox1.setBounds(500, 10, 60, comboBox1.getPreferredSize().height);
+                panelStudentMange.add(selectBoxStudentSex);
+                selectBoxStudentSex.setBounds(500, 10, 60, selectBoxStudentSex.getPreferredSize().height);
 
                 //---- label6 ----
                 label6.setText("\u5b66\u9662");
                 panelStudentMange.add(label6);
                 label6.setBounds(new Rectangle(new Point(565, 15), label6.getPreferredSize()));
 
-                //---- comboBox2 ----
-                comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
+                //---- selectBoxStudentCollege ----
+                selectBoxStudentCollege.setModel(new DefaultComboBoxModel<>(new String[] {
                     "\u4e0d\u9650"
                 }));
-                panelStudentMange.add(comboBox2);
-                comboBox2.setBounds(595, 10, 90, comboBox2.getPreferredSize().height);
+                panelStudentMange.add(selectBoxStudentCollege);
+                selectBoxStudentCollege.setBounds(595, 10, 90, selectBoxStudentCollege.getPreferredSize().height);
 
                 //---- label7 ----
                 label7.setText("\u5217\u8868\u4eba\u6570");
@@ -453,8 +506,7 @@ public class AdministratorControllerGui extends JFrame {
         for (Student student : students) {
             model.addRow(new Object[]{
                     student.getStudentId(),
-                    new CollegeServiceImpl().getCollegeNameById(student.getCollegeId())
-                    ,
+                    new CollegeServiceImpl().getCollegeNameById(student.getCollegeId()),
                     student.getClassId(),
                     student.getName(),
                     student.getAge(),
@@ -489,16 +541,16 @@ public class AdministratorControllerGui extends JFrame {
     private JButton buttonAddStudent;
     private JButton buttonUpdateStudent;
     private JButton buttonDeleteStudent;
-    private JButton buttoneQuery;
+    private JButton buttonQuery;
     private JPanel panelCountStudentByCollege;
     private JLabel label3;
-    private JTextField textField1;
+    private JTextField inputStudentId;
     private JLabel label4;
-    private JTextField textField2;
+    private JTextField inputStudentName;
     private JLabel label5;
-    private JComboBox<String> comboBox1;
+    private JComboBox<String> selectBoxStudentSex;
     private JLabel label6;
-    private JComboBox<String> comboBox2;
+    private JComboBox<String> selectBoxStudentCollege;
     private JLabel label7;
     private JLabel labelStudentListCount;
     private JPanel panelTeacherMain;

@@ -31,8 +31,9 @@
     <!--根据学生对象来动态查询学生信息-->
     <select id="selectDynamic" resultMap="studentResultMap">
         select * from t_student
-            <where>
+            <where >
                 <if test="name != null and name != ''">student_name = #{name}</if>
+                <if test="studentId != null and studentId != ''">student_id = #{studentId}</if>
                 <if test="sex != null">and student_sex = #{sex}</if>
                 <if test="collegeId != null and collegeId != ''">and student_college_id = #{collegeId}</if>
                 <if test="classId != null and classId != ''">and student_class_id = #{classId}</if>
