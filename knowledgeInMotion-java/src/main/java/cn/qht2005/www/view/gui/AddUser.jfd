@@ -1,0 +1,92 @@
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.7" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
+			"autoSize": false
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 2
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "姓名"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 5
+				"y": 15
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "inputName"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 39
+				"y": 10
+				"width": 95
+				"height": 30
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "班级"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 25
+				"height": 17
+				"x": 5
+				"y": 50
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "inputClassId"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 95
+				"height": 30
+				"x": 40
+				"y": 45
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "学院"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 5
+				"y": 115
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "selectBoxCollege"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 39
+				"y": 115
+				"width": 111
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "selectBoxSex"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "男"
+					addElement( "男" )
+					addElement( "女" )
+				}
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 85
+				"height": 30
+				"x": 39
+				"y": 80
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "性别"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 25
+				"height": 17
+				"x": 5
+				"y": 85
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "buttonAdd"
+				"text": "添加"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonAddMouseClicked", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 25
+				"y": 165
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 10, 5 )
+			"size": new java.awt.Dimension( 160, 235 )
+		} )
+	}
+}

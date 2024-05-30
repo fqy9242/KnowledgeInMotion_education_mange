@@ -71,6 +71,17 @@ new FormModel {
 						"y": 55
 						"width": 50
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label13"
+						"text": "待     发    掘   区"
+						"font": new java.awt.Font( "宋体", 0, 36 )
+						"foreground": new java.awt.Color( 255, 0, 0, 255 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 180
+						"y": 100
+						"width": 415
+						"height": 250
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "总览"
 				} )
@@ -141,6 +152,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "buttonAddStudent"
 						"text": "添加"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonAddStudentMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 78
 						"height": 30
@@ -336,8 +348,9 @@ new FormModel {
 						"height": 30
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "buttonAddStudent2"
+						name: "buttonAddTeacher"
 						"text": "添加"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonAddTeacherMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 78
 						"height": 30

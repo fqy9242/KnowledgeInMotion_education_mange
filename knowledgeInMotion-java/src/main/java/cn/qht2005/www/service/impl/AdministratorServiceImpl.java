@@ -53,14 +53,17 @@ public class AdministratorServiceImpl implements AdministratorService {
 		// 遍历教职工列表
 		teachers.forEach(teacher -> {
 			// 获取教职工年龄
-			int age = teacher.getAge();
-			if (age < 35){
-				map.put("under35", map.getOrDefault("under35", 0) + 1);
-			}else if (age < 50) {
-				map.put("35to50", map.getOrDefault("35to50", 0) + 1);
-			}else {
-				map.put("above50", map.getOrDefault("above50", 0) + 1);
+			if (teacher.getAge() != null){
+				int age = teacher.getAge();
+				if (age < 35){
+					map.put("under35", map.getOrDefault("under35", 0) + 1);
+				}else if (age < 50) {
+					map.put("35to50", map.getOrDefault("35to50", 0) + 1);
+				}else {
+					map.put("above50", map.getOrDefault("above50", 0) + 1);
+				}
 			}
+
 		});
 
 		return map;
@@ -109,6 +112,34 @@ public class AdministratorServiceImpl implements AdministratorService {
 		});
 
 		return map;
+	}
+
+	/**
+	 * 添加教师
+	 * @param teacher 教师对象
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean addTeacher(Teacher teacher) {
+		try {
+			TEACHER_MAPPER.insertTeacher(teacher);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	@Override
+	public boolean addStudent(Student student) {
+		try {
+			STUDENT_MAPPER.insertStudent(student);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

@@ -16,17 +16,19 @@
         <result column="teacher_login_password" property="passWord"/>
         <result column="teacher_photograph" property="photograph"/>
     </resultMap>
+    <!--添加教师-->
+    <insert id="insertTeacher">
+        insert into t_teacher
+            (teacher_id, teacher_name, teacher_sex, teacher_college_id)
+            values (#{teacherId},#{name}, #{sex}, #{collegeId})
+    </insert>
     <!--动态修改数据-->
     <update id="modifyTeacherByTeacher">
         UPDATE t_teacher
         <set>
-
             <if test="age != null">teacher_age = #{age},</if>
-
             <if test="sex != null and sex != ''">teacher_sex = #{sex},</if>
-
             <if test="phoneNumber != null and phoneNumber != ''">teacher_phone_number = #{phoneNumber},</if>
-
             <if test="photograph != null and photograph != ''">teacher_photograph = #{photograph},</if>
         </set>
         WHERE teacher_id = #{teacherId}
@@ -43,8 +45,8 @@
             <where>
                 <if test="teacherId != null and teacherId != ''"> and teacher_id = #{teacherId}</if>
                 <if test="name != null and name != ''"> and teacher_name = #{name}</if>
-                <if test="collegeId != null"> and teacher_college_id = #{collegeId}</if>
-                <if test="sex != null and sex != ''">and teacher_sex = {sex}</if>
+                <if test="collegeId != null and collegeId != ''"> and teacher_college_id = #{collegeId}</if>
+                <if test="sex != null and sex != ''">and teacher_sex = #{sex}</if>
             </where>
     </select>
 

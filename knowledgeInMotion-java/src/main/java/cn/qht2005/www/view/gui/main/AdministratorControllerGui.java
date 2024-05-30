@@ -15,11 +15,13 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import cn.qht2005.www.pojo.College;
+import cn.qht2005.www.pojo.Enumeration.UserType;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.view.gui.AddUser;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import org.jfree.chart.ChartFactory;
@@ -167,7 +169,13 @@ public class AdministratorControllerGui extends JFrame {
             // 将其可视化
             DefaultPieDataset dataset = new DefaultPieDataset();
 
-                teacherCountByPosition.forEach(dataset::setValue);
+                teacherCountByPosition.forEach((position, count) -> {
+                    if (position == null) {
+                        dataset.setValue("其他", count);
+                    }else{
+                        dataset.setValue(position, count);
+                    }
+                });
 
             JFreeChart pieChart = ChartFactory.createPieChart(
                     "teacherCountByPosition", // 图标题
@@ -294,6 +302,7 @@ public class AdministratorControllerGui extends JFrame {
         try {
             queryStudent();
             showStudentInfoToTable();
+            showStudentCountByCollegeToChart();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -327,8 +336,9 @@ public class AdministratorControllerGui extends JFrame {
     // 查询教师按钮被点击
     private void buttonQueryForTeacherMouseClicked(MouseEvent e) {
         try {
-            queryTeacherAndToTable();
+            queryTeacher();
             showTeacherAllToTable();
+            showTeacherCountByPositionToChart();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -336,7 +346,7 @@ public class AdministratorControllerGui extends JFrame {
 
     }
     // 查询教师然后展示到表格上
-    private void queryTeacherAndToTable() {
+    private void queryTeacher() {
         try {
             // 教师姓名
             String name = inputTeacherName.getText();
@@ -365,6 +375,15 @@ public class AdministratorControllerGui extends JFrame {
 
     }
 
+    // 添加教师按钮被点击
+    private void buttonAddTeacherMouseClicked(MouseEvent e) {
+        new AddUser(this, UserType.TEACHER).setVisible(true);
+    }
+    // 添加学生按钮被点击
+    private void buttonAddStudentMouseClicked(MouseEvent e) {
+        new AddUser(this, UserType.STUDENT).setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         tabbedPaneMenu = new JTabbedPane();
@@ -375,6 +394,7 @@ public class AdministratorControllerGui extends JFrame {
         panelForTeacherAgeCount = new JPanel();
         label2 = new JLabel();
         labelTeacherCount = new JLabel();
+        label13 = new JLabel();
         panelStudentMange = new JPanel();
         scrollPane1 = new JScrollPane();
         tableStudentList = new JTable();
@@ -398,7 +418,7 @@ public class AdministratorControllerGui extends JFrame {
         scrollPane2 = new JScrollPane();
         tableTeacherList = new JTable();
         buttoneExportForTeacher = new JButton();
-        buttonAddStudent2 = new JButton();
+        buttonAddTeacher = new JButton();
         buttonUpdateStudent2 = new JButton();
         buttonDeleteStudent2 = new JButton();
         buttonQueryForTeacher = new JButton();
@@ -472,6 +492,13 @@ public class AdministratorControllerGui extends JFrame {
                 labelTeacherCount.setText("text");
                 panelMain.add(labelTeacherCount);
                 labelTeacherCount.setBounds(105, 55, 50, labelTeacherCount.getPreferredSize().height);
+
+                //---- label13 ----
+                label13.setText("\u5f85     \u53d1    \u6398   \u533a");
+                label13.setFont(new Font("\u5b8b\u4f53", Font.PLAIN, 36));
+                label13.setForeground(Color.red);
+                panelMain.add(label13);
+                label13.setBounds(180, 100, 415, 250);
             }
             tabbedPaneMenu.addTab("\u603b\u89c8", panelMain);
 
@@ -517,6 +544,12 @@ public class AdministratorControllerGui extends JFrame {
 
                 //---- buttonAddStudent ----
                 buttonAddStudent.setText("\u6dfb\u52a0");
+                buttonAddStudent.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonAddStudentMouseClicked(e);
+                    }
+                });
                 panelStudentMange.add(buttonAddStudent);
                 buttonAddStudent.setBounds(5, 5, 78, 30);
 
@@ -640,10 +673,16 @@ public class AdministratorControllerGui extends JFrame {
                 panelTeacherMain.add(buttoneExportForTeacher);
                 buttoneExportForTeacher.setBounds(780, 5, 78, 30);
 
-                //---- buttonAddStudent2 ----
-                buttonAddStudent2.setText("\u6dfb\u52a0");
-                panelTeacherMain.add(buttonAddStudent2);
-                buttonAddStudent2.setBounds(5, 5, 78, 30);
+                //---- buttonAddTeacher ----
+                buttonAddTeacher.setText("\u6dfb\u52a0");
+                buttonAddTeacher.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonAddTeacherMouseClicked(e);
+                    }
+                });
+                panelTeacherMain.add(buttonAddTeacher);
+                buttonAddTeacher.setBounds(5, 5, 78, 30);
 
                 //---- buttonUpdateStudent2 ----
                 buttonUpdateStudent2.setText("\u4fee\u6539");
@@ -786,6 +825,7 @@ public class AdministratorControllerGui extends JFrame {
     private JPanel panelForTeacherAgeCount;
     private JLabel label2;
     private JLabel labelTeacherCount;
+    private JLabel label13;
     private JPanel panelStudentMange;
     private JScrollPane scrollPane1;
     private JTable tableStudentList;
@@ -809,7 +849,7 @@ public class AdministratorControllerGui extends JFrame {
     private JScrollPane scrollPane2;
     private JTable tableTeacherList;
     private JButton buttoneExportForTeacher;
-    private JButton buttonAddStudent2;
+    private JButton buttonAddTeacher;
     private JButton buttonUpdateStudent2;
     private JButton buttonDeleteStudent2;
     private JButton buttonQueryForTeacher;

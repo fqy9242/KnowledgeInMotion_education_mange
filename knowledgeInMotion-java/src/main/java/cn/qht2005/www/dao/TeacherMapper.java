@@ -81,6 +81,12 @@ public interface TeacherMapper {
 	 */
 	List<Teacher> selectTeacherByTeacher(Teacher teacher);
 
+	/**
+	 * 添加教师
+	 * @param teacher 教师对象
+	 */
+	void insertTeacher(Teacher teacher);
+
 }
 
 

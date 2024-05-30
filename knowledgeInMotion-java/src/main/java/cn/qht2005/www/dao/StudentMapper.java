@@ -68,4 +68,10 @@ public interface StudentMapper {
 	Integer updatePassWordForgot(@Param("studentId") String studentId,@Param("studentName") String studentName,
 						   @Param("phoneNumber")String phoneNumber,
 						   @Param("passWordNew") String passWordNew);
+
+	/**
+	 *  添加学生
+	 * @param student 学生对象
+	 */
+	void insertStudent(Student student);
 }
