@@ -37,5 +37,15 @@
         SET teacher_login_password = #{passWordNew}
         WHERE teacher_id = #{teacherId} and teacher_login_password = #{passWord}
     </update>
+    <!--根据教师对象动态条件查询教师-->
+    <select id="selectTeacherByTeacher" resultMap="teacherResultMap">
+        select * from t_teacher
+            <where>
+                <if test="teacherId != null and teacherId != ''"> and teacher_id = #{teacherId}</if>
+                <if test="name != null and name != ''"> and teacher_name = #{name}</if>
+                <if test="collegeId != null"> and teacher_college_id = #{collegeId}</if>
+                <if test="sex != null and sex != ''">and teacher_sex = {sex}</if>
+            </where>
+    </select>
 
 </mapper>

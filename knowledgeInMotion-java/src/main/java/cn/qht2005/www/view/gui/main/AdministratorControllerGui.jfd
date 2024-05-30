@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.10" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.7" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -365,7 +365,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "buttonQueryForTeacher"
 						"text": "查询"
-						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonQueryMouseClicked", true ) )
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonQueryForTeacherMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 78
 						"height": 30
@@ -405,7 +405,7 @@ new FormModel {
 						"y": 15
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "inputStudentName2"
+						name: "inputTeacherName"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 290
 						"y": 10

@@ -324,6 +324,46 @@ public class AdministratorControllerGui extends JFrame {
         // 将查询到的学生列表赋值给全局变量students
         students = new TeacherServiceImpl().getStudentByDynamic(student);
     }
+    // 查询教师按钮被点击
+    private void buttonQueryForTeacherMouseClicked(MouseEvent e) {
+        try {
+            queryTeacherAndToTable();
+            showTeacherAllToTable();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+
+    }
+    // 查询教师然后展示到表格上
+    private void queryTeacherAndToTable() {
+        try {
+            // 教师姓名
+            String name = inputTeacherName.getText();
+            // 教师工号
+            String id = inputTeacherId.getText();
+            // 教师性别
+            Integer sex = selectBoxTeacherSex.getSelectedIndex() == 0 ? null : selectBoxTeacherSex.getSelectedIndex() == 1 ? 1 : 2;
+            // 教师学院
+            String collegeName = Objects.equals(Objects.requireNonNull(selectBoxTeacherCollege.getSelectedItem())
+                    .toString(), "不限") ? null : selectBoxTeacherCollege.getSelectedItem().toString();
+            // 创建一个教师对象
+            Teacher teacher = new Teacher();
+            // 对这个教师对象进行赋值
+            teacher.setName(name);
+            teacher.setTeacherId(id);
+            if (collegeName != null) {
+                teacher.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+            }
+            teacher.setSex(sex == null ? null: sex == 1 ? (short)1 : (short)2);
+            // 进行动态条件查询
+            teachers = new TeacherServiceImpl().getTeacherByDynamic(teacher);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -366,7 +406,7 @@ public class AdministratorControllerGui extends JFrame {
         label8 = new JLabel();
         inputTeacherId = new JTextField();
         label9 = new JLabel();
-        inputStudentName2 = new JTextField();
+        inputTeacherName = new JTextField();
         label10 = new JLabel();
         selectBoxTeacherSex = new JComboBox<>();
         label11 = new JLabel();
@@ -620,7 +660,7 @@ public class AdministratorControllerGui extends JFrame {
                 buttonQueryForTeacher.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        buttonQueryMouseClicked(e);
+                        buttonQueryForTeacherMouseClicked(e);
                     }
                 });
                 panelTeacherMain.add(buttonQueryForTeacher);
@@ -644,8 +684,8 @@ public class AdministratorControllerGui extends JFrame {
                 label9.setText("\u5de5\u53f7");
                 panelTeacherMain.add(label9);
                 label9.setBounds(new Rectangle(new Point(365, 15), label9.getPreferredSize()));
-                panelTeacherMain.add(inputStudentName2);
-                inputStudentName2.setBounds(290, 10, 70, 25);
+                panelTeacherMain.add(inputTeacherName);
+                inputTeacherName.setBounds(290, 10, 70, 25);
 
                 //---- label10 ----
                 label10.setText("\u6027\u522b");
@@ -777,7 +817,7 @@ public class AdministratorControllerGui extends JFrame {
     private JLabel label8;
     private JTextField inputTeacherId;
     private JLabel label9;
-    private JTextField inputStudentName2;
+    private JTextField inputTeacherName;
     private JLabel label10;
     private JComboBox<String> selectBoxTeacherSex;
     private JLabel label11;

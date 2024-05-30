@@ -74,6 +74,12 @@ public interface TeacherMapper {
 	@ResultMap("teacherResultMap")
 	List<Teacher> selectAll();
 
+	/**
+	 * 根据教师对象动态条件查询教师
+	 * @param teacher 教师对象
+	 * @return 满足条件的教师列表
+	 */
+	List<Teacher> selectTeacherByTeacher(Teacher teacher);
 
 }
 

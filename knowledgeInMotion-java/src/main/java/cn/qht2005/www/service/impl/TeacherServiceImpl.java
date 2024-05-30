@@ -176,4 +176,9 @@ public class TeacherServiceImpl implements TeacherService {
 	public List<Teacher> getAllTeacher() {
 		return TEACHER_MAPPER.selectAll();
 	}
+
+	@Override
+	public List<Teacher> getTeacherByDynamic(Teacher teacher) {
+		return TEACHER_MAPPER.selectTeacherByTeacher(teacher);
+	}
 }

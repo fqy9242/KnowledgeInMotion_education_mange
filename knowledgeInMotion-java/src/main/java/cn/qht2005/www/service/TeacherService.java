@@ -48,5 +48,12 @@ public interface TeacherService {
 	 */
 	List<Teacher> getAllTeacher();
 
+	/**
+	 * 动态查询教师
+	 * @param teacher 教师对象
+	 * @return 教师对象列表
+	 */
+	List<Teacher> getTeacherByDynamic(Teacher teacher);
+
 
 }
