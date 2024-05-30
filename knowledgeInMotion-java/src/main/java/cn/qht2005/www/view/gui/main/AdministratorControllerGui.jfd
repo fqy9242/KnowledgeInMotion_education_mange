@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.7" encoding: "UTF-8"
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.10" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -224,7 +224,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "selectBoxStudentSex"
-						"model": new javax.swing.DefaultComboBoxModel {
+						"model": &DefaultComboBoxModel0 new javax.swing.DefaultComboBoxModel {
 							selectedItem: "不限"
 							addElement( "不限" )
 							addElement( "男" )
@@ -244,7 +244,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "selectBoxStudentCollege"
-						"model": new javax.swing.DefaultComboBoxModel {
+						"model": &DefaultComboBoxModel1 new javax.swing.DefaultComboBoxModel {
 							selectedItem: "不限"
 							addElement( "不限" )
 						}
@@ -275,6 +275,188 @@ new FormModel {
 					"autoSize": false
 				} ) {
 					name: "panelTeacherMain"
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane2"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "tableTeacherList"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+								add( "工号" )
+								add( "学院" )
+								add( "管理班级" )
+								add( "姓名" )
+								add( "年龄" )
+								add( "性别" )
+								add( "职位" )
+								add( "联系电话" )
+								add( "登录密码" )
+							}, new java.util.Vector {
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.Integer )
+								add( class java.lang.String )
+								add( class java.lang.Integer )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+							}, new java.util.Vector {
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 5
+						"y": 50
+						"width": 855
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttoneExportForTeacher"
+						"text": "导出"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 780
+						"y": 5
+						"width": 78
+						"height": 30
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonAddStudent2"
+						"text": "添加"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 78
+						"height": 30
+						"x": 5
+						"y": 5
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonUpdateStudent2"
+						"text": "修改"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 78
+						"height": 30
+						"x": 90
+						"y": 5
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonDeleteStudent2"
+						"text": "删除"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 78
+						"height": 30
+						"x": 185
+						"y": 5
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonQueryForTeacher"
+						"text": "查询"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonQueryMouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 78
+						"height": 30
+						"x": 690
+						"y": 5
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
+						"autoSize": false
+					} ) {
+						name: "panelCountTeacherByPositon"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 0
+						"y": 475
+						"height": 200
+						"width": 345
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label8"
+						"text": "姓名"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 265
+						"y": 15
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputTeacherId"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 395
+						"y": 10
+						"width": 70
+						"height": 25
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label9"
+						"text": "工号"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 365
+						"y": 15
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputStudentName2"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 290
+						"y": 10
+						"width": 70
+						"height": 25
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label10"
+						"text": "性别"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 470
+						"y": 15
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "selectBoxTeacherSex"
+						"model": #DefaultComboBoxModel0
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 500
+						"y": 10
+						"width": 60
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label11"
+						"text": "学院"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 565
+						"y": 15
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "selectBoxTeacherCollege"
+						"model": #DefaultComboBoxModel1
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 595
+						"y": 10
+						"width": 90
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label12"
+						"text": "列表人数"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 360
+						"y": 495
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelForTeacherCount"
+						"text": "text"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 415
+						"y": 495
+						"width": 70
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "教职工管理"
 				} )

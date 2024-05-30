@@ -1,5 +1,8 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.people.Teacher;
+
+import java.util.List;
 import java.util.Map;
 
 public interface AdministratorService {
@@ -15,5 +18,12 @@ public interface AdministratorService {
 	 * @return 一个map集合，key为学院名，value为人数
 	 */
 	Map<String, Integer> getStudentCountByCollege() throws Exception;
+
+	/**
+	 * 获取教师各职位的人数
+	 * @return 一个map集合，key为职位，value为人数
+	 * @throws Exception 异常它老爹
+	 */
+	Map<String, Integer> getTeacherCountByPosition(List<Teacher> teachers);
 
 }

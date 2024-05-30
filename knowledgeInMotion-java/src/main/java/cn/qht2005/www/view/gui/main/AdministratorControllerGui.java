@@ -61,7 +61,9 @@ public class AdministratorControllerGui extends JFrame {
         } else if (tabbedPaneMenu.getSelectedIndex() == 1) {
             // 学生管理
             try {
+                // 展示所有学生列表到表格上
                 showStudentInfoToTable();
+                // 展示所有
                 showStudentCountByCollegeToChart();
                 showCollegeListToSelectBox(selectBoxStudentCollege);
 
@@ -69,7 +71,46 @@ public class AdministratorControllerGui extends JFrame {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
+        } else if (tabbedPaneMenu.getSelectedIndex() == 2) {
+            // 教职工管理
+            try {
+                showTeacherAllToTable();
+                showCollegeListToSelectBox(selectBoxTeacherCollege);
+                showTeacherCountByPositionToChart();
+
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+
+
         }
+
+    }
+    // 将所有教职工列表展示到那玩意的表格上
+    private void showTeacherAllToTable() throws Exception {
+        DefaultTableModel model = (DefaultTableModel) tableTeacherList.getModel();
+        model.setRowCount(0);
+        for (Teacher teacher : teachers) {
+            model.addRow(new Object[]{
+                    //  工号
+                    teacher.getTeacherId(),
+                    new CollegeServiceImpl().getCollegeNameById(teacher.getCollegeId()),
+                    teacher.getMangeClassId(),
+                    teacher.getName(),
+                    teacher.getAge(),
+                    teacher.getSex() == 1 ? "男" : "女",
+                    teacher.getPosition(),
+                    teacher.getPhoneNumber(),
+                    teacher.getPassWord(),
+            });
+            // 设置表格内容居中
+            DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+            r.setHorizontalAlignment(JLabel.CENTER);
+            tableTeacherList.setDefaultRenderer(Object.class, r);
+            tableTeacherList.setDefaultRenderer(Integer.class, r);
+        }
+        // 展示总人数到那啥标签上
+        labelForTeacherCount.setText(model.getRowCount() + "");
 
     }
     // 展示学院列表到选择框上 形参：一个选择框
@@ -118,6 +159,41 @@ public class AdministratorControllerGui extends JFrame {
 			throw new RuntimeException(e);
 		}
 	}
+    // 展示各职位教师到图表上
+    private void showTeacherCountByPositionToChart() {
+        try {
+            // 获取各职位人数
+            Map<String, Integer> teacherCountByPosition = new AdministratorServiceImpl().getTeacherCountByPosition(teachers);
+            // 将其可视化
+            DefaultPieDataset dataset = new DefaultPieDataset();
+
+                teacherCountByPosition.forEach(dataset::setValue);
+
+            JFreeChart pieChart = ChartFactory.createPieChart(
+                    "teacherCountByPosition", // 图标题
+                    dataset, // 数据集
+                    true, true, true);
+            PiePlot plot = (PiePlot) pieChart.getPlot();
+            // 关闭图表文字抗锯齿
+            pieChart.getRenderingHints().put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+            ChartPanel chartPanel = new ChartPanel(pieChart);
+            // 为那些玩意设置中文字体，不然不显示
+            Font LegendFont = new Font("宋体", Font.PLAIN, 15);
+            LegendTitle legend = pieChart.getLegend(0);
+            legend.setItemFont(LegendFont);
+            plot.setLabelFont(new Font("黑体", Font.PLAIN, 13));
+            // 设置那啥位置，让其能够显示
+            chartPanel.setBounds(0, 0, panelCountTeacherByPositon.getWidth(), panelCountTeacherByPositon.getHeight());
+            // 刷新一下组件
+            panelCountTeacherByPositon.add(chartPanel);
+            panelCountTeacherByPositon.revalidate();
+            panelCountTeacherByPositon.repaint();
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     // 自定义的初始化
     private void init()  {
         try {
@@ -279,6 +355,24 @@ public class AdministratorControllerGui extends JFrame {
         label7 = new JLabel();
         labelStudentListCount = new JLabel();
         panelTeacherMain = new JPanel();
+        scrollPane2 = new JScrollPane();
+        tableTeacherList = new JTable();
+        buttoneExportForTeacher = new JButton();
+        buttonAddStudent2 = new JButton();
+        buttonUpdateStudent2 = new JButton();
+        buttonDeleteStudent2 = new JButton();
+        buttonQueryForTeacher = new JButton();
+        panelCountTeacherByPositon = new JPanel();
+        label8 = new JLabel();
+        inputTeacherId = new JTextField();
+        label9 = new JLabel();
+        inputStudentName2 = new JTextField();
+        label10 = new JLabel();
+        selectBoxTeacherSex = new JComboBox<>();
+        label11 = new JLabel();
+        selectBoxTeacherCollege = new JComboBox<>();
+        label12 = new JLabel();
+        labelForTeacherCount = new JLabel();
         panelCollegeMain = new JPanel();
         panelCourseMange = new JPanel();
         panelNoticeMange = new JPanel();
@@ -469,6 +563,125 @@ public class AdministratorControllerGui extends JFrame {
             //======== panelTeacherMain ========
             {
                 panelTeacherMain.setLayout(null);
+
+                //======== scrollPane2 ========
+                {
+
+                    //---- tableTeacherList ----
+                    tableTeacherList.setModel(new DefaultTableModel(
+                        new Object[][] {
+                        },
+                        new String[] {
+                            "\u5de5\u53f7", "\u5b66\u9662", "\u7ba1\u7406\u73ed\u7ea7", "\u59d3\u540d", "\u5e74\u9f84", "\u6027\u522b", "\u804c\u4f4d", "\u8054\u7cfb\u7535\u8bdd", "\u767b\u5f55\u5bc6\u7801"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, Integer.class, String.class, Integer.class, String.class, String.class, String.class, String.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false, false, false, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    scrollPane2.setViewportView(tableTeacherList);
+                }
+                panelTeacherMain.add(scrollPane2);
+                scrollPane2.setBounds(5, 50, 855, scrollPane2.getPreferredSize().height);
+
+                //---- buttoneExportForTeacher ----
+                buttoneExportForTeacher.setText("\u5bfc\u51fa");
+                panelTeacherMain.add(buttoneExportForTeacher);
+                buttoneExportForTeacher.setBounds(780, 5, 78, 30);
+
+                //---- buttonAddStudent2 ----
+                buttonAddStudent2.setText("\u6dfb\u52a0");
+                panelTeacherMain.add(buttonAddStudent2);
+                buttonAddStudent2.setBounds(5, 5, 78, 30);
+
+                //---- buttonUpdateStudent2 ----
+                buttonUpdateStudent2.setText("\u4fee\u6539");
+                panelTeacherMain.add(buttonUpdateStudent2);
+                buttonUpdateStudent2.setBounds(90, 5, 78, 30);
+
+                //---- buttonDeleteStudent2 ----
+                buttonDeleteStudent2.setText("\u5220\u9664");
+                panelTeacherMain.add(buttonDeleteStudent2);
+                buttonDeleteStudent2.setBounds(185, 5, 78, 30);
+
+                //---- buttonQueryForTeacher ----
+                buttonQueryForTeacher.setText("\u67e5\u8be2");
+                buttonQueryForTeacher.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonQueryMouseClicked(e);
+                    }
+                });
+                panelTeacherMain.add(buttonQueryForTeacher);
+                buttonQueryForTeacher.setBounds(690, 5, 78, 30);
+
+                //======== panelCountTeacherByPositon ========
+                {
+                    panelCountTeacherByPositon.setLayout(null);
+                }
+                panelTeacherMain.add(panelCountTeacherByPositon);
+                panelCountTeacherByPositon.setBounds(0, 475, 345, 200);
+
+                //---- label8 ----
+                label8.setText("\u59d3\u540d");
+                panelTeacherMain.add(label8);
+                label8.setBounds(new Rectangle(new Point(265, 15), label8.getPreferredSize()));
+                panelTeacherMain.add(inputTeacherId);
+                inputTeacherId.setBounds(395, 10, 70, 25);
+
+                //---- label9 ----
+                label9.setText("\u5de5\u53f7");
+                panelTeacherMain.add(label9);
+                label9.setBounds(new Rectangle(new Point(365, 15), label9.getPreferredSize()));
+                panelTeacherMain.add(inputStudentName2);
+                inputStudentName2.setBounds(290, 10, 70, 25);
+
+                //---- label10 ----
+                label10.setText("\u6027\u522b");
+                panelTeacherMain.add(label10);
+                label10.setBounds(new Rectangle(new Point(470, 15), label10.getPreferredSize()));
+
+                //---- selectBoxTeacherSex ----
+                selectBoxTeacherSex.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u4e0d\u9650",
+                    "\u7537",
+                    "\u5973"
+                }));
+                panelTeacherMain.add(selectBoxTeacherSex);
+                selectBoxTeacherSex.setBounds(500, 10, 60, selectBoxTeacherSex.getPreferredSize().height);
+
+                //---- label11 ----
+                label11.setText("\u5b66\u9662");
+                panelTeacherMain.add(label11);
+                label11.setBounds(new Rectangle(new Point(565, 15), label11.getPreferredSize()));
+
+                //---- selectBoxTeacherCollege ----
+                selectBoxTeacherCollege.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u4e0d\u9650"
+                }));
+                panelTeacherMain.add(selectBoxTeacherCollege);
+                selectBoxTeacherCollege.setBounds(595, 10, 90, selectBoxTeacherCollege.getPreferredSize().height);
+
+                //---- label12 ----
+                label12.setText("\u5217\u8868\u4eba\u6570");
+                panelTeacherMain.add(label12);
+                label12.setBounds(new Rectangle(new Point(360, 495), label12.getPreferredSize()));
+
+                //---- labelForTeacherCount ----
+                labelForTeacherCount.setText("text");
+                panelTeacherMain.add(labelForTeacherCount);
+                labelForTeacherCount.setBounds(415, 495, 70, labelForTeacherCount.getPreferredSize().height);
             }
             tabbedPaneMenu.addTab("\u6559\u804c\u5de5\u7ba1\u7406", panelTeacherMain);
 
@@ -553,6 +766,24 @@ public class AdministratorControllerGui extends JFrame {
     private JLabel label7;
     private JLabel labelStudentListCount;
     private JPanel panelTeacherMain;
+    private JScrollPane scrollPane2;
+    private JTable tableTeacherList;
+    private JButton buttoneExportForTeacher;
+    private JButton buttonAddStudent2;
+    private JButton buttonUpdateStudent2;
+    private JButton buttonDeleteStudent2;
+    private JButton buttonQueryForTeacher;
+    private JPanel panelCountTeacherByPositon;
+    private JLabel label8;
+    private JTextField inputTeacherId;
+    private JLabel label9;
+    private JTextField inputStudentName2;
+    private JLabel label10;
+    private JComboBox<String> selectBoxTeacherSex;
+    private JLabel label11;
+    private JComboBox<String> selectBoxTeacherCollege;
+    private JLabel label12;
+    private JLabel labelForTeacherCount;
     private JPanel panelCollegeMain;
     private JPanel panelCourseMange;
     private JPanel panelNoticeMange;

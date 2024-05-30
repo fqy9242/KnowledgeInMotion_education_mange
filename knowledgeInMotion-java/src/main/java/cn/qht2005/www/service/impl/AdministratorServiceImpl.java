@@ -89,4 +89,26 @@ public class AdministratorServiceImpl implements AdministratorService {
 		return map;
 	}
 
+	/**
+	 *  获取教师各职位人数
+	 * @return 一个map集合
+	 * @throws Exception
+	 */
+
+	@Override
+	public Map<String, Integer> getTeacherCountByPosition(List<Teacher> teachers){
+		// 存放人数的集合
+		Map<String, Integer> map = new HashMap<>();
+/*		// 获取所有教师
+		List<Teacher> teachers = TEACHER_MAPPER.selectAll();*/
+		teachers.forEach(t -> {
+			// 获取教师的职位
+			String positionName = t.getPosition();
+			// 将其放入集合
+			map.put(positionName, map.getOrDefault(positionName, 0) +1);
+		});
+
+		return map;
+	}
+
 }
