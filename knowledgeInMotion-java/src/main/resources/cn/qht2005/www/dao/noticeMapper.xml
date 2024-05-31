@@ -12,5 +12,24 @@
         <result column="notice_body" property="body"/>
         <result column="notice_time" property="publishDate"/>
     </resultMap>
+    <!--批量删除公告-->
+    <delete id="deleteByNoticeList">
+        delete from t_notice
+        <where>
+            notice_id in
+            <foreach collection="list" item="notice" open="(" close=")" separator=",">
+                #{notice.noticeId}
+            </foreach>
+        </where>
+    </delete>
+    <!--动态条件查询学生-->
+    <select id="selectByNotice" resultMap="noticeResultMap">
+        select * from t_notice
+        <where>
+            <if test="noticeId != null and noticeId != ''">notice_id = #{noticeId}</if>
+            <if test = "body != null and body != ''">and (notice_body like concat('%',#{body},'%')
+                                                    or notice_title like concat('%',#{body},'%'))</if>
+        </where>
+    </select>
 
 </mapper>

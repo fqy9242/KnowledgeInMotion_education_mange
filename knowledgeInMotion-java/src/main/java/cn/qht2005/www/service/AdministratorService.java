@@ -1,5 +1,6 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 
@@ -40,4 +41,30 @@ public interface AdministratorService {
 	 */
 	boolean addStudent(Student student);
 
+	/**
+	 * 获取所有公告
+	 * @return 公告列表
+	 */
+	List<Notice> getAllNotice();
+
+	/**
+	 * 发布公告
+	 * @param notice 公告实体对俩
+	 * @return 是否成功
+	 */
+	boolean addNotice(Notice notice);
+
+	/**
+	 * 根据条件查询通知
+	 * @param notice 通知实体对象
+	 * @return 符合条件的通知列表
+	 */
+	List<Notice>getNoticeByNotice(Notice notice);
+
+	/**
+	 * 批量删除公告
+	 * @param noticeList 公告列表
+	 * @return 是否成功
+	 */
+	boolean deleteNotices(List<Notice> noticeList);
 }

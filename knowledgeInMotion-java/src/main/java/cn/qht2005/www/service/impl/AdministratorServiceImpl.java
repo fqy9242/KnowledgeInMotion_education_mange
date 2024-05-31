@@ -1,8 +1,10 @@
 package cn.qht2005.www.service.impl;
 
 import cn.qht2005.www.dao.AdministratorMapper;
+import cn.qht2005.www.dao.NoticeMapper;
 import cn.qht2005.www.dao.StudentMapper;
 import cn.qht2005.www.dao.TeacherMapper;
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Administrator;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
@@ -20,6 +22,8 @@ public class AdministratorServiceImpl implements AdministratorService {
 	private static TeacherMapper TEACHER_MAPPER = null;
 	// 学生数据映射对象
 	private static StudentMapper STUDENT_MAPPER = null;
+	// 公告数据映射对象
+	private static NoticeMapper NOTICE_MAPPER = null;
 	static {
 		SqlSessionFactory sqlSessionFactory = null;
 		try {
@@ -27,6 +31,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 			SqlSession sqlSession = sqlSessionFactory.openSession(true);
 			TEACHER_MAPPER = sqlSession.getMapper(TeacherMapper.class);
 			STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
+			NOTICE_MAPPER = sqlSession.getMapper(NoticeMapper.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -135,6 +140,52 @@ public class AdministratorServiceImpl implements AdministratorService {
 	public boolean addStudent(Student student) {
 		try {
 			STUDENT_MAPPER.insertStudent(student);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 获取所有公告
+	 * @return 公告列表
+	 */
+	@Override
+	public List<Notice> getAllNotice() {
+		return NOTICE_MAPPER.selectAll();
+	}
+
+	/**
+	 *  发布公告
+	 * @param notice 公告实体对象
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean addNotice(Notice notice) {
+		try {
+			NOTICE_MAPPER.insert(notice);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public List<Notice> getNoticeByNotice(Notice notice) {
+		return NOTICE_MAPPER.selectByNotice(notice);
+	}
+
+	/**
+	 * 批量删除公告
+	 * @param noticeList 公告列表
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean deleteNotices(List<Notice> noticeList) {
+		try {
+			NOTICE_MAPPER.deleteByNoticeList(noticeList);
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

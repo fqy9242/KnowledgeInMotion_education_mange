@@ -7,6 +7,7 @@ package cn.qht2005.www.view.gui.main;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,11 +17,13 @@ import javax.swing.table.*;
 
 import cn.qht2005.www.pojo.College;
 import cn.qht2005.www.pojo.Enumeration.UserType;
+import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.view.gui.AddNotice;
 import cn.qht2005.www.view.gui.AddUser;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -85,8 +88,52 @@ public class AdministratorControllerGui extends JFrame {
             }
 
 
+        } else if (tabbedPaneMenu.getSelectedIndex() == 3) {
+            // 学院管理
+        }else if (tabbedPaneMenu.getSelectedIndex() == 4) {
+            // 课程管理
+        } else if (tabbedPaneMenu.getSelectedIndex() == 5) {
+            // 通知管理
+            showNoticeToTable(null);
+
         }
 
+
+    }
+    // 展示所有公告到公列表上
+    private void showNoticeToTable(List<Notice> notices) {
+        try {
+            // 获取所有公告
+            if (notices == null){
+                notices = new AdministratorServiceImpl().getAllNotice();
+            }
+            // 将所有公告展示到表格上
+            DefaultTableModel model = (DefaultTableModel) tableNoticeList.getModel();
+            model.setRowCount(0);
+            for (Notice notice : notices) {
+                model.addRow(new Object[]{
+                        // 获取公告id
+                        notice.getNoticeId(),
+                        // 获取发文机关
+                        notice.getPublisher(),
+                        // 获取主送机关 0.所有 1.学生 2.教师
+                        notice.getRecipient() == 0 ? "全体师生" : notice.getRecipient() == 1 ? "全体学生" : "全体教师",
+                        // 获取发文时间
+                        notice.getPublishDate(),
+                        // 获取公告标题
+                        notice.getTitle(),
+                        // 获取公告内容
+                        notice.getBody()
+                });
+            }
+            // 设置表格内容居中
+            DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+            r.setHorizontalAlignment(JLabel.CENTER);
+            tableNoticeList.setDefaultRenderer(Object.class, r);
+//            tableNoticeList.setDefaultRenderer(Integer.class, r);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     // 将所有教职工列表展示到那玩意的表格上
     private void showTeacherAllToTable() throws Exception {
@@ -383,6 +430,70 @@ public class AdministratorControllerGui extends JFrame {
     private void buttonAddStudentMouseClicked(MouseEvent e) {
         new AddUser(this, UserType.STUDENT).setVisible(true);
     }
+    // 发布公告按钮被点击
+    private void buttonPublishNoticeMouseClicked(MouseEvent e) {
+        new AddNotice(this).setVisible(true);
+        // 刷新
+        showNoticeToTable(null);
+    }
+
+    // 查询公告按钮被点击
+    private void buttonQueryNoticeMouseClicked(MouseEvent e) {
+        // 获取查询到的公告
+        List<Notice> notices = queryNotice();
+        // 展示到表格上
+        showNoticeToTable(notices);
+    }
+    // 根据条件查询公告
+    private List<Notice> queryNotice() {
+        // 获取文本框的公告id
+        String noticeId = inputNoticeId.getText();
+        // 获取文本框的公告内容包含
+        String contentContain = inputNoticeContain.getText();
+        // 创建一个公告对象
+        Notice notice = new Notice();
+        // 对这个公告对象进行赋值
+        if (!noticeId.isEmpty()) {
+            notice.setNoticeId(Integer.parseInt(noticeId));
+        }
+        notice.setBody(contentContain);
+        // 获取结果并返回
+        return new AdministratorServiceImpl().getNoticeByNotice(notice);
+    }
+    // 删除公告按钮被点击
+    private void buttonDeleteNoticeMouseClicked(MouseEvent e) {
+        deleteNotice();
+    }
+    // 删除公告
+    private void deleteNotice(){
+        // 获取选中的行
+        int[] rows = tableNoticeList.getSelectedRows();
+        if (rows.length == 0){
+            JOptionPane.showMessageDialog(null, "请选择要删除的公告");
+            return;
+        }
+        // 创建一个公告列表
+        List<Notice> notices = new ArrayList<>();
+        // 遍历选中的行
+        for (int row : rows) {
+            // 创建一个公告对象
+            Notice notice = new Notice();
+            // 对这个公告对象进行赋值
+            notice.setNoticeId((Integer) tableNoticeList.getValueAt(row, 0));
+            // 将这个公告对象添加到公告列表中
+            notices.add(notice);
+        }
+        // 删除公告
+        boolean result = new AdministratorServiceImpl().deleteNotices(notices);
+        // 判断是否删除成功
+        if (result) {
+            JOptionPane.showMessageDialog(null, "删除成功");
+            // 刷新
+            showNoticeToTable(null);
+        } else {
+            JOptionPane.showMessageDialog(null, "删除失败");
+        }
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -446,7 +557,7 @@ public class AdministratorControllerGui extends JFrame {
         inputNoticeContain = new JTextField();
         label15 = new JLabel();
         inputNoticeId = new JTextField();
-        button1 = new JButton();
+        buttonQueryNotice = new JButton();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u7ba1\u7406\u5458\u4e3b\u9875\u9762   by \u8983\u60e0\u901a");
@@ -509,7 +620,7 @@ public class AdministratorControllerGui extends JFrame {
                 label13.setFont(new Font("\u5b8b\u4f53", Font.PLAIN, 36));
                 label13.setForeground(Color.red);
                 panelMain.add(label13);
-                label13.setBounds(180, 100, 415, 250);
+                label13.setBounds(220, 100, 415, 250);
             }
             tabbedPaneMenu.addTab("\u603b\u89c8", panelMain);
 
@@ -859,11 +970,23 @@ public class AdministratorControllerGui extends JFrame {
 
                 //---- buttonPublishNotice ----
                 buttonPublishNotice.setText("\u53d1\u5e03\u516c\u544a");
+                buttonPublishNotice.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonPublishNoticeMouseClicked(e);
+                    }
+                });
                 panelNoticeMange.add(buttonPublishNotice);
                 buttonPublishNotice.setBounds(15, 15, 125, 30);
 
                 //---- buttonDeleteNotice ----
                 buttonDeleteNotice.setText("\u5220\u9664\u516c\u544a");
+                buttonDeleteNotice.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonDeleteNoticeMouseClicked(e);
+                    }
+                });
                 panelNoticeMange.add(buttonDeleteNotice);
                 buttonDeleteNotice.setBounds(155, 15, 125, 30);
 
@@ -881,10 +1004,16 @@ public class AdministratorControllerGui extends JFrame {
                 panelNoticeMange.add(inputNoticeId);
                 inputNoticeId.setBounds(630, 15, 95, inputNoticeId.getPreferredSize().height);
 
-                //---- button1 ----
-                button1.setText("\u67e5\u8be2\u516c\u544a");
-                panelNoticeMange.add(button1);
-                button1.setBounds(new Rectangle(new Point(740, 15), button1.getPreferredSize()));
+                //---- buttonQueryNotice ----
+                buttonQueryNotice.setText("\u67e5\u8be2\u516c\u544a");
+                buttonQueryNotice.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonQueryNoticeMouseClicked(e);
+                    }
+                });
+                panelNoticeMange.add(buttonQueryNotice);
+                buttonQueryNotice.setBounds(new Rectangle(new Point(740, 15), buttonQueryNotice.getPreferredSize()));
             }
             tabbedPaneMenu.addTab("\u516c\u544a\u7ba1\u7406", panelNoticeMange);
         }
@@ -983,8 +1112,11 @@ public class AdministratorControllerGui extends JFrame {
     private JTextField inputNoticeContain;
     private JLabel label15;
     private JTextField inputNoticeId;
-    private JButton button1;
+    private JButton buttonQueryNotice;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+
+
+
 
     public static void main(String[] args) {
         // 使用FlatLaf皮肤包

@@ -77,7 +77,7 @@ new FormModel {
 						"font": new java.awt.Font( "宋体", 0, 36 )
 						"foreground": new java.awt.Color( 255, 0, 0, 255 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 180
+						"x": 220
 						"y": 100
 						"width": 415
 						"height": 250
@@ -566,6 +566,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "buttonPublishNotice"
 						"text": "发布公告"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonPublishNoticeMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 15
 						"y": 15
@@ -575,6 +576,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "buttonDeleteNotice"
 						"text": "删除公告"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonDeleteNoticeMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 125
 						"height": 30
@@ -610,8 +612,9 @@ new FormModel {
 						"width": 95
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button1"
+						name: "buttonQueryNotice"
 						"text": "查询公告"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonQueryNoticeMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 740
 						"y": 15
