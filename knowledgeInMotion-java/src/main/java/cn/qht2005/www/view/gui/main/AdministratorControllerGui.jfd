@@ -484,6 +484,36 @@ new FormModel {
 					"autoSize": false
 				} ) {
 					name: "panelCourseMange"
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane3"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "table1"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+								add( "课程编号" )
+								add( "课程名称" )
+								add( "开设学院" )
+							}, new java.util.Vector {
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+							}, new java.util.Vector {
+								add( false )
+								add( false )
+								add( false )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+							} )
+							"showHorizontalLines": false
+							"showVerticalLines": false
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 0
+						"y": 80
+						"width": 860
+						"height": 585
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "课程管理"
 				} )
@@ -491,6 +521,101 @@ new FormModel {
 					"autoSize": false
 				} ) {
 					name: "panelNoticeMange"
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPaneNotice"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "tableNoticeList"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+								add( "公告id" )
+								add( "发文机关" )
+								add( "主送机关" )
+								add( "发文时间" )
+								add( "公告标题" )
+								add( "公告内容" )
+							}, new java.util.Vector {
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+							}, new java.util.Vector {
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							"showVerticalLines": false
+							"showHorizontalLines": false
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 0
+						"y": 60
+						"width": 865
+						"height": 610
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonPublishNotice"
+						"text": "发布公告"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 15
+						"y": 15
+						"width": 125
+						"height": 30
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonDeleteNotice"
+						"text": "删除公告"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 125
+						"height": 30
+						"x": 155
+						"y": 15
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label14"
+						"text": "公告标题或内容包含:"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 295
+						"y": 20
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputNoticeContain"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 430
+						"y": 15
+						"width": 140
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label15"
+						"text": "公告id"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 590
+						"y": 20
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputNoticeId"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 630
+						"y": 15
+						"width": 95
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button1"
+						"text": "查询公告"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 740
+						"y": 15
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "公告管理"
 				} )

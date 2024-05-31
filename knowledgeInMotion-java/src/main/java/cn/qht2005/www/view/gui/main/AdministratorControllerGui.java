@@ -435,7 +435,18 @@ public class AdministratorControllerGui extends JFrame {
         labelForTeacherCount = new JLabel();
         panelCollegeMain = new JPanel();
         panelCourseMange = new JPanel();
+        scrollPane3 = new JScrollPane();
+        table1 = new JTable();
         panelNoticeMange = new JPanel();
+        scrollPaneNotice = new JScrollPane();
+        tableNoticeList = new JTable();
+        buttonPublishNotice = new JButton();
+        buttonDeleteNotice = new JButton();
+        label14 = new JLabel();
+        inputNoticeContain = new JTextField();
+        label15 = new JLabel();
+        inputNoticeId = new JTextField();
+        button1 = new JButton();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u7ba1\u7406\u5458\u4e3b\u9875\u9762   by \u8983\u60e0\u901a");
@@ -773,12 +784,107 @@ public class AdministratorControllerGui extends JFrame {
             //======== panelCourseMange ========
             {
                 panelCourseMange.setLayout(null);
+
+                //======== scrollPane3 ========
+                {
+
+                    //---- table1 ----
+                    table1.setModel(new DefaultTableModel(
+                        new Object[][] {
+                        },
+                        new String[] {
+                            "\u8bfe\u7a0b\u7f16\u53f7", "\u8bfe\u7a0b\u540d\u79f0", "\u5f00\u8bbe\u5b66\u9662"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, String.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    table1.setShowHorizontalLines(false);
+                    table1.setShowVerticalLines(false);
+                    scrollPane3.setViewportView(table1);
+                }
+                panelCourseMange.add(scrollPane3);
+                scrollPane3.setBounds(0, 80, 860, 585);
             }
             tabbedPaneMenu.addTab("\u8bfe\u7a0b\u7ba1\u7406", panelCourseMange);
 
             //======== panelNoticeMange ========
             {
                 panelNoticeMange.setLayout(null);
+
+                //======== scrollPaneNotice ========
+                {
+
+                    //---- tableNoticeList ----
+                    tableNoticeList.setModel(new DefaultTableModel(
+                        new Object[][] {
+                        },
+                        new String[] {
+                            "\u516c\u544aid", "\u53d1\u6587\u673a\u5173", "\u4e3b\u9001\u673a\u5173", "\u53d1\u6587\u65f6\u95f4", "\u516c\u544a\u6807\u9898", "\u516c\u544a\u5185\u5bb9"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            String.class, String.class, String.class, String.class, String.class, String.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    tableNoticeList.setShowVerticalLines(false);
+                    tableNoticeList.setShowHorizontalLines(false);
+                    scrollPaneNotice.setViewportView(tableNoticeList);
+                }
+                panelNoticeMange.add(scrollPaneNotice);
+                scrollPaneNotice.setBounds(0, 60, 865, 610);
+
+                //---- buttonPublishNotice ----
+                buttonPublishNotice.setText("\u53d1\u5e03\u516c\u544a");
+                panelNoticeMange.add(buttonPublishNotice);
+                buttonPublishNotice.setBounds(15, 15, 125, 30);
+
+                //---- buttonDeleteNotice ----
+                buttonDeleteNotice.setText("\u5220\u9664\u516c\u544a");
+                panelNoticeMange.add(buttonDeleteNotice);
+                buttonDeleteNotice.setBounds(155, 15, 125, 30);
+
+                //---- label14 ----
+                label14.setText("\u516c\u544a\u6807\u9898\u6216\u5185\u5bb9\u5305\u542b:");
+                panelNoticeMange.add(label14);
+                label14.setBounds(new Rectangle(new Point(295, 20), label14.getPreferredSize()));
+                panelNoticeMange.add(inputNoticeContain);
+                inputNoticeContain.setBounds(430, 15, 140, inputNoticeContain.getPreferredSize().height);
+
+                //---- label15 ----
+                label15.setText("\u516c\u544aid");
+                panelNoticeMange.add(label15);
+                label15.setBounds(new Rectangle(new Point(590, 20), label15.getPreferredSize()));
+                panelNoticeMange.add(inputNoticeId);
+                inputNoticeId.setBounds(630, 15, 95, inputNoticeId.getPreferredSize().height);
+
+                //---- button1 ----
+                button1.setText("\u67e5\u8be2\u516c\u544a");
+                panelNoticeMange.add(button1);
+                button1.setBounds(new Rectangle(new Point(740, 15), button1.getPreferredSize()));
             }
             tabbedPaneMenu.addTab("\u516c\u544a\u7ba1\u7406", panelNoticeMange);
         }
@@ -866,7 +972,18 @@ public class AdministratorControllerGui extends JFrame {
     private JLabel labelForTeacherCount;
     private JPanel panelCollegeMain;
     private JPanel panelCourseMange;
+    private JScrollPane scrollPane3;
+    private JTable table1;
     private JPanel panelNoticeMange;
+    private JScrollPane scrollPaneNotice;
+    private JTable tableNoticeList;
+    private JButton buttonPublishNotice;
+    private JButton buttonDeleteNotice;
+    private JLabel label14;
+    private JTextField inputNoticeContain;
+    private JLabel label15;
+    private JTextField inputNoticeId;
+    private JButton button1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 
     public static void main(String[] args) {
