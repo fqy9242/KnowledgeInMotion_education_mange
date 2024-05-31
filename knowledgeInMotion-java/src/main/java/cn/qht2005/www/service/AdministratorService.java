@@ -67,4 +67,19 @@ public interface AdministratorService {
 	 * @return 是否成功
 	 */
 	boolean deleteNotices(List<Notice> noticeList);
+
+	/**
+	 * 根据学生列表批量删除学生
+	 * @param studentList 学生列表
+	 * @return 是否成功
+	 */
+
+	boolean deleteByStudentList(List<Student> studentList);
+
+	/**
+	 *  根据教师列表批量删除教师
+	 * @param teacherList 教师列表
+	 * @return 是否成功
+	 */
+	boolean deleteByTeacherList(List<Teacher> teacherList);
 }

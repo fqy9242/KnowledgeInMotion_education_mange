@@ -25,6 +25,9 @@
     <update id="modifyByDynamic">
         update t_student
         <set>
+            <if test="student.name != null and student.name != ''">student_name = #{student.name},</if>
+            <if test="student.passWord != null and student.passWord != ''">student_login_password = #{student.passWord},</if>
+            <if test="student.classId != null and student.classId != ''">student_class_id = #{student.classId},</if>
             <if test="student.sex != null">student_sex = #{student.sex},</if>
             <if test="student.age != null">student_age = #{student.age},</if>
             <if test="student.phoneNumber != null and student.phoneNumber != ''">student_phone_number = #{student.phoneNumber},</if>
@@ -33,6 +36,15 @@
             </set>
         where student_id = #{studentId}
     </update>
+    <!--批量删除学生-->
+    <delete id="deletebyStudents">
+        delete from t_student
+        <where>
+            <foreach collection="list" item="student" separator="or" open="(" close=")">
+                student_id = #{student.studentId}
+            </foreach>
+        </where>
+    </delete>
     <!--根据学生对象来动态查询学生信息-->
     <select id="selectDynamic" resultMap="studentResultMap">
         select * from t_student

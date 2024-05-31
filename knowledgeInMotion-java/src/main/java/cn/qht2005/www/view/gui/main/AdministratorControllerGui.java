@@ -7,6 +7,7 @@ package cn.qht2005.www.view.gui.main;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,13 @@ import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
 import cn.qht2005.www.view.gui.AddNotice;
 import cn.qht2005.www.view.gui.AddUser;
+import cn.qht2005.www.view.gui.UpdateStudentAndTeacher;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -425,16 +431,18 @@ public class AdministratorControllerGui extends JFrame {
     // 添加教师按钮被点击
     private void buttonAddTeacherMouseClicked(MouseEvent e) {
         new AddUser(this, UserType.TEACHER).setVisible(true);
+        buttonQueryForTeacherMouseClicked(null);
     }
     // 添加学生按钮被点击
     private void buttonAddStudentMouseClicked(MouseEvent e) {
         new AddUser(this, UserType.STUDENT).setVisible(true);
+        buttonQueryMouseClicked(null);
     }
     // 发布公告按钮被点击
     private void buttonPublishNoticeMouseClicked(MouseEvent e) {
         new AddNotice(this).setVisible(true);
         // 刷新
-        showNoticeToTable(null);
+        buttonQueryNoticeMouseClicked(null);
     }
 
     // 查询公告按钮被点击
@@ -463,6 +471,7 @@ public class AdministratorControllerGui extends JFrame {
     // 删除公告按钮被点击
     private void buttonDeleteNoticeMouseClicked(MouseEvent e) {
         deleteNotice();
+        buttonQueryNoticeMouseClicked(null);
     }
     // 删除公告
     private void deleteNotice(){
@@ -494,6 +503,227 @@ public class AdministratorControllerGui extends JFrame {
             JOptionPane.showMessageDialog(null, "删除失败");
         }
     }
+    // 删除学生按钮被点击
+    private void buttonDeleteStudentMouseClicked(MouseEvent e) {
+        try {
+            deleteStudent();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+    }
+    // 删除学生
+    private void deleteStudent() throws Exception {
+        // 获取选中的行
+        int[] rows = tableStudentList.getSelectedRows();
+        if (rows.length == 0){
+            JOptionPane.showMessageDialog(null, "请选择要删除的学生");
+            return;
+        }
+        // 创建一个学生列表
+        List<Student> students = new ArrayList<>();
+        // 遍历选中的行
+        for (int row : rows) {
+            // 创建一个学生对象
+            Student student = new Student();
+            // 对这个学生对象进行赋值
+            student.setStudentId((String) tableStudentList.getValueAt(row, 0));
+            // 将这个学生对象添加到学生列表中
+            students.add(student);
+        }
+        // 删除学生
+        boolean result = new AdministratorServiceImpl().deleteByStudentList(students);
+        // 判断是否删除成功
+        if (result) {
+            JOptionPane.showMessageDialog(null, "删除成功");
+            // 刷新
+            showStudentInfoToTable();
+            showStudentCountByCollegeToChart();
+        } else {
+            JOptionPane.showMessageDialog(null, "删除失败");
+        }
+
+    }
+    // 删除教师按钮被点击
+    private void buttonDeleteStudent2MouseClicked(MouseEvent e) {
+        try {
+            deleteTeacher();
+            showTeacherAllToTable();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    // 删除教师
+    private void deleteTeacher(){
+        // 获取选中的行
+        int[] rows = tableTeacherList.getSelectedRows();
+        if (rows.length == 0){
+            JOptionPane.showMessageDialog(null, "请选择要删除的教师");
+            return;
+        }
+        // 创建一个教师列表
+        List<Teacher> teachers = new ArrayList<>();
+        // 遍历选中的行
+        for (int row : rows) {
+            // 创建一个教师对象
+            Teacher teacher = new Teacher();
+            // 对这个教师对象进行赋值
+            teacher.setTeacherId((String) tableTeacherList.getValueAt(row, 0));
+            // 将这个教师对象添加到教师列表中
+            teachers.add(teacher);
+        }
+        // 删除教师
+        boolean result = new AdministratorServiceImpl().deleteByTeacherList(teachers);
+        // 判断是否删除成功
+        if (result) {
+            JOptionPane.showMessageDialog(null, "删除成功");
+        } else {
+            JOptionPane.showMessageDialog(null, "删除失败");
+        }
+
+
+    }
+    // 导出学生按钮被点击
+    private void buttonExportStudentMouseClicked(MouseEvent e) {
+        // 导出学生列表
+        exportStudent();
+    }
+    // 导出学生列表
+    private void exportStudent() {
+        Workbook workbook = new HSSFWorkbook();
+        Sheet sheet = workbook.createSheet("学生列表");
+        Row row = sheet.createRow(0);
+        for (int i = 0; i < tableStudentList.getColumnCount(); i++) {
+            row.createCell(i).setCellValue(tableStudentList.getColumnName(i));
+        }
+        for (int i = 0; i < tableStudentList.getRowCount(); i++) {
+            row = sheet.createRow(i + 1);
+            for (int j = 0; j < tableStudentList.getColumnCount(); j++) {
+                row.createCell(j).setCellValue(tableStudentList.getValueAt(i, j).toString());
+            }
+        }
+        // 导出
+        // 创建一个文件选择器
+        JFileChooser fileChooser = new JFileChooser();
+        // 设置文件选择器的标题
+        fileChooser.setDialogTitle("请选择导出路径");
+        // 设置文件选择器的默认路径
+        fileChooser.setCurrentDirectory(new java.io.File("."));
+        // 设置文件选择器的选择模式
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        // 打开文件选择器
+        int result = fileChooser.showSaveDialog(null);
+        // 判断是否点击了保存按钮
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // 获取选择的文件夹
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            try (FileOutputStream fos = new FileOutputStream(path + "/学生列表.xls")) {
+                workbook.write(fos);
+                JOptionPane.showMessageDialog(null, "导出成功");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "导出失败");
+                throw new RuntimeException(e);
+            }
+        }
+
+
+    }
+    // 导出教师列表按钮被点击
+    private void buttonExportForTeacherMouseClicked(MouseEvent e) {
+        exportTeacher();
+    }
+    // 导出教师列表
+    private void exportTeacher(){
+        Workbook workbook = new HSSFWorkbook();
+        Sheet sheet = workbook.createSheet("教师列表");
+        Row row = sheet.createRow(0);
+        for (int i = 0; i < tableTeacherList.getColumnCount(); i++) {
+            row.createCell(i).setCellValue(tableTeacherList.getColumnName(i));
+        }
+        for (int i = 0; i < tableTeacherList.getRowCount(); i++) {
+            row = sheet.createRow(i + 1);
+            for (int j = 0; j < tableTeacherList.getColumnCount(); j++) {
+                String value = "";
+                if (tableTeacherList.getValueAt(i, j) != null) {
+                    value = tableTeacherList.getValueAt(i, j).toString();
+                }
+                row.createCell(j).setCellValue(value);
+            }
+        }
+        // 导出
+        // 创建一个文件选择器
+        JFileChooser fileChooser = new JFileChooser();
+        // 设置文件选择器的标题
+        fileChooser.setDialogTitle("请选择导出路径");
+        // 设置文件选择器的默认路径
+        fileChooser.setCurrentDirectory(new java.io.File("."));
+        // 设置文件选择器的选择模式
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        // 打开文件选择器
+        int result = fileChooser.showSaveDialog(null);
+        // 判断是否点击了保存按钮
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // 获取选择的文件夹
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
+            try (FileOutputStream fos = new FileOutputStream(path + "/教师列表.xls")) {
+                workbook.write(fos);
+                JOptionPane.showMessageDialog(null, "导出成功");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "导出失败");
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    // 修改学生信息按钮被点击
+    private void buttonUpdateStudentMouseClicked(MouseEvent e) {
+        // 获取当前选中的行
+        int row = tableStudentList.getSelectedRow();
+        // 判断是否选中
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "请选择要修改的学生");
+            return;
+        }
+        // 获取学生id
+        String studentId = (String) tableStudentList.getValueAt(row, 0);
+        // 获取学生对象
+        Student student = null;
+        try {
+            student = new TeacherServiceImpl().getStudentById(studentId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        UpdateStudentAndTeacher updateStudentAndTeacher = new UpdateStudentAndTeacher(this, student);
+        updateStudentAndTeacher.setVisible(true);
+        // 刷新一下
+        if (! updateStudentAndTeacher.isVisible()){
+            buttonQueryMouseClicked(null);
+
+        }
+        buttonQueryMouseClicked(null);
+    }
+    // 修改教师信息按钮被点击
+    private void buttonUpdateTeacherMouseClicked(MouseEvent e) {
+        // 获取当前选中的行
+        int row = tableTeacherList.getSelectedRow();
+        // 判断是否选中
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "请选择要修改的教师");
+            return;
+        }
+        // 获取教师id
+        String teacherId = (String) tableTeacherList.getValueAt(row, 0);
+        // 获取教师对象
+        Teacher teacher = null;
+        try {
+            teacher = new TeacherServiceImpl().getTeacherById(teacherId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        new UpdateStudentAndTeacher(this, teacher).setVisible(true);
+        // 刷新一下
+        buttonQueryForTeacherMouseClicked(null);
+    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -509,7 +739,7 @@ public class AdministratorControllerGui extends JFrame {
         panelStudentMange = new JPanel();
         scrollPane1 = new JScrollPane();
         tableStudentList = new JTable();
-        buttoneExport = new JButton();
+        buttonExportStudent = new JButton();
         buttonAddStudent = new JButton();
         buttonUpdateStudent = new JButton();
         buttonDeleteStudent = new JButton();
@@ -528,9 +758,9 @@ public class AdministratorControllerGui extends JFrame {
         panelTeacherMain = new JPanel();
         scrollPane2 = new JScrollPane();
         tableTeacherList = new JTable();
-        buttoneExportForTeacher = new JButton();
+        buttonExportForTeacher = new JButton();
         buttonAddTeacher = new JButton();
-        buttonUpdateStudent2 = new JButton();
+        buttonUpdateTeacher = new JButton();
         buttonDeleteStudent2 = new JButton();
         buttonQueryForTeacher = new JButton();
         panelCountTeacherByPositon = new JPanel();
@@ -659,10 +889,16 @@ public class AdministratorControllerGui extends JFrame {
                 panelStudentMange.add(scrollPane1);
                 scrollPane1.setBounds(5, 50, 855, scrollPane1.getPreferredSize().height);
 
-                //---- buttoneExport ----
-                buttoneExport.setText("\u5bfc\u51fa");
-                panelStudentMange.add(buttoneExport);
-                buttoneExport.setBounds(780, 5, 78, 30);
+                //---- buttonExportStudent ----
+                buttonExportStudent.setText("\u5bfc\u51fa");
+                buttonExportStudent.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonExportStudentMouseClicked(e);
+                    }
+                });
+                panelStudentMange.add(buttonExportStudent);
+                buttonExportStudent.setBounds(780, 5, 78, 30);
 
                 //---- buttonAddStudent ----
                 buttonAddStudent.setText("\u6dfb\u52a0");
@@ -677,11 +913,23 @@ public class AdministratorControllerGui extends JFrame {
 
                 //---- buttonUpdateStudent ----
                 buttonUpdateStudent.setText("\u4fee\u6539");
+                buttonUpdateStudent.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonUpdateStudentMouseClicked(e);
+                    }
+                });
                 panelStudentMange.add(buttonUpdateStudent);
                 buttonUpdateStudent.setBounds(90, 5, 78, 30);
 
                 //---- buttonDeleteStudent ----
                 buttonDeleteStudent.setText("\u5220\u9664");
+                buttonDeleteStudent.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonDeleteStudentMouseClicked(e);
+                    }
+                });
                 panelStudentMange.add(buttonDeleteStudent);
                 buttonDeleteStudent.setBounds(185, 5, 78, 30);
 
@@ -790,10 +1038,16 @@ public class AdministratorControllerGui extends JFrame {
                 panelTeacherMain.add(scrollPane2);
                 scrollPane2.setBounds(5, 50, 855, scrollPane2.getPreferredSize().height);
 
-                //---- buttoneExportForTeacher ----
-                buttoneExportForTeacher.setText("\u5bfc\u51fa");
-                panelTeacherMain.add(buttoneExportForTeacher);
-                buttoneExportForTeacher.setBounds(780, 5, 78, 30);
+                //---- buttonExportForTeacher ----
+                buttonExportForTeacher.setText("\u5bfc\u51fa");
+                buttonExportForTeacher.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonExportForTeacherMouseClicked(e);
+                    }
+                });
+                panelTeacherMain.add(buttonExportForTeacher);
+                buttonExportForTeacher.setBounds(780, 5, 78, 30);
 
                 //---- buttonAddTeacher ----
                 buttonAddTeacher.setText("\u6dfb\u52a0");
@@ -806,13 +1060,25 @@ public class AdministratorControllerGui extends JFrame {
                 panelTeacherMain.add(buttonAddTeacher);
                 buttonAddTeacher.setBounds(5, 5, 78, 30);
 
-                //---- buttonUpdateStudent2 ----
-                buttonUpdateStudent2.setText("\u4fee\u6539");
-                panelTeacherMain.add(buttonUpdateStudent2);
-                buttonUpdateStudent2.setBounds(90, 5, 78, 30);
+                //---- buttonUpdateTeacher ----
+                buttonUpdateTeacher.setText("\u4fee\u6539");
+                buttonUpdateTeacher.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonUpdateTeacherMouseClicked(e);
+                    }
+                });
+                panelTeacherMain.add(buttonUpdateTeacher);
+                buttonUpdateTeacher.setBounds(90, 5, 78, 30);
 
                 //---- buttonDeleteStudent2 ----
                 buttonDeleteStudent2.setText("\u5220\u9664");
+                buttonDeleteStudent2.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        buttonDeleteStudent2MouseClicked(e);
+                    }
+                });
                 panelTeacherMain.add(buttonDeleteStudent2);
                 buttonDeleteStudent2.setBounds(185, 5, 78, 30);
 
@@ -1064,7 +1330,7 @@ public class AdministratorControllerGui extends JFrame {
     private JPanel panelStudentMange;
     private JScrollPane scrollPane1;
     private JTable tableStudentList;
-    private JButton buttoneExport;
+    private JButton buttonExportStudent;
     private JButton buttonAddStudent;
     private JButton buttonUpdateStudent;
     private JButton buttonDeleteStudent;
@@ -1083,9 +1349,9 @@ public class AdministratorControllerGui extends JFrame {
     private JPanel panelTeacherMain;
     private JScrollPane scrollPane2;
     private JTable tableTeacherList;
-    private JButton buttoneExportForTeacher;
+    private JButton buttonExportForTeacher;
     private JButton buttonAddTeacher;
-    private JButton buttonUpdateStudent2;
+    private JButton buttonUpdateTeacher;
     private JButton buttonDeleteStudent2;
     private JButton buttonQueryForTeacher;
     private JPanel panelCountTeacherByPositon;
@@ -1114,8 +1380,6 @@ public class AdministratorControllerGui extends JFrame {
     private JTextField inputNoticeId;
     private JButton buttonQueryNotice;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
-
-
 
 
     public static void main(String[] args) {

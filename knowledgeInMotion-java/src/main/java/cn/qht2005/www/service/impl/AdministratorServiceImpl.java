@@ -136,6 +136,22 @@ public class AdministratorServiceImpl implements AdministratorService {
 
 	}
 
+	/**
+	 * 批量删除教师
+	 * @param teacherList 教师列表
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean deleteByTeacherList(List<Teacher> teacherList) {
+		try {
+			TEACHER_MAPPER.deleteByTeachers(teacherList);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	@Override
 	public boolean addStudent(Student student) {
 		try {
@@ -165,6 +181,22 @@ public class AdministratorServiceImpl implements AdministratorService {
 	public boolean addNotice(Notice notice) {
 		try {
 			NOTICE_MAPPER.insert(notice);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 批量删除学生
+	 * @param studentList 学生列表
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean deleteByStudentList(List<Student> studentList) {
+		try {
+			STUDENT_MAPPER.deletebyStudents(studentList);
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

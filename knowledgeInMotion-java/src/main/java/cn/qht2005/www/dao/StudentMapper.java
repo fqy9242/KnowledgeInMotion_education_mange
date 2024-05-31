@@ -56,16 +56,16 @@ public interface StudentMapper {
 	List<Student>selectDynamic(Student student);
 
 	/**
-	 *  找回密码
-	 * @param studentId 学号
+	 * 找回密码
+	 *
+	 * @param studentId   学号
 	 * @param studentName 姓名
 	 * @param phoneNumber 手机号
 	 * @param passWordNew 新密码
-	 * @return 影响行数
 	 */
 	@Update("update t_student set student_login_password = #{passWordNew} where student_id = #{studentId} " +
 			"and student_name = #{studentName} and student_phone_number = #{phoneNumber}")
-	Integer updatePassWordForgot(@Param("studentId") String studentId,@Param("studentName") String studentName,
+	void updatePassWordForgot(@Param("studentId") String studentId,@Param("studentName") String studentName,
 						   @Param("phoneNumber")String phoneNumber,
 						   @Param("passWordNew") String passWordNew);
 
@@ -74,4 +74,11 @@ public interface StudentMapper {
 	 * @param student 学生对象
 	 */
 	void insertStudent(Student student);
+
+	/**
+	 * 批量删除学生
+	 * @param students 学生集合
+	 */
+
+	void deletebyStudents(List<Student> students);
 }

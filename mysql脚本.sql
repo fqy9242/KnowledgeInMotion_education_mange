@@ -50,7 +50,7 @@ CREATE TABLE t_teacher(
 	-- 年龄
 	teacher_age INT,
 	-- 性别 1.男 2.女
-	teacher_sex TINYINT NOT NULL,
+	teacher_sex TINYINT,
 	-- 联系电话
 	teacher_phone_number VARCHAR(20),
 	-- 登录密码 默认123456

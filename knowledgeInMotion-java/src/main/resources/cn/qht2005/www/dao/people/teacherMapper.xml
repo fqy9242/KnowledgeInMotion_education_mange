@@ -26,6 +26,11 @@
     <update id="modifyTeacherByTeacher">
         UPDATE t_teacher
         <set>
+            <if test="name != null and name != ''">teacher_name = #{name},</if>
+            <if test="position != null and position != ''">teacher_position = #{position},</if>
+            <if test="mangeClassId != null and mangeClassId != ''">teacher_mange_class_id = #{mangeClassId},</if>
+            <if test="collegeId != null and collegeId != ''">teacher_college_id = #{collegeId},</if>
+            <if test="passWord != null and passWord != ''">teacher_login_password = #{passWord},</if>
             <if test="age != null">teacher_age = #{age},</if>
             <if test="sex != null and sex != ''">teacher_sex = #{sex},</if>
             <if test="phoneNumber != null and phoneNumber != ''">teacher_phone_number = #{phoneNumber},</if>
@@ -39,6 +44,15 @@
         SET teacher_login_password = #{passWordNew}
         WHERE teacher_id = #{teacherId} and teacher_login_password = #{passWord}
     </update>
+    <!--批量删除教师-->
+    <delete id="deleteByTeachers">
+        delete from t_teacher
+        <where>
+            <foreach collection="list" item="teacher" separator="or" open="(" close=")">
+                teacher_id = #{teacher.teacherId}
+            </foreach>
+        </where>
+    </delete>
     <!--根据教师对象动态条件查询教师-->
     <select id="selectTeacherByTeacher" resultMap="teacherResultMap">
         select * from t_teacher

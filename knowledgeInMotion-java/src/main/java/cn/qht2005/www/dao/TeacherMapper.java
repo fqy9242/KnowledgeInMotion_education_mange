@@ -87,6 +87,12 @@ public interface TeacherMapper {
 	 */
 	void insertTeacher(Teacher teacher);
 
+	/**
+	 * 批量删除教师
+	 * @param teachers 教师列表
+	 */
+	void deleteByTeachers(List<Teacher> teachers);
+
 }
 
 
