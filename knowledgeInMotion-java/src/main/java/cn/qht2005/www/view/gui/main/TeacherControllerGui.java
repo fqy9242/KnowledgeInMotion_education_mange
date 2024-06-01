@@ -66,10 +66,6 @@ public class TeacherControllerGui extends JFrame {
             showNotice();
 
         }else if (tabbedPaneMain.getSelectedIndex() == 1){
-            // 录入学生成绩
-
-
-        } else if (tabbedPaneMain.getSelectedIndex() == 2){
             // 查询学生页
             try {
                 showCollegeToCheckBox();
@@ -77,7 +73,7 @@ public class TeacherControllerGui extends JFrame {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
-        } else if (tabbedPaneMain.getSelectedIndex() == 3){
+        } else if (tabbedPaneMain.getSelectedIndex() == 2){
             // 请假页
             showLeaveApplyList();
 
