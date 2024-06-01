@@ -1,6 +1,7 @@
 package cn.qht2005.www.service.impl;
 
 import cn.qht2005.www.dao.*;
+import cn.qht2005.www.pojo.College;
 import cn.qht2005.www.pojo.Course;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Administrator;
@@ -24,6 +25,8 @@ public class AdministratorServiceImpl implements AdministratorService {
 	private static NoticeMapper NOTICE_MAPPER = null;
 	// 课程映射对象
 	private static CourseMapper COURSE_MAPPER = null;
+	// 学院持久层映射接口
+	private static CollegeMapper COLLEGE_MAPPER = null;
 	static {
 		SqlSessionFactory sqlSessionFactory = null;
 		try {
@@ -33,6 +36,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 			STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
 			NOTICE_MAPPER = sqlSession.getMapper(NoticeMapper.class);
 			COURSE_MAPPER = sqlSession.getMapper(CourseMapper.class);
+			COLLEGE_MAPPER = sqlSession.getMapper(CollegeMapper.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -223,6 +227,59 @@ public class AdministratorServiceImpl implements AdministratorService {
 		return COURSE_MAPPER.selectByCourseId(courseId);
 	}
 
+	/**
+	 *  获取各个学院的学生人数
+	 * @param collegeId 学生id
+	 * @return 学生人数
+	 */
+
+	@Override
+	public Long getStudentCountByCollegeId(Integer collegeId) {
+		return STUDENT_MAPPER.selectCountByCollegeId(collegeId);
+	}
+
+	/**
+	 * 根据学院id查询教师人数
+	 * @param collegeId 学院id
+	 * @return 各学院学生人数
+	 */
+	@Override
+	public Long getTeacherCountByCollegeId(Integer collegeId) {
+		return TEACHER_MAPPER.selectCountByCollegeId(collegeId);
+	}
+
+	/**
+	 * 根据学院列表删除学院
+	 * @param collegeList 学院列表
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean deleteCollegeByList(List<College> collegeList) {
+		try {
+			COLLEGE_MAPPER.deleteByCollegeList(collegeList);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 添加学院
+	 * @param collegeName 学院名称
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean addCollege(String collegeName) {
+		try {
+			COLLEGE_MAPPER.insertByCollegeName(collegeName);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	@Override
 	public boolean addStudent(Student student) {
 		try {
@@ -267,7 +324,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 	@Override
 	public boolean deleteByStudentList(List<Student> studentList) {
 		try {
-			STUDENT_MAPPER.deletebyStudents(studentList);
+			STUDENT_MAPPER.deleteByStudents(studentList);
 			return true;
 		}catch (Exception e){
 			e.printStackTrace();

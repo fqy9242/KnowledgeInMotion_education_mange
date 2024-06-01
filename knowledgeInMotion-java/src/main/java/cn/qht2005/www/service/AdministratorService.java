@@ -1,5 +1,6 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.College;
 import cn.qht2005.www.pojo.Course;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
@@ -124,4 +125,32 @@ public interface AdministratorService {
 	 * @return 课程对象
 	 */
 	Course getCourseById(Integer courseId);
+
+	/**
+	 * 根据学生id查询学生
+	 * @param collegeId 学生id
+	 * @return 学生对象
+	 */
+	Long getStudentCountByCollegeId(Integer collegeId);
+
+	/**
+	 * 根据学院id查询教师人数
+	 * @param collegeId 学院id
+	 * @return 教师人数
+	 */
+	Long getTeacherCountByCollegeId(Integer collegeId);
+
+	/**
+	 * 根据学院列表删除学院
+	 * @param collegeList 学院列表
+	 * @return 是否成功
+	 */
+	boolean deleteCollegeByList(List<College> collegeList);
+
+	/**
+	 * 添加学院
+	 * @param collegeName 学院名称
+	 * @return 是否成功
+	 */
+	boolean addCollege(String collegeName);
 }

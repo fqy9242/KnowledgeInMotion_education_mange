@@ -92,6 +92,13 @@ public interface TeacherMapper {
 	 * @param teachers 教师列表
 	 */
 	void deleteByTeachers(List<Teacher> teachers);
+	/**
+	 * 根据学院id查询教师人数
+	 * @param collegeId 学院id
+	 * @return 教师人数
+	 */
+	@Select("select count(*) from t_teacher where teacher_college_id = #{collegeId}")
+	Long selectCountByCollegeId(Integer collegeId);
 
 }
 

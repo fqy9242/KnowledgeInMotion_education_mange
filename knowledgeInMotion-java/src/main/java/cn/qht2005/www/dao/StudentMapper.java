@@ -16,7 +16,7 @@ public interface StudentMapper {
 	 */
 	@Select("select * from t_student where student_id = #{studentId}")
 	@ResultMap("studentResultMap")
-	public Student getStudentById(String studentId);
+	Student getStudentById(String studentId);
 	/**
 	 * 根据id和密码查询学生对象
 	 * @param studentId  学号
@@ -80,5 +80,13 @@ public interface StudentMapper {
 	 * @param students 学生集合
 	 */
 
-	void deletebyStudents(List<Student> students);
+	void deleteByStudents(List<Student> students);
+
+	/**
+	 * 根据学院id查询学生数量
+	 * @param collegeId 学院id
+	 * @return 学生数量
+	 */
+	@Select("select count(*) from t_student where student_college_id = #{collegeId}")
+	Long selectCountByCollegeId(Integer collegeId);
 }

@@ -37,7 +37,7 @@
         where student_id = #{studentId}
     </update>
     <!--批量删除学生-->
-    <delete id="deletebyStudents">
+    <delete id="deleteByStudents">
         delete from t_student
         <where>
             <foreach collection="list" item="student" separator="or" open="(" close=")">

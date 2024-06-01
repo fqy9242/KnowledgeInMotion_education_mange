@@ -8,4 +8,14 @@
         <result column="college_id" property="collegeId"/>
         <result column="college_name" property="collegeName"/>
     </resultMap>
+    <!--批量删除学院-->
+    <delete id="deleteByCollegeList">
+        delete from t_college
+        <where>
+            college_id in
+            <foreach collection="list" item="college" open="(" close=")" separator=",">
+                #{college.collegeId}
+            </foreach>
+        </where>
+    </delete>
 </mapper>

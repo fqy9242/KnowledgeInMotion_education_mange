@@ -1,5 +1,6 @@
 import cn.qht2005.www.pojo.Score;
 import cn.qht2005.www.pojo.people.Student;
+import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.Test;
 
@@ -32,5 +33,10 @@ public class TestForStudent {
 		s.setSex(Short.valueOf((short) 2));
 		Student student = new StudentServiceImpl().modifyStudentByDynamic("2331020133133", s);
 		System.out.println(student);
+	}
+	@Test
+	public void testForStudentCountByCollegeId() throws Exception {
+		Long i = new AdministratorServiceImpl().getStudentCountByCollegeId(1);
+		System.out.println(i);
 	}
 }

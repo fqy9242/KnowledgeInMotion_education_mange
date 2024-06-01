@@ -498,7 +498,7 @@ new FormModel {
 								add( class java.lang.String )
 								add( class java.lang.String )
 								add( class java.lang.Integer )
-								add( class java.lang.String )
+								add( class java.lang.Integer )
 							}, new java.util.Vector {
 								add( false )
 								add( false )
@@ -515,6 +515,43 @@ new FormModel {
 						"x": 5
 						"y": 80
 						"width": 855
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button1"
+						"text": "增加学院"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button1MouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 15
+						"y": 20
+						"width": 85
+						"height": 30
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonDeleteCollege"
+						"text": "删除学院"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonDeleteCollegeMouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 85
+						"height": 30
+						"x": 125
+						"y": 20
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label19"
+						"text": "我    累    了，此      区       域     待   发       掘    。。。"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 135
+						"y": 570
+						"width": 605
+						"height": 75
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label20"
+						"text": "待           挖                           掘               区"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 265
+						"y": 25
+						"width": 575
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "学院管理"

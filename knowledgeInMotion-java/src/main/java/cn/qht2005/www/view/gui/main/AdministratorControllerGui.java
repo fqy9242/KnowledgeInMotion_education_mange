@@ -25,10 +25,7 @@ import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
-import cn.qht2005.www.view.gui.AddAndUpdateCourse;
-import cn.qht2005.www.view.gui.AddNotice;
-import cn.qht2005.www.view.gui.AddUser;
-import cn.qht2005.www.view.gui.UpdateStudentAndTeacher;
+import cn.qht2005.www.view.gui.*;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -76,8 +73,6 @@ public class AdministratorControllerGui extends JFrame {
                 // 展示所有
                 showStudentCountByCollegeToChart();
                 showCollegeListToSelectBox(selectBoxStudentCollege);
-
-
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -95,6 +90,11 @@ public class AdministratorControllerGui extends JFrame {
 
         } else if (tabbedPaneMenu.getSelectedIndex() == 3) {
             // 学院管理
+            try {
+                showCollegeInfoToTable();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }else if (tabbedPaneMenu.getSelectedIndex() == 4) {
             // 课程管理
             showCourseListToTable(null);
@@ -867,6 +867,37 @@ public class AdministratorControllerGui extends JFrame {
         }
 
     }
+    // 展示各学院信息到表格上
+    private void showCollegeInfoToTable() {
+        // 获取学院列表
+        List<College> colleges = null;
+        try {
+            colleges = new CollegeServiceImpl().getAllCollege();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // 创建表格模型
+        DefaultTableModel model = (DefaultTableModel) tableCollegeInfo.getModel();
+        // 清空表格
+        model.setRowCount(0);
+        // 遍历学院列表
+        for (College college : colleges) {
+            // 添加一行
+            model.addRow(new Object[]{
+                    college.getCollegeId(),
+                    college.getCollegeName(),
+                    new AdministratorServiceImpl().getTeacherCountByCollegeId(college.getCollegeId()),
+                    new AdministratorServiceImpl().getStudentCountByCollegeId(college.getCollegeId()),
+            });
+        }
+        // 设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        tableCollegeInfo.setDefaultRenderer(Object.class, r);
+        tableCollegeInfo.setDefaultRenderer(Integer.class, r);
+
+
+    }
     // 修改课程按钮被点击
     private void buttonUpdateCourseMouseClicked(MouseEvent e) {
         // 获取当前选中的行
@@ -888,6 +919,43 @@ public class AdministratorControllerGui extends JFrame {
         }
 
 
+    }
+
+    // 删除学院按钮被点击
+    private void buttonDeleteCollegeMouseClicked(MouseEvent e) {
+        deleteCollege();
+    }
+    // 删除学院
+    private void deleteCollege(){
+        // 获取选中的行
+        int[] rows = tableCollegeInfo.getSelectedRows();
+        if (rows.length == 0){
+            JOptionPane.showMessageDialog(null, "请选择要删除的学院");
+            return;
+        }
+        // 创建一个学院列表
+        List<College> colleges = new ArrayList<>();
+        // 遍历选中的行
+        for (int row : rows) {
+            // 创建一个学院对象
+            College college = new College();
+            // 对这个学院对象进行赋值
+            college.setCollegeId((Integer) tableCollegeInfo.getValueAt(row, 0));
+            // 将这个学院对象添加到学院列表中
+            colleges.add(college);
+        }
+        // 删除学院
+        boolean result = new AdministratorServiceImpl().deleteCollegeByList(colleges);
+        // 判断是否删除成功
+        if (result) {
+            JOptionPane.showMessageDialog(null, "删除成功");
+        } else {
+            JOptionPane.showMessageDialog(null, "删除失败");
+        }
+    }
+    // 添加学院按钮被点击
+    private void button1MouseClicked(MouseEvent e) {
+        new AddCollege(this).setVisible(true);
     }
     private void initComponents() {
     // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -941,6 +1009,10 @@ public class AdministratorControllerGui extends JFrame {
     panelCollegeMain = new JPanel();
     scrollPane3 = new JScrollPane();
     tableCollegeInfo = new JTable();
+    button1 = new JButton();
+    buttonDeleteCollege = new JButton();
+    label19 = new JLabel();
+    label20 = new JLabel();
     panelCourseMange = new JPanel();
     scrollPaneCourseMange = new JScrollPane();
     tableCourseList = new JTable();
@@ -1347,7 +1419,7 @@ public class AdministratorControllerGui extends JFrame {
                     }
                 ) {
                     Class<?>[] columnTypes = new Class<?>[] {
-                        String.class, String.class, Integer.class, String.class
+                        String.class, String.class, Integer.class, Integer.class
                     };
                     boolean[] columnEditable = new boolean[] {
                         false, false, false, false
@@ -1365,6 +1437,38 @@ public class AdministratorControllerGui extends JFrame {
             }
             panelCollegeMain.add(scrollPane3);
             scrollPane3.setBounds(5, 80, 855, scrollPane3.getPreferredSize().height);
+
+            //---- button1 ----
+            button1.setText("\u589e\u52a0\u5b66\u9662");
+            button1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    button1MouseClicked(e);
+                }
+            });
+            panelCollegeMain.add(button1);
+            button1.setBounds(15, 20, 85, 30);
+
+            //---- buttonDeleteCollege ----
+            buttonDeleteCollege.setText("\u5220\u9664\u5b66\u9662");
+            buttonDeleteCollege.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonDeleteCollegeMouseClicked(e);
+                }
+            });
+            panelCollegeMain.add(buttonDeleteCollege);
+            buttonDeleteCollege.setBounds(125, 20, 85, 30);
+
+            //---- label19 ----
+            label19.setText("\u6211    \u7d2f    \u4e86\uff0c\u6b64      \u533a       \u57df     \u5f85   \u53d1       \u6398    \u3002\u3002\u3002");
+            panelCollegeMain.add(label19);
+            label19.setBounds(135, 570, 605, 75);
+
+            //---- label20 ----
+            label20.setText("\u5f85           \u6316                           \u6398               \u533a");
+            panelCollegeMain.add(label20);
+            label20.setBounds(265, 25, 575, label20.getPreferredSize().height);
         }
         tabbedPaneMenu.addTab("\u5b66\u9662\u7ba1\u7406", panelCollegeMain);
 
@@ -1659,6 +1763,10 @@ public class AdministratorControllerGui extends JFrame {
     private JPanel panelCollegeMain;
     private JScrollPane scrollPane3;
     private JTable tableCollegeInfo;
+    private JButton button1;
+    private JButton buttonDeleteCollege;
+    private JLabel label19;
+    private JLabel label20;
     private JPanel panelCourseMange;
     private JScrollPane scrollPaneCourseMange;
     private JTable tableCourseList;
