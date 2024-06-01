@@ -276,13 +276,6 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
 					"autoSize": false
 				} ) {
-					name: "panelAddScore"
-				}, new FormLayoutConstraints( null ) {
-					"title": "学生成绩录入"
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
-					"autoSize": false
-				} ) {
 					name: "panelSeachInfo"
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "buttonExport"
@@ -503,24 +496,6 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "批假"
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
-					"autoSize": false
-				} ) {
-					name: "panelScoreSeacher"
-					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-						name: "scrollPane2"
-						add( new FormComponent( "javax.swing.JTable" ) {
-							name: "table1"
-						} )
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 0
-						"y": 35
-						"width": 655
-						"height": 440
-					} )
-				}, new FormLayoutConstraints( null ) {
-					"title": "学生成绩查询"
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 0

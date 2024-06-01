@@ -350,7 +350,6 @@ public class TeacherControllerGui extends JFrame {
         tableNotice = new JTable();
         label12 = new JLabel();
         labelTime = new JLabel();
-        panelAddScore = new JPanel();
         panelSeachInfo = new JPanel();
         buttonExport = new JButton();
         scrollPane1 = new JScrollPane();
@@ -370,9 +369,6 @@ public class TeacherControllerGui extends JFrame {
         buttonDispose = new JButton();
         notClassMangeTip = new JLabel();
         disposeTip = new JLabel();
-        panelScoreSeacher = new JPanel();
-        scrollPane2 = new JScrollPane();
-        table1 = new JTable();
 
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u6559\u5e08\u7528\u6237      by\u8983\u60e0\u901a");
@@ -579,12 +575,6 @@ public class TeacherControllerGui extends JFrame {
             }
             tabbedPaneMain.addTab("\u4e2a\u4eba\u4fe1\u606f", panelInfo);
 
-            //======== panelAddScore ========
-            {
-                panelAddScore.setLayout(null);
-            }
-            tabbedPaneMain.addTab("\u5b66\u751f\u6210\u7ee9\u5f55\u5165", panelAddScore);
-
             //======== panelSeachInfo ========
             {
                 panelSeachInfo.setLayout(null);
@@ -742,19 +732,6 @@ public class TeacherControllerGui extends JFrame {
                 disposeTip.setBounds(240, 10, 205, disposeTip.getPreferredSize().height);
             }
             tabbedPaneMain.addTab("\u6279\u5047", panelDisposeScore);
-
-            //======== panelScoreSeacher ========
-            {
-                panelScoreSeacher.setLayout(null);
-
-                //======== scrollPane2 ========
-                {
-                    scrollPane2.setViewportView(table1);
-                }
-                panelScoreSeacher.add(scrollPane2);
-                scrollPane2.setBounds(0, 35, 655, 440);
-            }
-            tabbedPaneMain.addTab("\u5b66\u751f\u6210\u7ee9\u67e5\u8be2", panelScoreSeacher);
         }
         contentPane.add(tabbedPaneMain);
         tabbedPaneMain.setBounds(0, 0, 770, 480);
@@ -840,7 +817,6 @@ public class TeacherControllerGui extends JFrame {
     private JTable tableNotice;
     private JLabel label12;
     private JLabel labelTime;
-    private JPanel panelAddScore;
     private JPanel panelSeachInfo;
     private JButton buttonExport;
     private JScrollPane scrollPane1;
@@ -860,9 +836,6 @@ public class TeacherControllerGui extends JFrame {
     private JButton buttonDispose;
     private JLabel notClassMangeTip;
     private JLabel disposeTip;
-    private JPanel panelScoreSeacher;
-    private JScrollPane scrollPane2;
-    private JTable table1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 获取到所有的学院 并且显示到下拉框中
     private void showCollegeToCheckBox(){
