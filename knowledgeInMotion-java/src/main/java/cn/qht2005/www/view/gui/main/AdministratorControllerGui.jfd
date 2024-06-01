@@ -483,6 +483,39 @@ new FormModel {
 					"autoSize": false
 				} ) {
 					name: "panelCollegeMain"
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane3"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "tableCollegeInfo"
+							"showHorizontalLines": false
+							"showVerticalLines": false
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+								add( "学院id" )
+								add( "学院名称" )
+								add( "教职工人数" )
+								add( "学生人数" )
+							}, new java.util.Vector {
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.Integer )
+								add( class java.lang.String )
+							}, new java.util.Vector {
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+							}, new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 5
+						"y": 80
+						"width": 855
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "学院管理"
 				} )
@@ -539,6 +572,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "buttonUpdateCourse"
 						"text": "修改课程"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonUpdateCourseMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 190
 						"y": 35

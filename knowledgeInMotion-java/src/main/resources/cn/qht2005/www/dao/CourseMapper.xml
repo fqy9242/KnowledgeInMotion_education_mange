@@ -9,6 +9,19 @@
         <result column="course_name" property="courseName"/>
         <result column="course_college_id" property="collegeId"/>
     </resultMap>
+    <!--修改课程-->
+    <update id="updateByCourse">
+        update t_course
+        <set>
+            <if test="courseName != null and courseName != ''">
+                course_name = #{courseName},
+            </if>
+            <if test="collegeId != null and collegeId != ''">
+                course_college_id = #{collegeId}
+            </if>
+        </set>
+        where course_id = #{courseId}
+    </update>
     <!--批量删除课程-->
     <delete id="deleteByCourseList">
         delete from t_course

@@ -197,6 +197,32 @@ public class AdministratorServiceImpl implements AdministratorService {
 		return COURSE_MAPPER.selectByCourse(course);
 	}
 
+	/**
+	 * 根据课程修改课程
+	 * @param course 课程对象
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean updateByCourse(Course course) {
+		try {
+			COURSE_MAPPER.updateByCourse(course);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 根据课程id查询课程
+	 * @param courseId 课程id
+	 * @return 课程对象
+	 */
+	@Override
+	public Course getCourseById(Integer courseId) {
+		return COURSE_MAPPER.selectByCourseId(courseId);
+	}
+
 	@Override
 	public boolean addStudent(Student student) {
 		try {

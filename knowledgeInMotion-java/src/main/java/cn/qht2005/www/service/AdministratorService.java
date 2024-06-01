@@ -110,4 +110,18 @@ public interface AdministratorService {
 	 * @return 课程列表
 	 */
 	List<Course> getCourseByCourse(Course course);
+
+	/**
+	 * 根据课程修改课程
+	 * @param course 课程对象
+	 * @return 是否成功
+	 */
+	boolean updateByCourse(Course course);
+
+	/**
+	 * 根据课程id查询课程
+	 * @param courseId 课程id
+	 * @return 课程对象
+	 */
+	Course getCourseById(Integer courseId);
 }

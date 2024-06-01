@@ -149,7 +149,6 @@ public class AddUser extends JDialog {
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
-
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     private JLabel label1;
     private JTextField inputName;
@@ -184,7 +183,6 @@ public class AddUser extends JDialog {
         }else{
             return null;
         }
-
     }
     // 添加学生
     private Student addStudent() throws Exception {
@@ -215,7 +213,6 @@ public class AddUser extends JDialog {
             return null;
         }
     }
-
     public static void main(String[] args) {
         // 使用FlatLaf皮肤包
         FlatLightLaf.install();

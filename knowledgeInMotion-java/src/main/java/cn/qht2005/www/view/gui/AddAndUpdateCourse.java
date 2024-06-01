@@ -15,14 +15,24 @@ import javax.swing.*;
 /**
  * @author 覃
  */
-public class AddCourse extends JDialog {
-    public AddCourse(Window owner) {
+public class AddAndUpdateCourse extends JDialog {
+    private Course course;
+    public AddAndUpdateCourse(Window owner, Course course) {
         super(owner);
         initComponents();
+        this.course = course;
         try {
             getCollegeList();
+            init();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    // 自定义的初始化方法
+    private void init() throws Exception{
+        if (course != null){
+            inputCourseName.setText(course.getCourseName());
+            selectCourseCollege.setSelectedItem(new CollegeServiceImpl().getCollegeNameById(course.getCollegeId()));
         }
     }
     // 添加课程
@@ -45,10 +55,36 @@ public class AddCourse extends JDialog {
             JOptionPane.showMessageDialog(this, "添加失败");
         }
     }
+    // 修改课程
+    private void updateCourse() throws Exception {
+        // 获取课程名
+        String courseName = inputCourseName.getText();
+        // 获取学院名
+        String collegeName = (String) selectCourseCollege.getSelectedItem();
+        // 获取学院id
+        int collegeId = new CollegeServiceImpl().getCollegeIdByName(collegeName);
+        // 创建一个课程对象
+        Course course = new Course();
+        course.setCourseName(courseName);
+        course.setCollegeId(collegeId);
+        course.setCourseId(this.course.getCourseId());
+        // 修改课程
+        boolean res = new AdministratorServiceImpl().updateByCourse(course);
+        if (res){
+            JOptionPane.showMessageDialog(this, "修改成功");
+        }else{
+            JOptionPane.showMessageDialog(this, "修改失败");
+        }
+
+    }
     // 添加课程按钮点击事件
     private void buttonAddCourseMouseClicked(MouseEvent e) {
         try {
-            addCourse();
+            if (course == null) {
+                addCourse();
+            } else {
+                updateCourse();
+            }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -94,7 +130,7 @@ public class AddCourse extends JDialog {
         inputCourseName.setBounds(60, 10, 100, inputCourseName.getPreferredSize().height);
 
         //---- buttonAddCourse ----
-        buttonAddCourse.setText("\u6dfb\u52a0\u8bfe\u7a0b");
+        buttonAddCourse.setText("\u63d0\u4ea4");
         buttonAddCourse.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

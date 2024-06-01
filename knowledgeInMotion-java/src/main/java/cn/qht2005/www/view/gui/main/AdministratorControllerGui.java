@@ -6,7 +6,6 @@ package cn.qht2005.www.view.gui.main;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Map;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 
 import cn.qht2005.www.pojo.College;
@@ -27,7 +25,7 @@ import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
-import cn.qht2005.www.view.gui.AddCourse;
+import cn.qht2005.www.view.gui.AddAndUpdateCourse;
 import cn.qht2005.www.view.gui.AddNotice;
 import cn.qht2005.www.view.gui.AddUser;
 import cn.qht2005.www.view.gui.UpdateStudentAndTeacher;
@@ -40,12 +38,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
 
 /**
@@ -758,7 +753,7 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 添加课程按钮被点击
     private void buttonAddCourseMouseClicked(MouseEvent e) {
-        new AddCourse(this).setVisible(true);
+        new AddAndUpdateCourse(this, null).setVisible(true);
     }
     // 删除课程按钮被点击
     private void buttonDeleteCourseMouseClicked(MouseEvent e) {
@@ -872,6 +867,28 @@ public class AdministratorControllerGui extends JFrame {
         }
 
     }
+    // 修改课程按钮被点击
+    private void buttonUpdateCourseMouseClicked(MouseEvent e) {
+        // 获取当前选中的行
+        int row = tableCourseList.getSelectedRow();
+        // 判断是否选中
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "请选择要修改的课程");
+            return;
+        }
+        // 获取课程id
+        Integer courseId = (Integer) tableCourseList.getValueAt(row, 0);
+        // 获取课程对象
+        Course course = null;
+        try {
+            course = new AdministratorServiceImpl().getCourseById(courseId);
+            new AddAndUpdateCourse(this, course).setVisible(true);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+
+    }
     private void initComponents() {
     // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
     tabbedPaneMenu = new JTabbedPane();
@@ -922,6 +939,8 @@ public class AdministratorControllerGui extends JFrame {
     label12 = new JLabel();
     labelForTeacherCount = new JLabel();
     panelCollegeMain = new JPanel();
+    scrollPane3 = new JScrollPane();
+    tableCollegeInfo = new JTable();
     panelCourseMange = new JPanel();
     scrollPaneCourseMange = new JScrollPane();
     tableCourseList = new JTable();
@@ -1313,6 +1332,39 @@ public class AdministratorControllerGui extends JFrame {
         //======== panelCollegeMain ========
         {
             panelCollegeMain.setLayout(null);
+
+            //======== scrollPane3 ========
+            {
+
+                //---- tableCollegeInfo ----
+                tableCollegeInfo.setShowHorizontalLines(false);
+                tableCollegeInfo.setShowVerticalLines(false);
+                tableCollegeInfo.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "\u5b66\u9662id", "\u5b66\u9662\u540d\u79f0", "\u6559\u804c\u5de5\u4eba\u6570", "\u5b66\u751f\u4eba\u6570"
+                    }
+                ) {
+                    Class<?>[] columnTypes = new Class<?>[] {
+                        String.class, String.class, Integer.class, String.class
+                    };
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false, false
+                    };
+                    @Override
+                    public Class<?> getColumnClass(int columnIndex) {
+                        return columnTypes[columnIndex];
+                    }
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                scrollPane3.setViewportView(tableCollegeInfo);
+            }
+            panelCollegeMain.add(scrollPane3);
+            scrollPane3.setBounds(5, 80, 855, scrollPane3.getPreferredSize().height);
         }
         tabbedPaneMenu.addTab("\u5b66\u9662\u7ba1\u7406", panelCollegeMain);
 
@@ -1377,6 +1429,12 @@ public class AdministratorControllerGui extends JFrame {
 
             //---- buttonUpdateCourse ----
             buttonUpdateCourse.setText("\u4fee\u6539\u8bfe\u7a0b");
+            buttonUpdateCourse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonUpdateCourseMouseClicked(e);
+                }
+            });
             panelCourseMange.add(buttonUpdateCourse);
             buttonUpdateCourse.setBounds(new Rectangle(new Point(190, 35), buttonUpdateCourse.getPreferredSize()));
 
@@ -1599,6 +1657,8 @@ public class AdministratorControllerGui extends JFrame {
     private JLabel label12;
     private JLabel labelForTeacherCount;
     private JPanel panelCollegeMain;
+    private JScrollPane scrollPane3;
+    private JTable tableCollegeInfo;
     private JPanel panelCourseMange;
     private JScrollPane scrollPaneCourseMange;
     private JTable tableCourseList;

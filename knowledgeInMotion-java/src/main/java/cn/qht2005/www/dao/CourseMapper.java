@@ -40,5 +40,19 @@ public interface CourseMapper {
 	 */
 	List<Course>selectByCourse(Course course);
 
+	/**
+	 * 根据课程id修改课程
+	 * @param course 课程对象
+	 */
+	void updateByCourse(Course course);
+
+	/**
+	 * 根据课程id查询课程
+	 * @param courseID 课程id
+	 */
+	@Select("select * from t_course where course_id = #{courseID}")
+	@ResultMap("courseResultMap")
+	Course selectByCourseId(Integer courseId);
+
 
 }
