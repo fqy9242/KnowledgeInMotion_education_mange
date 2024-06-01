@@ -491,9 +491,9 @@ new FormModel {
 				} ) {
 					name: "panelCourseMange"
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-						name: "scrollPane3"
+						name: "scrollPaneCourseMange"
 						add( new FormComponent( "javax.swing.JTable" ) {
-							name: "table1"
+							name: "tableCourseList"
 							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
 								add( "课程编号" )
 								add( "课程名称" )
@@ -519,6 +519,90 @@ new FormModel {
 						"y": 80
 						"width": 860
 						"height": 585
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonAddCourse"
+						"text": "添加课程"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonAddCourseMouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 5
+						"y": 35
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonDeleteCourse"
+						"text": "删除课程"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonDeleteCourseMouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 100
+						"y": 35
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonUpdateCourse"
+						"text": "修改课程"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 190
+						"y": 35
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonQueryCourse"
+						"text": "查询课程"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonQueryCourseMouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 680
+						"y": 35
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "buttonExportCourse"
+						"text": "导出列表"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonExportCourseMouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 775
+						"y": 35
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label16"
+						"text": "课程id"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 280
+						"y": 40
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputCourseId"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 320
+						"y": 35
+						"width": 75
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label17"
+						"text": "课程名称"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 400
+						"y": 40
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "inputCourseName"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 455
+						"y": 35
+						"width": 65
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label18"
+						"text": "负责学院"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 525
+						"y": 40
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "selectCourseCollege"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "不限"
+							addElement( "不限" )
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 585
+						"y": 35
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "课程管理"

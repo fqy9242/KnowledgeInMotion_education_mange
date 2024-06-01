@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qht2005.www.dao.CourseMapper">
+    <!--课程表数据库结果映射-->
+    <resultMap id="courseResultMap" type="cn.qht2005.www.pojo.Course">
+        <result column="course_id" property="courseId"/>
+        <result column="course_name" property="courseName"/>
+        <result column="course_college_id" property="collegeId"/>
+    </resultMap>
+    <!--批量删除课程-->
+    <delete id="deleteByCourseList">
+        delete from t_course
+        where course_id in
+        <foreach collection="list" item="course" open="(" separator="," close=")">
+            #{course.courseId}
+        </foreach>
+    </delete>
+    <!--根据课程对象动态条件查询课程-->
+    <select id="selectByCourse" resultMap="courseResultMap">
+        select *
+        from t_course
+        <where>
+            <if test="courseId != null and courseId != ''">
+                course_id = #{courseId}
+            </if>
+            <if test="courseName != null and courseName != ''">
+                and course_name like concat('%', #{courseName}, '%')
+            </if>
+            <if test="collegeId != null and collegeId != ''">
+                and course_college_id = #{collegeId}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -197,7 +197,7 @@ public class AddUser extends JDialog {
         // 获取学院id
         Integer collegeId = new CollegeServiceImpl().getCollegeIdByName(collegeName);
         // 获取学生性别
-        Integer sex = selectBoxSex.getSelectedIndex() == 0 ? 1 : 2;
+        int sex = selectBoxSex.getSelectedIndex() == 0 ? 1 : 2;
         // 生成学号
         String id = IdUtil.generateStudentId(collegeId, classId);
         // 创建一个学生对象
@@ -206,7 +206,7 @@ public class AddUser extends JDialog {
         student.setName(name);
         student.setClassId(classId);
         student.setCollegeId(collegeId);
-        student.setSex(sex.shortValue());
+        student.setSex((short) sex);
         // 添加学生
         boolean b = new AdministratorServiceImpl().addStudent(student);
         if (b){

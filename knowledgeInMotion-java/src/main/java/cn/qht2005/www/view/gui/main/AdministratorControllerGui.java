@@ -8,15 +8,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 
 import cn.qht2005.www.pojo.College;
+import cn.qht2005.www.pojo.Course;
 import cn.qht2005.www.pojo.Enumeration.UserType;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
@@ -24,6 +27,7 @@ import cn.qht2005.www.pojo.people.Teacher;
 import cn.qht2005.www.service.impl.AdministratorServiceImpl;
 import cn.qht2005.www.service.impl.CollegeServiceImpl;
 import cn.qht2005.www.service.impl.TeacherServiceImpl;
+import cn.qht2005.www.view.gui.AddCourse;
 import cn.qht2005.www.view.gui.AddNotice;
 import cn.qht2005.www.view.gui.AddUser;
 import cn.qht2005.www.view.gui.UpdateStudentAndTeacher;
@@ -98,6 +102,8 @@ public class AdministratorControllerGui extends JFrame {
             // 学院管理
         }else if (tabbedPaneMenu.getSelectedIndex() == 4) {
             // 课程管理
+            showCourseListToTable(null);
+            showCollegeListToSelectBox(selectCourseCollege);
         } else if (tabbedPaneMenu.getSelectedIndex() == 5) {
             // 通知管理
             showNoticeToTable(null);
@@ -581,7 +587,6 @@ public class AdministratorControllerGui extends JFrame {
             JOptionPane.showMessageDialog(null, "删除失败");
         }
 
-
     }
     // 导出学生按钮被点击
     private void buttonExportStudentMouseClicked(MouseEvent e) {
@@ -610,20 +615,24 @@ public class AdministratorControllerGui extends JFrame {
         // 设置文件选择器的默认路径
         fileChooser.setCurrentDirectory(new java.io.File("."));
         // 设置文件选择器的选择模式
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         // 打开文件选择器
         int result = fileChooser.showSaveDialog(null);
         // 判断是否点击了保存按钮
         if (result == JFileChooser.APPROVE_OPTION) {
             // 获取选择的文件夹
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
-            try (FileOutputStream fos = new FileOutputStream(path + "/学生列表.xls")) {
+            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xls")) {
                 workbook.write(fos);
                 JOptionPane.showMessageDialog(null, "导出成功");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "导出失败");
                 throw new RuntimeException(e);
             }
+        }
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
 
@@ -658,16 +667,16 @@ public class AdministratorControllerGui extends JFrame {
         // 设置文件选择器的默认路径
         fileChooser.setCurrentDirectory(new java.io.File("."));
         // 设置文件选择器的选择模式
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         // 打开文件选择器
         int result = fileChooser.showSaveDialog(null);
         // 判断是否点击了保存按钮
         if (result == JFileChooser.APPROVE_OPTION) {
             // 获取选择的文件夹
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
-            try (FileOutputStream fos = new FileOutputStream(path + "/教师列表.xls")) {
+            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xls")) {
                 workbook.write(fos);
                 JOptionPane.showMessageDialog(null, "导出成功");
+                workbook.close();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "导出失败");
                 throw new RuntimeException(e);
@@ -723,574 +732,798 @@ public class AdministratorControllerGui extends JFrame {
         // 刷新一下
         buttonQueryForTeacherMouseClicked(null);
     }
-
-
-    private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        tabbedPaneMenu = new JTabbedPane();
-        panelMain = new JPanel();
-        panelForStudentSexCount = new JPanel();
-        label1 = new JLabel();
-        labelStudentCount = new JLabel();
-        panelForTeacherAgeCount = new JPanel();
-        label2 = new JLabel();
-        labelTeacherCount = new JLabel();
-        label13 = new JLabel();
-        panelStudentMange = new JPanel();
-        scrollPane1 = new JScrollPane();
-        tableStudentList = new JTable();
-        buttonExportStudent = new JButton();
-        buttonAddStudent = new JButton();
-        buttonUpdateStudent = new JButton();
-        buttonDeleteStudent = new JButton();
-        buttonQuery = new JButton();
-        panelCountStudentByCollege = new JPanel();
-        label3 = new JLabel();
-        inputStudentId = new JTextField();
-        label4 = new JLabel();
-        inputStudentName = new JTextField();
-        label5 = new JLabel();
-        selectBoxStudentSex = new JComboBox<>();
-        label6 = new JLabel();
-        selectBoxStudentCollege = new JComboBox<>();
-        label7 = new JLabel();
-        labelStudentListCount = new JLabel();
-        panelTeacherMain = new JPanel();
-        scrollPane2 = new JScrollPane();
-        tableTeacherList = new JTable();
-        buttonExportForTeacher = new JButton();
-        buttonAddTeacher = new JButton();
-        buttonUpdateTeacher = new JButton();
-        buttonDeleteStudent2 = new JButton();
-        buttonQueryForTeacher = new JButton();
-        panelCountTeacherByPositon = new JPanel();
-        label8 = new JLabel();
-        inputTeacherId = new JTextField();
-        label9 = new JLabel();
-        inputTeacherName = new JTextField();
-        label10 = new JLabel();
-        selectBoxTeacherSex = new JComboBox<>();
-        label11 = new JLabel();
-        selectBoxTeacherCollege = new JComboBox<>();
-        label12 = new JLabel();
-        labelForTeacherCount = new JLabel();
-        panelCollegeMain = new JPanel();
-        panelCourseMange = new JPanel();
-        scrollPane3 = new JScrollPane();
-        table1 = new JTable();
-        panelNoticeMange = new JPanel();
-        scrollPaneNotice = new JScrollPane();
-        tableNoticeList = new JTable();
-        buttonPublishNotice = new JButton();
-        buttonDeleteNotice = new JButton();
-        label14 = new JLabel();
-        inputNoticeContain = new JTextField();
-        label15 = new JLabel();
-        inputNoticeId = new JTextField();
-        buttonQueryNotice = new JButton();
-
-        //======== this ========
-        setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u7ba1\u7406\u5458\u4e3b\u9875\u9762   by \u8983\u60e0\u901a");
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setResizable(false);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                thisWindowClosing(e);
+    // 获取课程列表并展示到表格上
+    private void showCourseListToTable(List<Course> courses){
+        // 给一个默认值
+        try {
+            if (courses == null){
+                courses = new AdministratorServiceImpl().getAllCourse();
             }
-        });
-        var contentPane = getContentPane();
-        contentPane.setLayout(null);
-
-        //======== tabbedPaneMenu ========
-        {
-            tabbedPaneMenu.setTabPlacement(SwingConstants.LEFT);
-            tabbedPaneMenu.addChangeListener(e -> tabbedPaneMenuStateChanged(e));
-
-            //======== panelMain ========
-            {
-                panelMain.setLayout(null);
-
-                //======== panelForStudentSexCount ========
-                {
-                    panelForStudentSexCount.setLayout(null);
-                }
-                panelMain.add(panelForStudentSexCount);
-                panelForStudentSexCount.setBounds(0, 395, 420, 275);
-
-                //---- label1 ----
-                label1.setText("\u5728\u6821\u5b66\u751f\u4eba\u6570:");
-                panelMain.add(label1);
-                label1.setBounds(new Rectangle(new Point(5, 25), label1.getPreferredSize()));
-
-                //---- labelStudentCount ----
-                labelStudentCount.setText("text");
-                panelMain.add(labelStudentCount);
-                labelStudentCount.setBounds(105, 25, 70, labelStudentCount.getPreferredSize().height);
-
-                //======== panelForTeacherAgeCount ========
-                {
-                    panelForTeacherAgeCount.setLayout(null);
-                }
-                panelMain.add(panelForTeacherAgeCount);
-                panelForTeacherAgeCount.setBounds(425, 395, 440, 275);
-
-                //---- label2 ----
-                label2.setText("\u5728\u6821\u6559\u804c\u5de5\u4eba\u6570:");
-                panelMain.add(label2);
-                label2.setBounds(5, 55, 105, 17);
-
-                //---- labelTeacherCount ----
-                labelTeacherCount.setText("text");
-                panelMain.add(labelTeacherCount);
-                labelTeacherCount.setBounds(105, 55, 50, labelTeacherCount.getPreferredSize().height);
-
-                //---- label13 ----
-                label13.setText("\u5f85     \u53d1    \u6398   \u533a");
-                label13.setFont(new Font("\u5b8b\u4f53", Font.PLAIN, 36));
-                label13.setForeground(Color.red);
-                panelMain.add(label13);
-                label13.setBounds(220, 100, 415, 250);
+            DefaultTableModel model = (DefaultTableModel) tableCourseList.getModel();
+            model.setRowCount(0);
+            for (Course course : courses) {
+                model.addRow(new Object[]{
+                        course.getCourseId(),
+                        course.getCourseName(),
+                        new CollegeServiceImpl().getCollegeNameById(course.getCollegeId()),
+                });
             }
-            tabbedPaneMenu.addTab("\u603b\u89c8", panelMain);
-
-            //======== panelStudentMange ========
-            {
-                panelStudentMange.setLayout(null);
-
-                //======== scrollPane1 ========
-                {
-
-                    //---- tableStudentList ----
-                    tableStudentList.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "\u5b66\u53f7", "\u5b66\u9662", "\u73ed\u7ea7", "\u59d3\u540d", "\u5e74\u9f84", "\u6027\u522b", "\u8054\u7cfb\u7535\u8bdd", "\u767b\u5f55\u5bc6\u7801", "\u5bb6\u5ead\u4f4f\u5740"
-                        }
-                    ) {
-                        Class<?>[] columnTypes = new Class<?>[] {
-                            String.class, String.class, Integer.class, String.class, Integer.class, String.class, String.class, String.class, String.class
-                        };
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false, false, false, false, false, false, false
-                        };
-                        @Override
-                        public Class<?> getColumnClass(int columnIndex) {
-                            return columnTypes[columnIndex];
-                        }
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    scrollPane1.setViewportView(tableStudentList);
-                }
-                panelStudentMange.add(scrollPane1);
-                scrollPane1.setBounds(5, 50, 855, scrollPane1.getPreferredSize().height);
-
-                //---- buttonExportStudent ----
-                buttonExportStudent.setText("\u5bfc\u51fa");
-                buttonExportStudent.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonExportStudentMouseClicked(e);
-                    }
-                });
-                panelStudentMange.add(buttonExportStudent);
-                buttonExportStudent.setBounds(780, 5, 78, 30);
-
-                //---- buttonAddStudent ----
-                buttonAddStudent.setText("\u6dfb\u52a0");
-                buttonAddStudent.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonAddStudentMouseClicked(e);
-                    }
-                });
-                panelStudentMange.add(buttonAddStudent);
-                buttonAddStudent.setBounds(5, 5, 78, 30);
-
-                //---- buttonUpdateStudent ----
-                buttonUpdateStudent.setText("\u4fee\u6539");
-                buttonUpdateStudent.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonUpdateStudentMouseClicked(e);
-                    }
-                });
-                panelStudentMange.add(buttonUpdateStudent);
-                buttonUpdateStudent.setBounds(90, 5, 78, 30);
-
-                //---- buttonDeleteStudent ----
-                buttonDeleteStudent.setText("\u5220\u9664");
-                buttonDeleteStudent.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonDeleteStudentMouseClicked(e);
-                    }
-                });
-                panelStudentMange.add(buttonDeleteStudent);
-                buttonDeleteStudent.setBounds(185, 5, 78, 30);
-
-                //---- buttonQuery ----
-                buttonQuery.setText("\u67e5\u8be2");
-                buttonQuery.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonQueryMouseClicked(e);
-                    }
-                });
-                panelStudentMange.add(buttonQuery);
-                buttonQuery.setBounds(690, 5, 78, 30);
-
-                //======== panelCountStudentByCollege ========
-                {
-                    panelCountStudentByCollege.setLayout(null);
-                }
-                panelStudentMange.add(panelCountStudentByCollege);
-                panelCountStudentByCollege.setBounds(0, 475, 345, 200);
-
-                //---- label3 ----
-                label3.setText("\u59d3\u540d");
-                panelStudentMange.add(label3);
-                label3.setBounds(new Rectangle(new Point(265, 15), label3.getPreferredSize()));
-                panelStudentMange.add(inputStudentId);
-                inputStudentId.setBounds(395, 10, 70, 25);
-
-                //---- label4 ----
-                label4.setText("\u5b66\u53f7");
-                panelStudentMange.add(label4);
-                label4.setBounds(new Rectangle(new Point(365, 15), label4.getPreferredSize()));
-                panelStudentMange.add(inputStudentName);
-                inputStudentName.setBounds(290, 10, 70, 25);
-
-                //---- label5 ----
-                label5.setText("\u6027\u522b");
-                panelStudentMange.add(label5);
-                label5.setBounds(new Rectangle(new Point(470, 15), label5.getPreferredSize()));
-
-                //---- selectBoxStudentSex ----
-                selectBoxStudentSex.setModel(new DefaultComboBoxModel<>(new String[] {
-                    "\u4e0d\u9650",
-                    "\u7537",
-                    "\u5973"
-                }));
-                panelStudentMange.add(selectBoxStudentSex);
-                selectBoxStudentSex.setBounds(500, 10, 60, selectBoxStudentSex.getPreferredSize().height);
-
-                //---- label6 ----
-                label6.setText("\u5b66\u9662");
-                panelStudentMange.add(label6);
-                label6.setBounds(new Rectangle(new Point(565, 15), label6.getPreferredSize()));
-
-                //---- selectBoxStudentCollege ----
-                selectBoxStudentCollege.setModel(new DefaultComboBoxModel<>(new String[] {
-                    "\u4e0d\u9650"
-                }));
-                panelStudentMange.add(selectBoxStudentCollege);
-                selectBoxStudentCollege.setBounds(595, 10, 90, selectBoxStudentCollege.getPreferredSize().height);
-
-                //---- label7 ----
-                label7.setText("\u5217\u8868\u4eba\u6570");
-                panelStudentMange.add(label7);
-                label7.setBounds(new Rectangle(new Point(360, 495), label7.getPreferredSize()));
-
-                //---- labelStudentListCount ----
-                labelStudentListCount.setText("text");
-                panelStudentMange.add(labelStudentListCount);
-                labelStudentListCount.setBounds(415, 495, 70, labelStudentListCount.getPreferredSize().height);
-            }
-            tabbedPaneMenu.addTab("\u5b66\u751f\u7ba1\u7406", panelStudentMange);
-
-            //======== panelTeacherMain ========
-            {
-                panelTeacherMain.setLayout(null);
-
-                //======== scrollPane2 ========
-                {
-
-                    //---- tableTeacherList ----
-                    tableTeacherList.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "\u5de5\u53f7", "\u5b66\u9662", "\u7ba1\u7406\u73ed\u7ea7", "\u59d3\u540d", "\u5e74\u9f84", "\u6027\u522b", "\u804c\u4f4d", "\u8054\u7cfb\u7535\u8bdd", "\u767b\u5f55\u5bc6\u7801"
-                        }
-                    ) {
-                        Class<?>[] columnTypes = new Class<?>[] {
-                            String.class, String.class, Integer.class, String.class, Integer.class, String.class, String.class, String.class, String.class
-                        };
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false, false, false, false, false, false, false
-                        };
-                        @Override
-                        public Class<?> getColumnClass(int columnIndex) {
-                            return columnTypes[columnIndex];
-                        }
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    scrollPane2.setViewportView(tableTeacherList);
-                }
-                panelTeacherMain.add(scrollPane2);
-                scrollPane2.setBounds(5, 50, 855, scrollPane2.getPreferredSize().height);
-
-                //---- buttonExportForTeacher ----
-                buttonExportForTeacher.setText("\u5bfc\u51fa");
-                buttonExportForTeacher.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonExportForTeacherMouseClicked(e);
-                    }
-                });
-                panelTeacherMain.add(buttonExportForTeacher);
-                buttonExportForTeacher.setBounds(780, 5, 78, 30);
-
-                //---- buttonAddTeacher ----
-                buttonAddTeacher.setText("\u6dfb\u52a0");
-                buttonAddTeacher.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonAddTeacherMouseClicked(e);
-                    }
-                });
-                panelTeacherMain.add(buttonAddTeacher);
-                buttonAddTeacher.setBounds(5, 5, 78, 30);
-
-                //---- buttonUpdateTeacher ----
-                buttonUpdateTeacher.setText("\u4fee\u6539");
-                buttonUpdateTeacher.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonUpdateTeacherMouseClicked(e);
-                    }
-                });
-                panelTeacherMain.add(buttonUpdateTeacher);
-                buttonUpdateTeacher.setBounds(90, 5, 78, 30);
-
-                //---- buttonDeleteStudent2 ----
-                buttonDeleteStudent2.setText("\u5220\u9664");
-                buttonDeleteStudent2.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonDeleteStudent2MouseClicked(e);
-                    }
-                });
-                panelTeacherMain.add(buttonDeleteStudent2);
-                buttonDeleteStudent2.setBounds(185, 5, 78, 30);
-
-                //---- buttonQueryForTeacher ----
-                buttonQueryForTeacher.setText("\u67e5\u8be2");
-                buttonQueryForTeacher.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonQueryForTeacherMouseClicked(e);
-                    }
-                });
-                panelTeacherMain.add(buttonQueryForTeacher);
-                buttonQueryForTeacher.setBounds(690, 5, 78, 30);
-
-                //======== panelCountTeacherByPositon ========
-                {
-                    panelCountTeacherByPositon.setLayout(null);
-                }
-                panelTeacherMain.add(panelCountTeacherByPositon);
-                panelCountTeacherByPositon.setBounds(0, 475, 345, 200);
-
-                //---- label8 ----
-                label8.setText("\u59d3\u540d");
-                panelTeacherMain.add(label8);
-                label8.setBounds(new Rectangle(new Point(265, 15), label8.getPreferredSize()));
-                panelTeacherMain.add(inputTeacherId);
-                inputTeacherId.setBounds(395, 10, 70, 25);
-
-                //---- label9 ----
-                label9.setText("\u5de5\u53f7");
-                panelTeacherMain.add(label9);
-                label9.setBounds(new Rectangle(new Point(365, 15), label9.getPreferredSize()));
-                panelTeacherMain.add(inputTeacherName);
-                inputTeacherName.setBounds(290, 10, 70, 25);
-
-                //---- label10 ----
-                label10.setText("\u6027\u522b");
-                panelTeacherMain.add(label10);
-                label10.setBounds(new Rectangle(new Point(470, 15), label10.getPreferredSize()));
-
-                //---- selectBoxTeacherSex ----
-                selectBoxTeacherSex.setModel(new DefaultComboBoxModel<>(new String[] {
-                    "\u4e0d\u9650",
-                    "\u7537",
-                    "\u5973"
-                }));
-                panelTeacherMain.add(selectBoxTeacherSex);
-                selectBoxTeacherSex.setBounds(500, 10, 60, selectBoxTeacherSex.getPreferredSize().height);
-
-                //---- label11 ----
-                label11.setText("\u5b66\u9662");
-                panelTeacherMain.add(label11);
-                label11.setBounds(new Rectangle(new Point(565, 15), label11.getPreferredSize()));
-
-                //---- selectBoxTeacherCollege ----
-                selectBoxTeacherCollege.setModel(new DefaultComboBoxModel<>(new String[] {
-                    "\u4e0d\u9650"
-                }));
-                panelTeacherMain.add(selectBoxTeacherCollege);
-                selectBoxTeacherCollege.setBounds(595, 10, 90, selectBoxTeacherCollege.getPreferredSize().height);
-
-                //---- label12 ----
-                label12.setText("\u5217\u8868\u4eba\u6570");
-                panelTeacherMain.add(label12);
-                label12.setBounds(new Rectangle(new Point(360, 495), label12.getPreferredSize()));
-
-                //---- labelForTeacherCount ----
-                labelForTeacherCount.setText("text");
-                panelTeacherMain.add(labelForTeacherCount);
-                labelForTeacherCount.setBounds(415, 495, 70, labelForTeacherCount.getPreferredSize().height);
-            }
-            tabbedPaneMenu.addTab("\u6559\u804c\u5de5\u7ba1\u7406", panelTeacherMain);
-
-            //======== panelCollegeMain ========
-            {
-                panelCollegeMain.setLayout(null);
-            }
-            tabbedPaneMenu.addTab("\u5b66\u9662\u7ba1\u7406", panelCollegeMain);
-
-            //======== panelCourseMange ========
-            {
-                panelCourseMange.setLayout(null);
-
-                //======== scrollPane3 ========
-                {
-
-                    //---- table1 ----
-                    table1.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "\u8bfe\u7a0b\u7f16\u53f7", "\u8bfe\u7a0b\u540d\u79f0", "\u5f00\u8bbe\u5b66\u9662"
-                        }
-                    ) {
-                        Class<?>[] columnTypes = new Class<?>[] {
-                            String.class, String.class, String.class
-                        };
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false
-                        };
-                        @Override
-                        public Class<?> getColumnClass(int columnIndex) {
-                            return columnTypes[columnIndex];
-                        }
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    table1.setShowHorizontalLines(false);
-                    table1.setShowVerticalLines(false);
-                    scrollPane3.setViewportView(table1);
-                }
-                panelCourseMange.add(scrollPane3);
-                scrollPane3.setBounds(0, 80, 860, 585);
-            }
-            tabbedPaneMenu.addTab("\u8bfe\u7a0b\u7ba1\u7406", panelCourseMange);
-
-            //======== panelNoticeMange ========
-            {
-                panelNoticeMange.setLayout(null);
-
-                //======== scrollPaneNotice ========
-                {
-
-                    //---- tableNoticeList ----
-                    tableNoticeList.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "\u516c\u544aid", "\u53d1\u6587\u673a\u5173", "\u4e3b\u9001\u673a\u5173", "\u53d1\u6587\u65f6\u95f4", "\u516c\u544a\u6807\u9898", "\u516c\u544a\u5185\u5bb9"
-                        }
-                    ) {
-                        Class<?>[] columnTypes = new Class<?>[] {
-                            String.class, String.class, String.class, String.class, String.class, String.class
-                        };
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false, false, false, false
-                        };
-                        @Override
-                        public Class<?> getColumnClass(int columnIndex) {
-                            return columnTypes[columnIndex];
-                        }
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    tableNoticeList.setShowVerticalLines(false);
-                    tableNoticeList.setShowHorizontalLines(false);
-                    scrollPaneNotice.setViewportView(tableNoticeList);
-                }
-                panelNoticeMange.add(scrollPaneNotice);
-                scrollPaneNotice.setBounds(0, 60, 865, 610);
-
-                //---- buttonPublishNotice ----
-                buttonPublishNotice.setText("\u53d1\u5e03\u516c\u544a");
-                buttonPublishNotice.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonPublishNoticeMouseClicked(e);
-                    }
-                });
-                panelNoticeMange.add(buttonPublishNotice);
-                buttonPublishNotice.setBounds(15, 15, 125, 30);
-
-                //---- buttonDeleteNotice ----
-                buttonDeleteNotice.setText("\u5220\u9664\u516c\u544a");
-                buttonDeleteNotice.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonDeleteNoticeMouseClicked(e);
-                    }
-                });
-                panelNoticeMange.add(buttonDeleteNotice);
-                buttonDeleteNotice.setBounds(155, 15, 125, 30);
-
-                //---- label14 ----
-                label14.setText("\u516c\u544a\u6807\u9898\u6216\u5185\u5bb9\u5305\u542b:");
-                panelNoticeMange.add(label14);
-                label14.setBounds(new Rectangle(new Point(295, 20), label14.getPreferredSize()));
-                panelNoticeMange.add(inputNoticeContain);
-                inputNoticeContain.setBounds(430, 15, 140, inputNoticeContain.getPreferredSize().height);
-
-                //---- label15 ----
-                label15.setText("\u516c\u544aid");
-                panelNoticeMange.add(label15);
-                label15.setBounds(new Rectangle(new Point(590, 20), label15.getPreferredSize()));
-                panelNoticeMange.add(inputNoticeId);
-                inputNoticeId.setBounds(630, 15, 95, inputNoticeId.getPreferredSize().height);
-
-                //---- buttonQueryNotice ----
-                buttonQueryNotice.setText("\u67e5\u8be2\u516c\u544a");
-                buttonQueryNotice.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        buttonQueryNoticeMouseClicked(e);
-                    }
-                });
-                panelNoticeMange.add(buttonQueryNotice);
-                buttonQueryNotice.setBounds(new Rectangle(new Point(740, 15), buttonQueryNotice.getPreferredSize()));
-            }
-            tabbedPaneMenu.addTab("\u516c\u544a\u7ba1\u7406", panelNoticeMange);
+            DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+            r.setHorizontalAlignment(JLabel.CENTER);
+            tableCourseList.setDefaultRenderer(Object.class, r);
+            tableCourseList.setDefaultRenderer(Integer.class, r);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        contentPane.add(tabbedPaneMenu);
-        tabbedPaneMenu.setBounds(5, 10, 955, 670);
-
-        contentPane.setPreferredSize(new Dimension(960, 710));
-        pack();
-        setLocationRelativeTo(getOwner());
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
+    // 添加课程按钮被点击
+    private void buttonAddCourseMouseClicked(MouseEvent e) {
+        new AddCourse(this).setVisible(true);
+    }
+    // 删除课程按钮被点击
+    private void buttonDeleteCourseMouseClicked(MouseEvent e) {
+        deleteCourse();
+        showCourseListToTable(null);
+    }
+    // 删除课程
+    private void  deleteCourse(){
+        // 获取选中的行
+        int[] rows = tableCourseList.getSelectedRows();
+        if (rows.length == 0){
+            JOptionPane.showMessageDialog(null, "请选择要删除的课程");
+            return;
+        }
+        // 创建一个课程列表
+        List<Course> courses = new ArrayList<>();
+        // 遍历选中的行
+        for (int row : rows) {
+            // 创建一个课程对象
+            Course course = new Course();
+            // 对这个课程对象进行赋值
+            course.setCourseId((Integer) tableCourseList.getValueAt(row, 0));
+            // 将这个课程对象添加到课程列表中
+            courses.add(course);
+        }
+        // 删除课程
+        boolean result = new AdministratorServiceImpl().deleteByCourseList(courses);
+        // 判断是否删除成功
+        if (result) {
+            JOptionPane.showMessageDialog(null, "删除成功");
+        } else {
+            JOptionPane.showMessageDialog(null, "删除失败");
+        }
+    }
+    // 查询课程按钮被点击
+    private void buttonQueryCourseMouseClicked(MouseEvent e) {
+        try {
+            List<Course> courses = queryCourse();
+            // 刷新一下
+            showCourseListToTable(courses);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    // 查询课程
+    private List<Course> queryCourse() throws Exception {
+        // 获取课程id
+        String courseId = inputCourseId.getText();
+        // 获取课程名
+        String courseName = inputCourseName.getText();
+        // 获取学院
+        String collegeName = Objects.equals(Objects.requireNonNull(selectCourseCollege.getSelectedItem())
+                .toString(), "不限") ? null : selectCourseCollege.getSelectedItem().toString();
+        // 创建一个课程对象
+        Course course = new Course();
+        // 对这个课程对象进行赋值
+        if (!courseId.isEmpty()) {
+            course.setCourseId(Integer.parseInt(courseId));
+        }
+        course.setCourseName(courseName);
+        if (collegeName != null) {
+            course.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+        }
+        // 获取结果并返回
+        return new AdministratorServiceImpl().getCourseByCourse(course);
+    }
+    // 导出课程按钮被点击
+    private void buttonExportCourseMouseClicked(MouseEvent e) {
+        exportCourse();
+    }
+    // 导出课程
+    private void exportCourse(){
+        Workbook workbook = new HSSFWorkbook();
+        Sheet sheet = workbook.createSheet("课程列表");
+        Row row = sheet.createRow(0);
+        for (int i = 0; i < tableCourseList.getColumnCount(); i++) {
+            row.createCell(i).setCellValue(tableCourseList.getColumnName(i));
+        }
+        for (int i = 0; i < tableCourseList.getRowCount(); i++) {
+            row = sheet.createRow(i + 1);
+            for (int j = 0; j < tableCourseList.getColumnCount(); j++) {
+                String value = "";
+                if (tableCourseList.getValueAt(i, j) != null) {
+                    value = tableCourseList.getValueAt(i, j).toString();
+                }
+                row.createCell(j).setCellValue(value);
+            }
+        }
+        // 导出
+        // 创建一个文件选择器
+        JFileChooser fileChooser = new JFileChooser();
+        // 设置文件选择器的标题
+        fileChooser.setDialogTitle("请选择导出路径");
+        // 设置文件选择器的默认路径
+        fileChooser.setCurrentDirectory(new java.io.File("."));
+        // 设置文件选择器的选择模式
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        // 打开文件选择器
+        int result = fileChooser.showSaveDialog(null);
+        // 判断是否点击了保存按钮
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // 获取选择的文件夹
+            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xls")) {
+                workbook.write(fos);
+                JOptionPane.showMessageDialog(null, "导出成功");
+                workbook.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "导出失败");
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+    private void initComponents() {
+    // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+    tabbedPaneMenu = new JTabbedPane();
+    panelMain = new JPanel();
+    panelForStudentSexCount = new JPanel();
+    label1 = new JLabel();
+    labelStudentCount = new JLabel();
+    panelForTeacherAgeCount = new JPanel();
+    label2 = new JLabel();
+    labelTeacherCount = new JLabel();
+    label13 = new JLabel();
+    panelStudentMange = new JPanel();
+    scrollPane1 = new JScrollPane();
+    tableStudentList = new JTable();
+    buttonExportStudent = new JButton();
+    buttonAddStudent = new JButton();
+    buttonUpdateStudent = new JButton();
+    buttonDeleteStudent = new JButton();
+    buttonQuery = new JButton();
+    panelCountStudentByCollege = new JPanel();
+    label3 = new JLabel();
+    inputStudentId = new JTextField();
+    label4 = new JLabel();
+    inputStudentName = new JTextField();
+    label5 = new JLabel();
+    selectBoxStudentSex = new JComboBox<>();
+    label6 = new JLabel();
+    selectBoxStudentCollege = new JComboBox<>();
+    label7 = new JLabel();
+    labelStudentListCount = new JLabel();
+    panelTeacherMain = new JPanel();
+    scrollPane2 = new JScrollPane();
+    tableTeacherList = new JTable();
+    buttonExportForTeacher = new JButton();
+    buttonAddTeacher = new JButton();
+    buttonUpdateTeacher = new JButton();
+    buttonDeleteStudent2 = new JButton();
+    buttonQueryForTeacher = new JButton();
+    panelCountTeacherByPositon = new JPanel();
+    label8 = new JLabel();
+    inputTeacherId = new JTextField();
+    label9 = new JLabel();
+    inputTeacherName = new JTextField();
+    label10 = new JLabel();
+    selectBoxTeacherSex = new JComboBox<>();
+    label11 = new JLabel();
+    selectBoxTeacherCollege = new JComboBox<>();
+    label12 = new JLabel();
+    labelForTeacherCount = new JLabel();
+    panelCollegeMain = new JPanel();
+    panelCourseMange = new JPanel();
+    scrollPaneCourseMange = new JScrollPane();
+    tableCourseList = new JTable();
+    buttonAddCourse = new JButton();
+    buttonDeleteCourse = new JButton();
+    buttonUpdateCourse = new JButton();
+    buttonQueryCourse = new JButton();
+    buttonExportCourse = new JButton();
+    label16 = new JLabel();
+    inputCourseId = new JTextField();
+    label17 = new JLabel();
+    inputCourseName = new JTextField();
+    label18 = new JLabel();
+    selectCourseCollege = new JComboBox<>();
+    panelNoticeMange = new JPanel();
+    scrollPaneNotice = new JScrollPane();
+    tableNoticeList = new JTable();
+    buttonPublishNotice = new JButton();
+    buttonDeleteNotice = new JButton();
+    label14 = new JLabel();
+    inputNoticeContain = new JTextField();
+    label15 = new JLabel();
+    inputNoticeId = new JTextField();
+    buttonQueryNotice = new JButton();
+
+    //======== this ========
+    setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf-\u7ba1\u7406\u5458\u4e3b\u9875\u9762   by \u8983\u60e0\u901a");
+    setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    setResizable(false);
+    addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            thisWindowClosing(e);
+        }
+    });
+    var contentPane = getContentPane();
+    contentPane.setLayout(null);
+
+    //======== tabbedPaneMenu ========
+    {
+        tabbedPaneMenu.setTabPlacement(SwingConstants.LEFT);
+        tabbedPaneMenu.addChangeListener(e -> tabbedPaneMenuStateChanged(e));
+
+        //======== panelMain ========
+        {
+            panelMain.setLayout(null);
+
+            //======== panelForStudentSexCount ========
+            {
+                panelForStudentSexCount.setLayout(null);
+            }
+            panelMain.add(panelForStudentSexCount);
+            panelForStudentSexCount.setBounds(0, 395, 420, 275);
+
+            //---- label1 ----
+            label1.setText("\u5728\u6821\u5b66\u751f\u4eba\u6570:");
+            panelMain.add(label1);
+            label1.setBounds(new Rectangle(new Point(5, 25), label1.getPreferredSize()));
+
+            //---- labelStudentCount ----
+            labelStudentCount.setText("text");
+            panelMain.add(labelStudentCount);
+            labelStudentCount.setBounds(105, 25, 70, labelStudentCount.getPreferredSize().height);
+
+            //======== panelForTeacherAgeCount ========
+            {
+                panelForTeacherAgeCount.setLayout(null);
+            }
+            panelMain.add(panelForTeacherAgeCount);
+            panelForTeacherAgeCount.setBounds(425, 395, 440, 275);
+
+            //---- label2 ----
+            label2.setText("\u5728\u6821\u6559\u804c\u5de5\u4eba\u6570:");
+            panelMain.add(label2);
+            label2.setBounds(5, 55, 105, 17);
+
+            //---- labelTeacherCount ----
+            labelTeacherCount.setText("text");
+            panelMain.add(labelTeacherCount);
+            labelTeacherCount.setBounds(105, 55, 50, labelTeacherCount.getPreferredSize().height);
+
+            //---- label13 ----
+            label13.setText("\u5f85     \u53d1    \u6398   \u533a");
+            label13.setFont(new Font("\u5b8b\u4f53", Font.PLAIN, 36));
+            label13.setForeground(Color.red);
+            panelMain.add(label13);
+            label13.setBounds(220, 100, 415, 250);
+        }
+        tabbedPaneMenu.addTab("\u603b\u89c8", panelMain);
+
+        //======== panelStudentMange ========
+        {
+            panelStudentMange.setLayout(null);
+
+            //======== scrollPane1 ========
+            {
+
+                //---- tableStudentList ----
+                tableStudentList.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "\u5b66\u53f7", "\u5b66\u9662", "\u73ed\u7ea7", "\u59d3\u540d", "\u5e74\u9f84", "\u6027\u522b", "\u8054\u7cfb\u7535\u8bdd", "\u767b\u5f55\u5bc6\u7801", "\u5bb6\u5ead\u4f4f\u5740"
+                    }
+                ) {
+                    Class<?>[] columnTypes = new Class<?>[] {
+                        String.class, String.class, Integer.class, String.class, Integer.class, String.class, String.class, String.class, String.class
+                    };
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false, false, false, false, false, false, false
+                    };
+                    @Override
+                    public Class<?> getColumnClass(int columnIndex) {
+                        return columnTypes[columnIndex];
+                    }
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                scrollPane1.setViewportView(tableStudentList);
+            }
+            panelStudentMange.add(scrollPane1);
+            scrollPane1.setBounds(5, 50, 855, scrollPane1.getPreferredSize().height);
+
+            //---- buttonExportStudent ----
+            buttonExportStudent.setText("\u5bfc\u51fa");
+            buttonExportStudent.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonExportStudentMouseClicked(e);
+                }
+            });
+            panelStudentMange.add(buttonExportStudent);
+            buttonExportStudent.setBounds(780, 5, 78, 30);
+
+            //---- buttonAddStudent ----
+            buttonAddStudent.setText("\u6dfb\u52a0");
+            buttonAddStudent.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonAddStudentMouseClicked(e);
+                }
+            });
+            panelStudentMange.add(buttonAddStudent);
+            buttonAddStudent.setBounds(5, 5, 78, 30);
+
+            //---- buttonUpdateStudent ----
+            buttonUpdateStudent.setText("\u4fee\u6539");
+            buttonUpdateStudent.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonUpdateStudentMouseClicked(e);
+                }
+            });
+            panelStudentMange.add(buttonUpdateStudent);
+            buttonUpdateStudent.setBounds(90, 5, 78, 30);
+
+            //---- buttonDeleteStudent ----
+            buttonDeleteStudent.setText("\u5220\u9664");
+            buttonDeleteStudent.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonDeleteStudentMouseClicked(e);
+                }
+            });
+            panelStudentMange.add(buttonDeleteStudent);
+            buttonDeleteStudent.setBounds(185, 5, 78, 30);
+
+            //---- buttonQuery ----
+            buttonQuery.setText("\u67e5\u8be2");
+            buttonQuery.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonQueryMouseClicked(e);
+                }
+            });
+            panelStudentMange.add(buttonQuery);
+            buttonQuery.setBounds(690, 5, 78, 30);
+
+            //======== panelCountStudentByCollege ========
+            {
+                panelCountStudentByCollege.setLayout(null);
+            }
+            panelStudentMange.add(panelCountStudentByCollege);
+            panelCountStudentByCollege.setBounds(0, 475, 345, 200);
+
+            //---- label3 ----
+            label3.setText("\u59d3\u540d");
+            panelStudentMange.add(label3);
+            label3.setBounds(new Rectangle(new Point(265, 15), label3.getPreferredSize()));
+            panelStudentMange.add(inputStudentId);
+            inputStudentId.setBounds(395, 10, 70, 25);
+
+            //---- label4 ----
+            label4.setText("\u5b66\u53f7");
+            panelStudentMange.add(label4);
+            label4.setBounds(new Rectangle(new Point(365, 15), label4.getPreferredSize()));
+            panelStudentMange.add(inputStudentName);
+            inputStudentName.setBounds(290, 10, 70, 25);
+
+            //---- label5 ----
+            label5.setText("\u6027\u522b");
+            panelStudentMange.add(label5);
+            label5.setBounds(new Rectangle(new Point(470, 15), label5.getPreferredSize()));
+
+            //---- selectBoxStudentSex ----
+            selectBoxStudentSex.setModel(new DefaultComboBoxModel<>(new String[] {
+                "\u4e0d\u9650",
+                "\u7537",
+                "\u5973"
+            }));
+            panelStudentMange.add(selectBoxStudentSex);
+            selectBoxStudentSex.setBounds(500, 10, 60, selectBoxStudentSex.getPreferredSize().height);
+
+            //---- label6 ----
+            label6.setText("\u5b66\u9662");
+            panelStudentMange.add(label6);
+            label6.setBounds(new Rectangle(new Point(565, 15), label6.getPreferredSize()));
+
+            //---- selectBoxStudentCollege ----
+            selectBoxStudentCollege.setModel(new DefaultComboBoxModel<>(new String[] {
+                "\u4e0d\u9650"
+            }));
+            panelStudentMange.add(selectBoxStudentCollege);
+            selectBoxStudentCollege.setBounds(595, 10, 90, selectBoxStudentCollege.getPreferredSize().height);
+
+            //---- label7 ----
+            label7.setText("\u5217\u8868\u4eba\u6570");
+            panelStudentMange.add(label7);
+            label7.setBounds(new Rectangle(new Point(360, 495), label7.getPreferredSize()));
+
+            //---- labelStudentListCount ----
+            labelStudentListCount.setText("text");
+            panelStudentMange.add(labelStudentListCount);
+            labelStudentListCount.setBounds(415, 495, 70, labelStudentListCount.getPreferredSize().height);
+        }
+        tabbedPaneMenu.addTab("\u5b66\u751f\u7ba1\u7406", panelStudentMange);
+
+        //======== panelTeacherMain ========
+        {
+            panelTeacherMain.setLayout(null);
+
+            //======== scrollPane2 ========
+            {
+
+                //---- tableTeacherList ----
+                tableTeacherList.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "\u5de5\u53f7", "\u5b66\u9662", "\u7ba1\u7406\u73ed\u7ea7", "\u59d3\u540d", "\u5e74\u9f84", "\u6027\u522b", "\u804c\u4f4d", "\u8054\u7cfb\u7535\u8bdd", "\u767b\u5f55\u5bc6\u7801"
+                    }
+                ) {
+                    Class<?>[] columnTypes = new Class<?>[] {
+                        String.class, String.class, Integer.class, String.class, Integer.class, String.class, String.class, String.class, String.class
+                    };
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false, false, false, false, false, false, false
+                    };
+                    @Override
+                    public Class<?> getColumnClass(int columnIndex) {
+                        return columnTypes[columnIndex];
+                    }
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                scrollPane2.setViewportView(tableTeacherList);
+            }
+            panelTeacherMain.add(scrollPane2);
+            scrollPane2.setBounds(5, 50, 855, scrollPane2.getPreferredSize().height);
+
+            //---- buttonExportForTeacher ----
+            buttonExportForTeacher.setText("\u5bfc\u51fa");
+            buttonExportForTeacher.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonExportForTeacherMouseClicked(e);
+                }
+            });
+            panelTeacherMain.add(buttonExportForTeacher);
+            buttonExportForTeacher.setBounds(780, 5, 78, 30);
+
+            //---- buttonAddTeacher ----
+            buttonAddTeacher.setText("\u6dfb\u52a0");
+            buttonAddTeacher.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonAddTeacherMouseClicked(e);
+                }
+            });
+            panelTeacherMain.add(buttonAddTeacher);
+            buttonAddTeacher.setBounds(5, 5, 78, 30);
+
+            //---- buttonUpdateTeacher ----
+            buttonUpdateTeacher.setText("\u4fee\u6539");
+            buttonUpdateTeacher.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonUpdateTeacherMouseClicked(e);
+                }
+            });
+            panelTeacherMain.add(buttonUpdateTeacher);
+            buttonUpdateTeacher.setBounds(90, 5, 78, 30);
+
+            //---- buttonDeleteStudent2 ----
+            buttonDeleteStudent2.setText("\u5220\u9664");
+            buttonDeleteStudent2.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonDeleteStudent2MouseClicked(e);
+                }
+            });
+            panelTeacherMain.add(buttonDeleteStudent2);
+            buttonDeleteStudent2.setBounds(185, 5, 78, 30);
+
+            //---- buttonQueryForTeacher ----
+            buttonQueryForTeacher.setText("\u67e5\u8be2");
+            buttonQueryForTeacher.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonQueryForTeacherMouseClicked(e);
+                }
+            });
+            panelTeacherMain.add(buttonQueryForTeacher);
+            buttonQueryForTeacher.setBounds(690, 5, 78, 30);
+
+            //======== panelCountTeacherByPositon ========
+            {
+                panelCountTeacherByPositon.setLayout(null);
+            }
+            panelTeacherMain.add(panelCountTeacherByPositon);
+            panelCountTeacherByPositon.setBounds(0, 475, 345, 200);
+
+            //---- label8 ----
+            label8.setText("\u59d3\u540d");
+            panelTeacherMain.add(label8);
+            label8.setBounds(new Rectangle(new Point(265, 15), label8.getPreferredSize()));
+            panelTeacherMain.add(inputTeacherId);
+            inputTeacherId.setBounds(395, 10, 70, 25);
+
+            //---- label9 ----
+            label9.setText("\u5de5\u53f7");
+            panelTeacherMain.add(label9);
+            label9.setBounds(new Rectangle(new Point(365, 15), label9.getPreferredSize()));
+            panelTeacherMain.add(inputTeacherName);
+            inputTeacherName.setBounds(290, 10, 70, 25);
+
+            //---- label10 ----
+            label10.setText("\u6027\u522b");
+            panelTeacherMain.add(label10);
+            label10.setBounds(new Rectangle(new Point(470, 15), label10.getPreferredSize()));
+
+            //---- selectBoxTeacherSex ----
+            selectBoxTeacherSex.setModel(new DefaultComboBoxModel<>(new String[] {
+                "\u4e0d\u9650",
+                "\u7537",
+                "\u5973"
+            }));
+            panelTeacherMain.add(selectBoxTeacherSex);
+            selectBoxTeacherSex.setBounds(500, 10, 60, selectBoxTeacherSex.getPreferredSize().height);
+
+            //---- label11 ----
+            label11.setText("\u5b66\u9662");
+            panelTeacherMain.add(label11);
+            label11.setBounds(new Rectangle(new Point(565, 15), label11.getPreferredSize()));
+
+            //---- selectBoxTeacherCollege ----
+            selectBoxTeacherCollege.setModel(new DefaultComboBoxModel<>(new String[] {
+                "\u4e0d\u9650"
+            }));
+            panelTeacherMain.add(selectBoxTeacherCollege);
+            selectBoxTeacherCollege.setBounds(595, 10, 90, selectBoxTeacherCollege.getPreferredSize().height);
+
+            //---- label12 ----
+            label12.setText("\u5217\u8868\u4eba\u6570");
+            panelTeacherMain.add(label12);
+            label12.setBounds(new Rectangle(new Point(360, 495), label12.getPreferredSize()));
+
+            //---- labelForTeacherCount ----
+            labelForTeacherCount.setText("text");
+            panelTeacherMain.add(labelForTeacherCount);
+            labelForTeacherCount.setBounds(415, 495, 70, labelForTeacherCount.getPreferredSize().height);
+        }
+        tabbedPaneMenu.addTab("\u6559\u804c\u5de5\u7ba1\u7406", panelTeacherMain);
+
+        //======== panelCollegeMain ========
+        {
+            panelCollegeMain.setLayout(null);
+        }
+        tabbedPaneMenu.addTab("\u5b66\u9662\u7ba1\u7406", panelCollegeMain);
+
+        //======== panelCourseMange ========
+        {
+            panelCourseMange.setLayout(null);
+
+            //======== scrollPaneCourseMange ========
+            {
+
+                //---- tableCourseList ----
+                tableCourseList.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "\u8bfe\u7a0b\u7f16\u53f7", "\u8bfe\u7a0b\u540d\u79f0", "\u5f00\u8bbe\u5b66\u9662"
+                    }
+                ) {
+                    Class<?>[] columnTypes = new Class<?>[] {
+                        String.class, String.class, String.class
+                    };
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false
+                    };
+                    @Override
+                    public Class<?> getColumnClass(int columnIndex) {
+                        return columnTypes[columnIndex];
+                    }
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                tableCourseList.setShowHorizontalLines(false);
+                tableCourseList.setShowVerticalLines(false);
+                scrollPaneCourseMange.setViewportView(tableCourseList);
+            }
+            panelCourseMange.add(scrollPaneCourseMange);
+            scrollPaneCourseMange.setBounds(0, 80, 860, 585);
+
+            //---- buttonAddCourse ----
+            buttonAddCourse.setText("\u6dfb\u52a0\u8bfe\u7a0b");
+            buttonAddCourse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonAddCourseMouseClicked(e);
+                }
+            });
+            panelCourseMange.add(buttonAddCourse);
+            buttonAddCourse.setBounds(new Rectangle(new Point(5, 35), buttonAddCourse.getPreferredSize()));
+
+            //---- buttonDeleteCourse ----
+            buttonDeleteCourse.setText("\u5220\u9664\u8bfe\u7a0b");
+            buttonDeleteCourse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonDeleteCourseMouseClicked(e);
+                }
+            });
+            panelCourseMange.add(buttonDeleteCourse);
+            buttonDeleteCourse.setBounds(new Rectangle(new Point(100, 35), buttonDeleteCourse.getPreferredSize()));
+
+            //---- buttonUpdateCourse ----
+            buttonUpdateCourse.setText("\u4fee\u6539\u8bfe\u7a0b");
+            panelCourseMange.add(buttonUpdateCourse);
+            buttonUpdateCourse.setBounds(new Rectangle(new Point(190, 35), buttonUpdateCourse.getPreferredSize()));
+
+            //---- buttonQueryCourse ----
+            buttonQueryCourse.setText("\u67e5\u8be2\u8bfe\u7a0b");
+            buttonQueryCourse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonQueryCourseMouseClicked(e);
+                }
+            });
+            panelCourseMange.add(buttonQueryCourse);
+            buttonQueryCourse.setBounds(new Rectangle(new Point(680, 35), buttonQueryCourse.getPreferredSize()));
+
+            //---- buttonExportCourse ----
+            buttonExportCourse.setText("\u5bfc\u51fa\u5217\u8868");
+            buttonExportCourse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonExportCourseMouseClicked(e);
+                }
+            });
+            panelCourseMange.add(buttonExportCourse);
+            buttonExportCourse.setBounds(new Rectangle(new Point(775, 35), buttonExportCourse.getPreferredSize()));
+
+            //---- label16 ----
+            label16.setText("\u8bfe\u7a0bid");
+            panelCourseMange.add(label16);
+            label16.setBounds(new Rectangle(new Point(280, 40), label16.getPreferredSize()));
+            panelCourseMange.add(inputCourseId);
+            inputCourseId.setBounds(320, 35, 75, inputCourseId.getPreferredSize().height);
+
+            //---- label17 ----
+            label17.setText("\u8bfe\u7a0b\u540d\u79f0");
+            panelCourseMange.add(label17);
+            label17.setBounds(new Rectangle(new Point(400, 40), label17.getPreferredSize()));
+            panelCourseMange.add(inputCourseName);
+            inputCourseName.setBounds(455, 35, 65, inputCourseName.getPreferredSize().height);
+
+            //---- label18 ----
+            label18.setText("\u8d1f\u8d23\u5b66\u9662");
+            panelCourseMange.add(label18);
+            label18.setBounds(new Rectangle(new Point(525, 40), label18.getPreferredSize()));
+
+            //---- selectCourseCollege ----
+            selectCourseCollege.setModel(new DefaultComboBoxModel<>(new String[] {
+                "\u4e0d\u9650"
+            }));
+            panelCourseMange.add(selectCourseCollege);
+            selectCourseCollege.setBounds(new Rectangle(new Point(585, 35), selectCourseCollege.getPreferredSize()));
+        }
+        tabbedPaneMenu.addTab("\u8bfe\u7a0b\u7ba1\u7406", panelCourseMange);
+
+        //======== panelNoticeMange ========
+        {
+            panelNoticeMange.setLayout(null);
+
+            //======== scrollPaneNotice ========
+            {
+
+                //---- tableNoticeList ----
+                tableNoticeList.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "\u516c\u544aid", "\u53d1\u6587\u673a\u5173", "\u4e3b\u9001\u673a\u5173", "\u53d1\u6587\u65f6\u95f4", "\u516c\u544a\u6807\u9898", "\u516c\u544a\u5185\u5bb9"
+                    }
+                ) {
+                    Class<?>[] columnTypes = new Class<?>[] {
+                        String.class, String.class, String.class, String.class, String.class, String.class
+                    };
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false, false, false, false
+                    };
+                    @Override
+                    public Class<?> getColumnClass(int columnIndex) {
+                        return columnTypes[columnIndex];
+                    }
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                tableNoticeList.setShowVerticalLines(false);
+                tableNoticeList.setShowHorizontalLines(false);
+                scrollPaneNotice.setViewportView(tableNoticeList);
+            }
+            panelNoticeMange.add(scrollPaneNotice);
+            scrollPaneNotice.setBounds(0, 60, 865, 610);
+
+            //---- buttonPublishNotice ----
+            buttonPublishNotice.setText("\u53d1\u5e03\u516c\u544a");
+            buttonPublishNotice.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonPublishNoticeMouseClicked(e);
+                }
+            });
+            panelNoticeMange.add(buttonPublishNotice);
+            buttonPublishNotice.setBounds(15, 15, 125, 30);
+
+            //---- buttonDeleteNotice ----
+            buttonDeleteNotice.setText("\u5220\u9664\u516c\u544a");
+            buttonDeleteNotice.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonDeleteNoticeMouseClicked(e);
+                }
+            });
+            panelNoticeMange.add(buttonDeleteNotice);
+            buttonDeleteNotice.setBounds(155, 15, 125, 30);
+
+            //---- label14 ----
+            label14.setText("\u516c\u544a\u6807\u9898\u6216\u5185\u5bb9\u5305\u542b:");
+            panelNoticeMange.add(label14);
+            label14.setBounds(new Rectangle(new Point(295, 20), label14.getPreferredSize()));
+            panelNoticeMange.add(inputNoticeContain);
+            inputNoticeContain.setBounds(430, 15, 140, inputNoticeContain.getPreferredSize().height);
+
+            //---- label15 ----
+            label15.setText("\u516c\u544aid");
+            panelNoticeMange.add(label15);
+            label15.setBounds(new Rectangle(new Point(590, 20), label15.getPreferredSize()));
+            panelNoticeMange.add(inputNoticeId);
+            inputNoticeId.setBounds(630, 15, 95, inputNoticeId.getPreferredSize().height);
+
+            //---- buttonQueryNotice ----
+            buttonQueryNotice.setText("\u67e5\u8be2\u516c\u544a");
+            buttonQueryNotice.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    buttonQueryNoticeMouseClicked(e);
+                }
+            });
+            panelNoticeMange.add(buttonQueryNotice);
+            buttonQueryNotice.setBounds(new Rectangle(new Point(740, 15), buttonQueryNotice.getPreferredSize()));
+        }
+        tabbedPaneMenu.addTab("\u516c\u544a\u7ba1\u7406", panelNoticeMange);
+    }
+    contentPane.add(tabbedPaneMenu);
+    tabbedPaneMenu.setBounds(5, 10, 955, 670);
+
+    contentPane.setPreferredSize(new Dimension(960, 710));
+    pack();
+    setLocationRelativeTo(getOwner());
+    // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+}
     // 展示学生列表到表格上
     private void showStudentInfoToTable() throws Exception {
         DefaultTableModel model = (DefaultTableModel) tableStudentList.getModel();
@@ -1367,8 +1600,19 @@ public class AdministratorControllerGui extends JFrame {
     private JLabel labelForTeacherCount;
     private JPanel panelCollegeMain;
     private JPanel panelCourseMange;
-    private JScrollPane scrollPane3;
-    private JTable table1;
+    private JScrollPane scrollPaneCourseMange;
+    private JTable tableCourseList;
+    private JButton buttonAddCourse;
+    private JButton buttonDeleteCourse;
+    private JButton buttonUpdateCourse;
+    private JButton buttonQueryCourse;
+    private JButton buttonExportCourse;
+    private JLabel label16;
+    private JTextField inputCourseId;
+    private JLabel label17;
+    private JTextField inputCourseName;
+    private JLabel label18;
+    private JComboBox<String> selectCourseCollege;
     private JPanel panelNoticeMange;
     private JScrollPane scrollPaneNotice;
     private JTable tableNoticeList;

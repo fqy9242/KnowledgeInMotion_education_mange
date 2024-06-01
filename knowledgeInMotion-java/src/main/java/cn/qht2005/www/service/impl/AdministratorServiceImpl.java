@@ -1,9 +1,7 @@
 package cn.qht2005.www.service.impl;
 
-import cn.qht2005.www.dao.AdministratorMapper;
-import cn.qht2005.www.dao.NoticeMapper;
-import cn.qht2005.www.dao.StudentMapper;
-import cn.qht2005.www.dao.TeacherMapper;
+import cn.qht2005.www.dao.*;
+import cn.qht2005.www.pojo.Course;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Administrator;
 import cn.qht2005.www.pojo.people.Student;
@@ -24,6 +22,8 @@ public class AdministratorServiceImpl implements AdministratorService {
 	private static StudentMapper STUDENT_MAPPER = null;
 	// 公告数据映射对象
 	private static NoticeMapper NOTICE_MAPPER = null;
+	// 课程映射对象
+	private static CourseMapper COURSE_MAPPER = null;
 	static {
 		SqlSessionFactory sqlSessionFactory = null;
 		try {
@@ -32,6 +32,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 			TEACHER_MAPPER = sqlSession.getMapper(TeacherMapper.class);
 			STUDENT_MAPPER = sqlSession.getMapper(StudentMapper.class);
 			NOTICE_MAPPER = sqlSession.getMapper(NoticeMapper.class);
+			COURSE_MAPPER = sqlSession.getMapper(CourseMapper.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -100,7 +101,6 @@ public class AdministratorServiceImpl implements AdministratorService {
 	/**
 	 *  获取教师各职位人数
 	 * @return 一个map集合
-	 * @throws Exception
 	 */
 
 	@Override
@@ -118,7 +118,6 @@ public class AdministratorServiceImpl implements AdministratorService {
 
 		return map;
 	}
-
 	/**
 	 * 添加教师
 	 * @param teacher 教师对象
@@ -150,6 +149,52 @@ public class AdministratorServiceImpl implements AdministratorService {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	/**
+	 * 获取所有课程
+	 * @return 课程列表
+	 */
+	@Override
+	public List<Course> getAllCourse() {
+		return COURSE_MAPPER.selectAll();
+	}
+
+	/**
+	 * 添加课程
+	 * @param course 课程对象
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean addCourse(Course course) {
+		try {
+			COURSE_MAPPER.insertCourse(course);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 *  根据课程列表批量删除课程
+	 * @param courseList 课程列表
+	 * @return 是否成功
+	 */
+	@Override
+	public boolean deleteByCourseList(List<Course> courseList) {
+		try {
+			COURSE_MAPPER.deleteByCourseList(courseList);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public List<Course> getCourseByCourse(Course course) {
+		return COURSE_MAPPER.selectByCourse(course);
 	}
 
 	@Override

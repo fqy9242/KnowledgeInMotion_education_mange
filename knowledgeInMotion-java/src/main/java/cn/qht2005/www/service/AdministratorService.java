@@ -1,5 +1,6 @@
 package cn.qht2005.www.service;
 
+import cn.qht2005.www.pojo.Course;
 import cn.qht2005.www.pojo.Notice;
 import cn.qht2005.www.pojo.people.Student;
 import cn.qht2005.www.pojo.people.Teacher;
@@ -82,4 +83,31 @@ public interface AdministratorService {
 	 * @return 是否成功
 	 */
 	boolean deleteByTeacherList(List<Teacher> teacherList);
+
+	/**
+	 * 获取所有课程
+	 * @return 课程列表
+	 */
+	List<Course> getAllCourse();
+
+	/**
+	 * 添加课程
+	 * @param course 课程对象
+	 * @return 是否成功
+	 */
+	boolean addCourse(Course course);
+
+	/**
+	 * 根据课程列表批量删除课程
+	 * @param courseList 课程列表
+	 * @return 是否成功
+	 */
+	boolean deleteByCourseList(List<Course> courseList);
+
+	/**
+	 * 根据课程查询
+	 * @param course 课程对象
+	 * @return 课程列表
+	 */
+	List<Course> getCourseByCourse(Course course);
 }
