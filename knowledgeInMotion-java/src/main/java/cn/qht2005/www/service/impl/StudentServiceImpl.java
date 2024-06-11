@@ -58,8 +58,12 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public Integer modifyPassWord(String studentId, String passWord, String passWordNew) {
-		return STUDENT_MAPPER.modifyPassWord(studentId, passWord, passWordNew);
+	public boolean modifyPassWord(String studentId, String passWord, String passWordNew) {
+		try {
+			return STUDENT_MAPPER.modifyPassWord(studentId, passWord, passWordNew) == 1;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	// 获取所有学生可以接收的公告
 	@Override

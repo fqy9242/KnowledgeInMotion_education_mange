@@ -60,7 +60,7 @@ public class ModifyPassword extends JFrame {
             if (student != null){
                 // 学生用户修改密码
                 row = new StudentServiceImpl().modifyPassWord(student.getStudentId(), new String(inputNowPassWord.getPassword()),
-						new String(inputNewPassWord.getPassword())) == 1;
+						new String(inputNewPassWord.getPassword()));
             }else{
                 // 教师用户修改密码
                 row = new TeacherServiceImpl().modifyPassWord(teacher.getTeacherId(), new String((inputNowPassWord.getPassword())),

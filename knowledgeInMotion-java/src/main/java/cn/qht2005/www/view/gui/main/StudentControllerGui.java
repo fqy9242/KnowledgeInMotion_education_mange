@@ -910,21 +910,30 @@ public class StudentControllerGui extends JFrame {
         Integer collegeId = student.getCollegeId();
         // 获取学院名称
         String collegeName = getCollegeName(collegeId);
-        BufferedImage photograph; // 证件照url
+        BufferedImage photograph = null; // 证件照url
 
         try {
             // 获取班级任姓名及手机号
             Teacher classMangeTeacher = new TeacherServiceImpl().getTeacherByManageClassId(student.getClassId());
-            inputClassTeacher.setText(classMangeTeacher.getName());
-            InputClassTeacherPhoneNumber.setText(classMangeTeacher.getPhoneNumber());
+            if (classMangeTeacher != null){
+                inputClassTeacher.setText(classMangeTeacher.getName());
+                InputClassTeacherPhoneNumber.setText(classMangeTeacher.getPhoneNumber());
+            }
             // 通过url获取图片
-            photograph = ImgUtil.getImgByUrl(student.getPhotograph());
+            String url = student.getPhotograph();
+            if (url != null){
+                photograph = ImgUtil.getImgByUrl(url);
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        ImageIcon photo = new ImageIcon(photograph);
-        photo.setImage(photo.getImage().getScaledInstance(labelPhoto.getWidth(), labelPhoto.getHeight(), Image.SCALE_DEFAULT)); // 设置图片大小
-        labelPhoto.setIcon(photo);  // 展示图片到标签
+        if (photograph != null){
+            ImageIcon photo = new ImageIcon(photograph);
+            photo.setImage(photo.getImage().getScaledInstance(labelPhoto.getWidth(), labelPhoto.getHeight(), Image.SCALE_DEFAULT)); // 设置图片大小
+            labelPhoto.setIcon(photo);  // 展示图片到标签
+        }
+
         // 展示到文本框
         inputStudentId.setText(studentId);
         inputStudentName.setText(name);

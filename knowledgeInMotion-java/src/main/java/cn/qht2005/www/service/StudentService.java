@@ -37,7 +37,7 @@ public interface StudentService {
 	 * @param passWordNew	新密码
 	 * @return 影响行数
 	 */
-	Integer modifyPassWord(String studentId, String passWord, String passWordNew);
+	boolean modifyPassWord(String studentId, String passWord, String passWordNew);
 
 	/**
 	 * 学生对象获取公告
