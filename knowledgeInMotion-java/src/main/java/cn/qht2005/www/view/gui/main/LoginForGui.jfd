@@ -9,6 +9,7 @@ new FormModel {
 			name: "this"
 			"title": "行知教务管理系统 -登录    by覃惠通"
 			"defaultCloseOperation": 3
+			"resizable": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "用 户名"

@@ -382,7 +382,8 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "checkboxSexForStudent"
 						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "男"
+							selectedItem: "不限"
+							addElement( "不限" )
 							addElement( "男" )
 							addElement( "女" )
 						}

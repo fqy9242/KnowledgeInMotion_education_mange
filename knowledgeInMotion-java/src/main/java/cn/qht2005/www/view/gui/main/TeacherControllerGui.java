@@ -69,6 +69,7 @@ public class TeacherControllerGui extends JFrame {
             // 查询学生页
             try {
                 showCollegeToCheckBox();
+                checkboxSexForStudent.setSelectedIndex(0);
                 showAllStudent(new TeacherServiceImpl().getAllStudent());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
@@ -76,7 +77,6 @@ public class TeacherControllerGui extends JFrame {
         } else if (tabbedPaneMain.getSelectedIndex() == 2){
             // 请假页
             showLeaveApplyList();
-
         }
     }
     // 获取当前时间
@@ -208,10 +208,12 @@ public class TeacherControllerGui extends JFrame {
         Student s = new Student();
         s.setName(studentName);
         s.setClassId(classId);
-        s.setSex(checkboxSex.getSelectedIndex() == -1 ? null :
-                checkboxSex.getSelectedIndex() == 0 ? (short) 1 : (short) 0);
-        s.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
-        s.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+        if (! "不限".equals(checkboxSexForStudent.getSelectedItem())){
+            s.setSex((short)checkboxSexForStudent.getSelectedIndex());
+        }
+        if (! "不限".equals(collegeName)){
+            s.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
+        }
         List<Student> students = new TeacherServiceImpl().getStudentByDynamic(s);
         showAllStudent(students);
     }
@@ -649,6 +651,7 @@ public class TeacherControllerGui extends JFrame {
 
                 //---- checkboxSexForStudent ----
                 checkboxSexForStudent.setModel(new DefaultComboBoxModel<>(new String[] {
+                    "\u4e0d\u9650",
                     "\u7537",
                     "\u5973"
                 }));
@@ -840,12 +843,13 @@ public class TeacherControllerGui extends JFrame {
             List<College> allColleges = collegeService.getAllCollege();
             // 先清空学院下拉框
             checkboxCollege.removeAllItems();
+            checkboxCollege.addItem("不限");
             for (College college : allColleges) {
                 if (college != null){
                     checkboxCollege.addItem(college.getCollegeName());
                 }
             }
-            checkboxCollege.setSelectedIndex(-1);
+            checkboxCollege.setSelectedIndex(0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

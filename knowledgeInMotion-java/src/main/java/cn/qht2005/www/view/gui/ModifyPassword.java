@@ -56,14 +56,19 @@ public class ModifyPassword extends JFrame {
         // 开始那啥
         // 没报错就是修改成功（大概） 报错就是修改失败
         try {
+            boolean row;
             if (student != null){
                 // 学生用户修改密码
-                new StudentServiceImpl().modifyPassWord(student.getStudentId(), new String(inputNowPassWord.getPassword()),
-                        new String(inputNewPassWord.getPassword()));
+                row = new StudentServiceImpl().modifyPassWord(student.getStudentId(), new String(inputNowPassWord.getPassword()),
+						new String(inputNewPassWord.getPassword())) == 1;
             }else{
                 // 教师用户修改密码
-                new TeacherServiceImpl().modifyPassWord(teacher.getTeacherId(), new String((inputNowPassWord.getPassword())),
+                row = new TeacherServiceImpl().modifyPassWord(teacher.getTeacherId(), new String((inputNowPassWord.getPassword())),
                         new String(inputNewPassWord.getPassword()));
+            }
+            if (!row){
+                JOptionPane.showMessageDialog(this, "修改失败！请再次检查重试！");
+                return;
             }
             JOptionPane.showMessageDialog(this, "修改成功！");
             JOptionPane.showMessageDialog(this, "登录已失效，请重新登录！");

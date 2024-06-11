@@ -138,6 +138,7 @@ public class LoginForGui extends JFrame {
         //======== this ========
         setTitle("\u884c\u77e5\u6559\u52a1\u7ba1\u7406\u7cfb\u7edf -\u767b\u5f55    by\u8983\u60e0\u901a");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 

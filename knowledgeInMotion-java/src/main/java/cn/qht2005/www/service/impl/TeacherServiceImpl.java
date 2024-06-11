@@ -97,8 +97,12 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public boolean modifyPassWord(String teacherId, String passWord, String passWordNew) {
 		try {
-			TEACHER_MAPPER.modifyPassWord(teacherId, passWord, passWordNew);
-			return true;
+			Integer row = TEACHER_MAPPER.modifyPassWord(teacherId, passWord, passWordNew);
+			if (row == 1){
+				return true;
+			}else{
+				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
