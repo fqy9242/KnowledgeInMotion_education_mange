@@ -79,6 +79,10 @@ public class AddAndUpdateCourse extends JDialog {
     }
     // 添加课程按钮点击事件
     private void buttonAddCourseMouseClicked(MouseEvent e) {
+        if (inputCourseName.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "请填写课程名");
+            return;
+        }
         try {
             if (course == null) {
                 addCourse();
@@ -113,6 +117,7 @@ public class AddAndUpdateCourse extends JDialog {
         selectCourseCollege = new JComboBox();
 
         //======== this ========
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {

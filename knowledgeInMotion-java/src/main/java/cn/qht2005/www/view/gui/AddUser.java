@@ -162,6 +162,11 @@ public class AddUser extends JDialog {
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
     // 添加教师
     private Teacher addTeacher() throws Exception {
+        // 非空验证
+        if (inputName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "信息不完整！");
+            return null;
+        }
          // 姓名
        String name = inputName.getText();
          // 学院名
@@ -186,6 +191,11 @@ public class AddUser extends JDialog {
     }
     // 添加学生
     private Student addStudent() throws Exception {
+        // 非空验证
+        if (inputName.getText().isEmpty() || inputClassId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "信息不完整！");
+            return null;
+        }
         // 获取学生姓名
         String name = inputName.getText();
         // 获取学生班级id

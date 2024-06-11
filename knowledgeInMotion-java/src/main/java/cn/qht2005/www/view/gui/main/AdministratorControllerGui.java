@@ -1,7 +1,6 @@
 /*
  * Created by JFormDesigner on Mon May 27 11:00:12 CST 2024
  */
-
 package cn.qht2005.www.view.gui.main;
 
 import java.awt.*;
@@ -32,6 +31,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -167,16 +167,16 @@ public class AdministratorControllerGui extends JFrame {
         }
         // 展示总人数到那啥标签上
         labelForTeacherCount.setText(model.getRowCount() + "");
-
     }
     // 展示学院列表到选择框上 形参：一个选择框
     private void showCollegeListToSelectBox(JComboBox<String> selectBox) {
         try {
+            selectBox.removeAllItems();
+            selectBox.addItem("不限");
             new CollegeServiceImpl().getAllCollege().forEach(college -> selectBox.addItem(college.getCollegeName()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
     // 展示各学院人数并展示到图表上
     private void showStudentCountByCollegeToChart() {
@@ -349,8 +349,6 @@ public class AdministratorControllerGui extends JFrame {
             this.dispose();
         }
     }
-
-
     // 查询按钮被点击
     private void buttonQueryMouseClicked(MouseEvent e) {
         try {
@@ -360,7 +358,6 @@ public class AdministratorControllerGui extends JFrame {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
     }
     // 动态条件查询学生
     private void queryStudent() throws Exception {
@@ -380,7 +377,6 @@ public class AdministratorControllerGui extends JFrame {
         if (collegeName != null) {
             student.setCollegeId(new CollegeServiceImpl().getCollegeIdByName(collegeName));
         }
-
         if (sex != null) {
             student.setSex(sex.shortValue());
         }
@@ -396,8 +392,6 @@ public class AdministratorControllerGui extends JFrame {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
-
     }
     // 查询教师然后展示到表格上
     private void queryTeacher() {
@@ -425,27 +419,61 @@ public class AdministratorControllerGui extends JFrame {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
-
     // 添加教师按钮被点击
     private void buttonAddTeacherMouseClicked(MouseEvent e) {
-        new AddUser(this, UserType.TEACHER).setVisible(true);
-        buttonQueryForTeacherMouseClicked(null);
+        // 创建一个添加用户信息的窗口
+        AddUser addUser = new AddUser(this, UserType.TEACHER);
+        // 显示为显示
+        addUser.setVisible(true);
+        addUser.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // 刷新一下
+                try {
+                    teachers = new TeacherServiceImpl().getAllTeacher();
+                    showTeacherAllToTable();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+                showTeacherCountByPositionToChart();
+            }
+        });
+
+
     }
     // 添加学生按钮被点击
     private void buttonAddStudentMouseClicked(MouseEvent e) {
-        new AddUser(this, UserType.STUDENT).setVisible(true);
-        buttonQueryMouseClicked(null);
+        // 创建一个窗口
+        AddUser addUser = new AddUser(this, UserType.STUDENT);
+        // 设置为可见
+        addUser.setVisible(true);
+        // 刷新一下
+        addUser.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                try {
+                    students = new TeacherServiceImpl().getAllStudent();
+                    showStudentInfoToTable();
+                    showStudentCountByCollegeToChart();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
     }
     // 发布公告按钮被点击
     private void buttonPublishNoticeMouseClicked(MouseEvent e) {
-        new AddNotice(this).setVisible(true);
-        // 刷新
-        buttonQueryNoticeMouseClicked(null);
+        AddNotice addNotice = new AddNotice(this);
+        addNotice.setVisible(true);
+        addNotice.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                showNoticeToTable(null);
+            }
+        });
     }
-
     // 查询公告按钮被点击
     private void buttonQueryNoticeMouseClicked(MouseEvent e) {
         // 获取查询到的公告
@@ -508,6 +536,9 @@ public class AdministratorControllerGui extends JFrame {
     private void buttonDeleteStudentMouseClicked(MouseEvent e) {
         try {
             deleteStudent();
+            // 刷新一下
+            students = new TeacherServiceImpl().getAllStudent();
+            showStudentInfoToTable();
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
@@ -549,7 +580,10 @@ public class AdministratorControllerGui extends JFrame {
     private void buttonDeleteStudent2MouseClicked(MouseEvent e) {
         try {
             deleteTeacher();
+            // 刷新一下
+            teachers = new TeacherServiceImpl().getAllTeacher();
             showTeacherAllToTable();
+
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -590,7 +624,7 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 导出学生列表
     private void exportStudent() {
-        Workbook workbook = new HSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("学生列表");
         Row row = sheet.createRow(0);
         for (int i = 0; i < tableStudentList.getColumnCount(); i++) {
@@ -599,7 +633,9 @@ public class AdministratorControllerGui extends JFrame {
         for (int i = 0; i < tableStudentList.getRowCount(); i++) {
             row = sheet.createRow(i + 1);
             for (int j = 0; j < tableStudentList.getColumnCount(); j++) {
-                row.createCell(j).setCellValue(tableStudentList.getValueAt(i, j).toString());
+                if (tableStudentList.getValueAt(i, j) != null){
+                    row.createCell(j).setCellValue(tableStudentList.getValueAt(i, j).toString());
+                }
             }
         }
         // 导出
@@ -616,7 +652,7 @@ public class AdministratorControllerGui extends JFrame {
         // 判断是否点击了保存按钮
         if (result == JFileChooser.APPROVE_OPTION) {
             // 获取选择的文件夹
-            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xls")) {
+            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xlsx")) {
                 workbook.write(fos);
                 JOptionPane.showMessageDialog(null, "导出成功");
             } catch (Exception e) {
@@ -629,8 +665,6 @@ public class AdministratorControllerGui extends JFrame {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
     // 导出教师列表按钮被点击
     private void buttonExportForTeacherMouseClicked(MouseEvent e) {
@@ -638,7 +672,7 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 导出教师列表
     private void exportTeacher(){
-        Workbook workbook = new HSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("教师列表");
         Row row = sheet.createRow(0);
         for (int i = 0; i < tableTeacherList.getColumnCount(); i++) {
@@ -649,9 +683,8 @@ public class AdministratorControllerGui extends JFrame {
             for (int j = 0; j < tableTeacherList.getColumnCount(); j++) {
                 String value = "";
                 if (tableTeacherList.getValueAt(i, j) != null) {
-                    value = tableTeacherList.getValueAt(i, j).toString();
+                    row.createCell(j).setCellValue(tableTeacherList.getValueAt(i, j).toString());
                 }
-                row.createCell(j).setCellValue(value);
             }
         }
         // 导出
@@ -668,7 +701,7 @@ public class AdministratorControllerGui extends JFrame {
         // 判断是否点击了保存按钮
         if (result == JFileChooser.APPROVE_OPTION) {
             // 获取选择的文件夹
-            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xls")) {
+            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xlsx")) {
                 workbook.write(fos);
                 JOptionPane.showMessageDialog(null, "导出成功");
                 workbook.close();
@@ -699,11 +732,19 @@ public class AdministratorControllerGui extends JFrame {
         UpdateStudentAndTeacher updateStudentAndTeacher = new UpdateStudentAndTeacher(this, student);
         updateStudentAndTeacher.setVisible(true);
         // 刷新一下
-        if (! updateStudentAndTeacher.isVisible()){
-            buttonQueryMouseClicked(null);
+        updateStudentAndTeacher.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                try {
+                    students = new TeacherServiceImpl().getAllStudent();
+                    showStudentInfoToTable();
+                    showStudentCountByCollegeToChart();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
-        }
-        buttonQueryMouseClicked(null);
     }
     // 修改教师信息按钮被点击
     private void buttonUpdateTeacherMouseClicked(MouseEvent e) {
@@ -723,9 +764,24 @@ public class AdministratorControllerGui extends JFrame {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        new UpdateStudentAndTeacher(this, teacher).setVisible(true);
+        // 创建一个窗口
+        UpdateStudentAndTeacher updateStudentAndTeacher = new UpdateStudentAndTeacher(this, teacher);
+        // 设置为显示
+        updateStudentAndTeacher.setVisible(true);
         // 刷新一下
-        buttonQueryForTeacherMouseClicked(null);
+        updateStudentAndTeacher.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                try {
+                    teachers = new TeacherServiceImpl().getAllTeacher();
+                    showTeacherAllToTable();
+                    showTeacherCountByPositionToChart();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
     }
     // 获取课程列表并展示到表格上
     private void showCourseListToTable(List<Course> courses){
@@ -753,7 +809,17 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 添加课程按钮被点击
     private void buttonAddCourseMouseClicked(MouseEvent e) {
-        new AddAndUpdateCourse(this, null).setVisible(true);
+        // 创建一个窗口
+        AddAndUpdateCourse addAndUpdateCourse = new AddAndUpdateCourse(this, null);
+        // 设置为可见
+        addAndUpdateCourse.setVisible(true);
+        // 刷新一下
+        addAndUpdateCourse.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                showCourseListToTable(null);
+            }
+        });
     }
     // 删除课程按钮被点击
     private void buttonDeleteCourseMouseClicked(MouseEvent e) {
@@ -826,7 +892,7 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 导出课程
     private void exportCourse(){
-        Workbook workbook = new HSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("课程列表");
         Row row = sheet.createRow(0);
         for (int i = 0; i < tableCourseList.getColumnCount(); i++) {
@@ -856,7 +922,7 @@ public class AdministratorControllerGui extends JFrame {
         // 判断是否点击了保存按钮
         if (result == JFileChooser.APPROVE_OPTION) {
             // 获取选择的文件夹
-            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xls")) {
+            try (FileOutputStream fos = new FileOutputStream(fileChooser.getSelectedFile() + ".xlsx")) {
                 workbook.write(fos);
                 JOptionPane.showMessageDialog(null, "导出成功");
                 workbook.close();
@@ -913,17 +979,24 @@ public class AdministratorControllerGui extends JFrame {
         Course course = null;
         try {
             course = new AdministratorServiceImpl().getCourseById(courseId);
-            new AddAndUpdateCourse(this, course).setVisible(true);
+            AddAndUpdateCourse addAndUpdateCourse = new AddAndUpdateCourse(this, course);
+            addAndUpdateCourse.setVisible(true);
+            // 刷新一下
+            addAndUpdateCourse.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    showCourseListToTable(null);
+                }
+            });
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
-
     }
-
     // 删除学院按钮被点击
     private void buttonDeleteCollegeMouseClicked(MouseEvent e) {
         deleteCollege();
+        // 刷新一下
+        showCollegeInfoToTable();
     }
     // 删除学院
     private void deleteCollege(){
@@ -955,7 +1028,17 @@ public class AdministratorControllerGui extends JFrame {
     }
     // 添加学院按钮被点击
     private void button1MouseClicked(MouseEvent e) {
-        new AddCollege(this).setVisible(true);
+        // 创建一个窗口
+        AddCollege addCollege = new AddCollege(this);
+        // 设置为可见
+        addCollege.setVisible(true);
+        // 刷新一下
+        addCollege.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                showCollegeInfoToTable();
+            }
+        });
     }
     private void initComponents() {
     // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
@@ -1588,7 +1671,7 @@ public class AdministratorControllerGui extends JFrame {
                 "\u4e0d\u9650"
             }));
             panelCourseMange.add(selectCourseCollege);
-            selectCourseCollege.setBounds(new Rectangle(new Point(585, 35), selectCourseCollege.getPreferredSize()));
+            selectCourseCollege.setBounds(585, 35, 90, selectCourseCollege.getPreferredSize().height);
         }
         tabbedPaneMenu.addTab("\u8bfe\u7a0b\u7ba1\u7406", panelCourseMange);
 

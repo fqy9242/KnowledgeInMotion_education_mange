@@ -110,6 +110,10 @@ public class AddNotice extends JDialog {
     }
     // 发布公告
     private void addNotice() {
+        if (inputNoaticeTitle.getText().equals("") || textAreaNoticeBody.getText().equals("") || inputPublisher.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "请填写完整!");
+            return;
+        }
         // 获取公告标题
         String noticeTitle = inputNoaticeTitle.getText();
         // 获取公告内容

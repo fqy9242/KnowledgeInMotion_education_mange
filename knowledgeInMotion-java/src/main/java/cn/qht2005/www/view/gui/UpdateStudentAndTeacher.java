@@ -50,7 +50,9 @@ public class UpdateStudentAndTeacher extends JDialog {
             // 为那些文本框赋值
             inputClass.setText(student.getClassId());
             inputName.setText(student.getName());
-            inputAge.setText(String.valueOf(student.getAge()));
+            if (student.getAge() != null){
+                inputAge.setText(String.valueOf(student.getAge()));
+            }
             selectSex.setSelectedIndex(student.getSex() == 1 ? 0 : 1);
             inputPhoneNumber.setText(student.getPhoneNumber());
             inputPassword.setText(student.getPassWord());
@@ -64,7 +66,9 @@ public class UpdateStudentAndTeacher extends JDialog {
             // 为那些文本框赋值
             inputClass.setText(teacher.getMangeClassId());
             inputName.setText(teacher.getName());
-            inputAge.setText(String.valueOf(teacher.getAge()));
+            if (teacher.getAge() != null){
+                inputAge.setText(String.valueOf(teacher.getAge()));
+            }
             selectSex.setSelectedIndex(teacher.getSex() == 1 ? 0 : 1);
             inputPhoneNumber.setText(teacher.getPhoneNumber());
             inputPassword.setText(teacher.getPassWord());
@@ -112,6 +116,7 @@ public class UpdateStudentAndTeacher extends JDialog {
         buttonModify = new JButton();
 
         //======== this ========
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -213,7 +218,7 @@ public class UpdateStudentAndTeacher extends JDialog {
         String name = inputName.getText();
         stu.setName(name);
         // 获取年龄
-        if (inputAge.getText() != null){
+        if (inputAge.getText() != null && ! inputAge.getText().isEmpty()){
             Integer age= Integer.valueOf(inputAge.getText());
             stu.setAge(age);
         }
@@ -259,7 +264,7 @@ public class UpdateStudentAndTeacher extends JDialog {
         String name = inputName.getText();
         tea.setName(name);
         // 获取年龄
-        if (inputAge.getText() != null){
+        if (inputAge.getText() != null && ! inputAge.getText().isEmpty()){
             Integer age= Integer.valueOf(inputAge.getText());
             tea.setAge(age);
         }

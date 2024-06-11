@@ -26,6 +26,10 @@ public class AddCollege extends JDialog {
     private void addCollege(){
         // 获取学院名称
         String collegeName = inputCollegeName.getText();
+        if (collegeName.isEmpty()){
+            JOptionPane.showMessageDialog(this, "学院名称不能为空");
+            return;
+        }
         boolean res = new AdministratorServiceImpl().addCollege(collegeName);
         if (res){
             JOptionPane.showMessageDialog(this, "添加成功");

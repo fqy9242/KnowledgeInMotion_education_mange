@@ -674,6 +674,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 585
 						"y": 35
+						"width": 90
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "课程管理"
